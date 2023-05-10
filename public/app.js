@@ -1,0 +1,38 @@
+import './firebase/config.js';
+  
+// Handle form submission
+const addMovieForm = document.querySelector('#add-movie-form');
+addMovieForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const title = addMovieForm['title'].value;
+    const director = addMovieForm['director'].value;
+
+    // Add movie to Firebase Realtime Database
+    const currentUser = firebase.auth().currentUser;
+    const userRef = firebase.database().ref(`users/${currentUser.uid}`);
+    const moviesRef = userRef.child('movies');
+    const newMovieRef = moviesRef.push();
+    newMovieRef.set({ title, director });
+
+    // Clear form fields
+    addMovieForm.reset();
+});
+
+// Display list of movies for the current user
+firebase.auth().onAuthStateChanged((user) => {
+if (user) {
+    const userRef = firebase.database().ref(`users/${user.uid}`);
+    userRef.child('movies').on('value', (snapshot) => {
+    const movies = snapshot.val();
+    const movieList = document.querySelector('#movie-list');
+    movieList.innerHTML = '';
+    for (const movieKey in movies) {
+        const movie = movies[movieKey];
+        const movieItem = document.createElement('li');
+        movieItem.innerHTML = `<strong>${movie.title}</strong> directed by ${movie.director}`;
+        movieList.appendChild(movieItem);
+    }
+    });
+}
+});
