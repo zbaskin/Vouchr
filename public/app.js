@@ -17,6 +17,20 @@ firebase.auth().onAuthStateChanged((user) => {
     }
 });
 
+// Logout handling
+const logoutButton = document.getElementById('logout-button');
+logoutButton.addEventListener('click', () => {
+    firebase.auth().signOut()
+    .then(() => {
+        // Redirect to login page or desired page
+        window.location.href = 'login.html';
+    })
+    .catch((error) => {
+        // Handle logout error
+        console.log(error);
+    });
+});
+
 // Handle form submission
 const addMovieForm = document.getElementById('add-movie-form');
 addMovieForm.addEventListener('submit', (e) => {
@@ -51,5 +65,7 @@ firebase.auth().onAuthStateChanged((user) => {
             movieList.appendChild(movieItem);
         }
         });
+    } else {
+        window.location.href = 'login.html';
     }
 });
