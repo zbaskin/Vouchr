@@ -1,3 +1,3 @@
 # Vouchr
 
-This is an app that will catalog the movies you have seen throughout your life. Also intended to be a film merchandise hub. More details to follow.
+This is an app that will catalog the movies you have seen throughout your life. Furthermore, the user will be able to purchase personalized film tickets to recreate important moments such as a first moviegoing experience. More details to follow.
