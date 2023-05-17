@@ -2,26 +2,31 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="app.css">
+    <link rel="shortcut icon" href="https://png.pngitem.com/pimgs/s/51-519814_ticket-clip-art-ticket-hd-png-download.png"/>
+    <link rel="stylesheet" href="app.css" />
     <title>Vouchr</title>
   </head>
   <body>
-    <button id="signup-button" onclick="location.href = 'signup.html';">Sign Up</button>
-    <button id="login-button" onclick="location.href = 'login.html';">Log In</button>
-    <button id="logout-button">Log Out</button>
-    <h1>Vouchr</h1>
-    <form id="add-movie-form">
-      <label for="title">Title:</label>
-      <input type="text" id="title" name="title"><br><br>
-      <label for="director">Director:</label>
-      <input type="text" id="director" name="director"><br><br>
-      <input type="submit" value="Add Movie">
-    </form>
-    <ul id="movie-list"></ul>
+    <div class="app">
+      <div class="auth-section">
+        <button id="signup-button" onclick="location.href = 'signup.html';" class="auth-button">Sign Up</button>
+        <button id="login-button" onclick="location.href = 'login.html';" class="auth-button">Log In</button>
+        <button id="logout-button" class="auth-button">Log Out</button>
+      </div>
+      <h1 class="app-title">Vouchr</h1>
+      <form id="add-movie-form">
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title"><br><br>
+        <label for="director">Director:</label>
+        <input type="text" id="director" name="director"><br><br>
+        <input type="submit" value="Add Movie">
+      </form>
+      <ul id="movie-list"></ul>
 
-    <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-database.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-auth.js"></script>
-    <script src="app.js" type="module"></script>
+      <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-app.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-database.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-auth.js"></script>
+      <script src="app.js" type="module"></script>
+    </div>  
   </body>
 </html>
