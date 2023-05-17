@@ -1,0 +1,8 @@
+body {
+    text-align: center;
+    min-height: 100vh;
+    align-items: center;
+    display: flex;
+    user-select: none;
+    flex-direction: column;
+}
