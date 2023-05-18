@@ -1,3 +1,5 @@
+import { options } from './config/tmdb.js';
+
 // Initialize Firebase app
 import { firebaseConfig } from './config/firebase.js';
 firebase.initializeApp(firebaseConfig);
@@ -30,6 +32,13 @@ addMovieForm.addEventListener('submit', (e) => {
 
     const title = addMovieForm['title'].value;
     const director = addMovieForm['director'].value;
+
+    // Create and send request to TMDB
+    var req = 'https://api.themoviedb.org/3/search/movie?query=' + title;
+    fetch(req, options)
+        .then(response => response.json())
+        .then(response => console.log(response))
+        .catch(err => console.error(err));
 
     // Add movie to Firebase Realtime Database
     const currentUser = firebase.auth().currentUser;
