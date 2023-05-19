@@ -93,8 +93,16 @@ firebase.auth().onAuthStateChanged((user) => {
         for (const movieKey in movies) {
             const movie = movies[movieKey];
             const movieItem = document.createElement('li');
-            movieItem.innerHTML = `<strong>${movie.title}</strong> directed by `;
-            movieList.appendChild(movieItem);
+            
+            // Get movie information from stored movie ID
+            var req = 'https://api.themoviedb.org/3/movie/' + movie.titleID;
+            fetch(req, options)
+                .then(response => response.json())
+                .then(response => {
+                    movieItem.innerHTML = `<strong>${response.title}</strong> with the tagline <strong>${response.tagline}</strong>`;
+                    movieList.appendChild(movieItem);
+                })
+                .catch(err => console.error(err));
         }
         });
     } else {
