@@ -1,5 +1,5 @@
 // Initialize Firebase app
-import { firebaseConfig } from './config/firebase.js';
+import { firebaseConfig } from '../config/firebase.js';
 firebase.initializeApp(firebaseConfig);
 
 // Login form handling
@@ -14,7 +14,7 @@ loginForm.addEventListener('submit', (e) => {
     firebase.auth().signInWithEmailAndPassword(email, password)
         .then(() => {
         // Redirect to movie list page or desired page
-        window.location.href = 'index.html';
+        window.location.href = '../index.html';
         })
         .catch((error) => {
         // Handle login error

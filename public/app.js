@@ -7,7 +7,7 @@ firebase.initializeApp(firebaseConfig);
 // Redirect to the login page if the user is not authenticated
 firebase.auth().onAuthStateChanged((user) => {
     if (!user) {
-        window.location.href = 'login.html';
+        window.location.href = 'auth/login.html';
     }
 });
 
@@ -17,7 +17,7 @@ logoutButton.addEventListener('click', () => {
     firebase.auth().signOut()
     .then(() => {
         // Redirect to login page or desired page
-        window.location.href = 'login.html';
+        window.location.href = 'auth/login.html';
     })
     .catch((error) => {
         // Handle logout error
@@ -44,7 +44,7 @@ movieTitleSearch.addEventListener('change', (e) => {
         .then(response => response.json())
         .then(response => {
             removeOptions(search);
-            var maxLength = Math.max(response.results.length, 5);
+            var maxLength = Math.min(response.results.length, 5);
             for (let i = 0; i < maxLength; i++) {
                 var searchResult = document.createElement('option');
                 var resultID = response.results[i].id;
@@ -106,6 +106,6 @@ firebase.auth().onAuthStateChanged((user) => {
         }
         });
     } else {
-        window.location.href = 'login.html';
+        window.location.href = 'auth/login.html';
     }
 });
