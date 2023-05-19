@@ -44,7 +44,8 @@ movieTitleSearch.addEventListener('change', (e) => {
         .then(response => response.json())
         .then(response => {
             removeOptions(search);
-            for (let i = 0; i < 3; i++) {
+            var maxLength = Math.max(response.results.length, 5);
+            for (let i = 0; i < maxLength; i++) {
                 var searchResult = document.createElement('option');
                 var resultID = response.results[i].id;
                 var resultTitle = response.results[i].title;
@@ -61,7 +62,7 @@ const addMovieForm = document.getElementById('add-movie-form');
 addMovieForm.addEventListener('submit', (e) => {
     e.preventDefault();
 
-    const title = addMovieForm['title'].value;
+    const titleID = addMovieForm['search'].value;
 
     // Create and send request to TMDB
     var req = 'https://api.themoviedb.org/3/search/movie?query=' + title;
@@ -75,7 +76,7 @@ addMovieForm.addEventListener('submit', (e) => {
     const userRef = firebase.database().ref(`users/${currentUser.uid}`);
     const moviesRef = userRef.child('movies');
     const newMovieRef = moviesRef.push();
-    newMovieRef.set({ title });
+    newMovieRef.set({ titleID });
 
     // Clear form fields
     addMovieForm.reset();
