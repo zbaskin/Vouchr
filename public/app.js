@@ -1,4 +1,5 @@
 import { options } from './config/tmdb.js';
+import { getMovie } from './functions/tmdb-api.js';
 
 // Initialize Firebase app
 import { firebaseConfig } from './config/firebase.js';
@@ -7,7 +8,7 @@ firebase.initializeApp(firebaseConfig);
 // Redirect to the login page if the user is not authenticated
 firebase.auth().onAuthStateChanged((user) => {
     if (!user) {
-        window.location.href = 'auth/login.html';
+        window.location.href = './auth/login.html';
     }
 });
 
@@ -17,7 +18,7 @@ logoutButton.addEventListener('click', () => {
     firebase.auth().signOut()
     .then(() => {
         // Redirect to login page or desired page
-        window.location.href = 'auth/login.html';
+        window.location.href = './auth/login.html';
     })
     .catch((error) => {
         // Handle logout error
@@ -36,7 +37,7 @@ function removeOptions(element) {
 const movieTitleSearch = document.getElementById('title');
 movieTitleSearch.addEventListener('change', (e) => {
     e.preventDefault();
-    
+
     var title = movieTitleSearch.value;
     var search = document.getElementById('search');
     var req = 'https://api.themoviedb.org/3/search/movie?query=' + title;
@@ -106,6 +107,6 @@ firebase.auth().onAuthStateChanged((user) => {
         }
         });
     } else {
-        window.location.href = 'auth/login.html';
+        window.location.href = './auth/login.html';
     }
 });

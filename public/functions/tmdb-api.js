@@ -1,0 +1,10 @@
+import { options } from '../config/tmdb.js';
+
+export function getMovie(titleID) {
+    // Get movie information from stored movie ID
+    var req = 'https://api.themoviedb.org/3/movie/' + titleID;
+    fetch(req, options)
+        .then(response => response.json())
+        .then(response => console.log(response))
+        .catch(err => console.error(err));
+}
