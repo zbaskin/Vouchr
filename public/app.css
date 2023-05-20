@@ -15,3 +15,7 @@
 #movie-list {
     text-align: left;
 }
+
+#search {
+    display: none;
+}

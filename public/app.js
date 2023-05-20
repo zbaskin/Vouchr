@@ -40,12 +40,24 @@ movieTitleSearch.addEventListener('change', (e) => {
 
     var title = movieTitleSearch.value;
     var search = document.getElementById('search');
+    if (document.getElementById('title').value == null) {
+        search.style.display = 'none';
+        return;
+    }
+
+    search.style.display = 'flex';
     var req = 'https://api.themoviedb.org/3/search/movie?query=' + title;
     fetch(req, options)
         .then(response => response.json())
         .then(response => {
             removeOptions(search);
-            var maxLength = Math.min(response.results.length, 5);
+            var numResults = response.results.length;
+            if (numResults == 0) {
+                search.style.display = 'none';
+                return;
+            }
+            console.log("this code is running");
+            var maxLength = Math.min(numResults, 5);
             for (let i = 0; i < maxLength; i++) {
                 var searchResult = document.createElement('option');
                 var resultID = response.results[i].id;
@@ -66,7 +78,7 @@ addMovieForm.addEventListener('submit', (e) => {
     const titleID = addMovieForm['search'].value;
 
     // Create and send request to TMDB
-    var req = 'https://api.themoviedb.org/3/search/movie?query=' + title;
+    var req = 'https://api.themoviedb.org/3/search/movie?query=' + titleID;
     fetch(req, options)
         .then(response => response.json())
         .then(response => console.log(response))
