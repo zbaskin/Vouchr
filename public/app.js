@@ -96,6 +96,8 @@ addMovieForm.addEventListener('submit', (e) => {
 
     // Clear form fields
     addMovieForm.reset();
+    removeOptions(document.getElementById('search'));
+    document.getElementById('search').style.display = 'none';
 });
 
 // Display list of movies for the current user
