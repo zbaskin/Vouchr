@@ -80,13 +80,6 @@ addMovieForm.addEventListener('submit', (e) => {
         return;
     }
 
-    // Create and send request to TMDB
-    var req = 'https://api.themoviedb.org/3/search/movie?query=' + titleID;
-    fetch(req, options)
-        .then(response => response.json())
-        .then(response => console.log(response))
-        .catch(err => console.error(err));
-
     // Add movie to Firebase Realtime Database
     const currentUser = firebase.auth().currentUser;
     const userRef = firebase.database().ref(`users/${currentUser.uid}`);
