@@ -56,7 +56,7 @@ movieTitleSearch.addEventListener('change', (e) => {
                 search.style.display = 'none';
                 return;
             }
-            console.log("this code is running");
+
             var maxLength = Math.min(numResults, 5);
             for (let i = 0; i < maxLength; i++) {
                 var searchResult = document.createElement('option');
@@ -76,6 +76,9 @@ addMovieForm.addEventListener('submit', (e) => {
     e.preventDefault();
 
     const titleID = addMovieForm['search'].value;
+    if (titleID == null || titleID == '') {
+        return;
+    }
 
     // Create and send request to TMDB
     var req = 'https://api.themoviedb.org/3/search/movie?query=' + titleID;
