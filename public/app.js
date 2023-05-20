@@ -45,7 +45,7 @@ movieTitleSearch.addEventListener('change', (e) => {
         return;
     }
 
-    search.style.display = 'flex';
+    search.style.display = 'inline-block';
     var req = 'https://api.themoviedb.org/3/search/movie?query=' + title;
     fetch(req, options)
         .then(response => response.json())
