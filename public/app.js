@@ -104,16 +104,27 @@ firebase.auth().onAuthStateChanged((user) => {
         for (const movieKey in movies) {
             const movie = movies[movieKey];
             const movieItem = document.createElement('li');
-            
-            // Get movie information from stored movie ID
+
+            // Get movie title information from stored movie ID
             var req = 'https://api.themoviedb.org/3/movie/' + movie.titleID;
             fetch(req, options)
                 .then(response => response.json())
                 .then(response => {
-                    movieItem.innerHTML = `<strong>${response.title}</strong> with the tagline <strong>${response.tagline}</strong>`;
-                    movieList.appendChild(movieItem);
+                    movieItem.innerHTML += `<span class="movie-title"><strong>${response.title}</strong></span>`;
+                })
+                .then(() => {
+                    // Get director information from stored movie ID
+                    var req = 'https://api.themoviedb.org/3/movie/' + movie.titleID + '/credits';
+                    fetch(req, options)
+                        .then(response => response.json())
+                        .then(response => {
+                            var director = response.crew.filter(({job}) => job === 'Director');
+                            movieItem.innerHTML += `directed by <strong>${director[0].name}</strong>`;
+                        });
                 })
                 .catch(err => console.error(err));
+
+            movieList.appendChild(movieItem);
         }
         });
     } else {
