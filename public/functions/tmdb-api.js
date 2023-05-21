@@ -8,3 +8,11 @@ export function getMovie(titleID) {
         .then(response => console.log(response))
         .catch(err => console.error(err));
 }
+
+export function searchTitle(title) {
+    var req = 'https://api.themoviedb.org/3/search/movie?query=' + title;
+    fetch(req, options)
+        .then(response => response.json())
+        .then(response => console.log(response))
+        .catch(err => console.error(err));
+}
