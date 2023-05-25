@@ -1,4 +1,6 @@
 import { options } from '../config/tmdb.js';
+import { updateDB } from './updateDB.js';
+import { search } from './search.js';
 
 export function getMovie(titleID) {
     // Get movie information from stored movie ID
