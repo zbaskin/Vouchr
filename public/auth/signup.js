@@ -14,7 +14,7 @@ signupForm.addEventListener('submit', (e) => {
     firebase.auth().createUserWithEmailAndPassword(email, password)
     .then(() => {
         // Redirect to movie list page or desired page
-        window.location.href = '../index.html';
+        window.location.href = '../main.html';
     })
     .catch((error) => {
         // Handle signup error

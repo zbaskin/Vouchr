@@ -12,14 +12,14 @@ loginForm.addEventListener('submit', (e) => {
 
     // Sign in with email and password
     firebase.auth().signInWithEmailAndPassword(email, password)
-        .then(() => {
+    .then(() => {
         // Redirect to movie list page or desired page
-        window.location.href = '../index.html';
-        })
-        .catch((error) => {
+        window.location.href = '../main.html';
+    })
+    .catch((error) => {
         // Handle login error
         console.log(error);
-        });
+    });
 
     // Clear form fields
     loginForm.reset();

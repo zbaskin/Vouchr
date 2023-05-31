@@ -8,7 +8,7 @@ firebase.initializeApp(firebaseConfig);
 // Redirect to the login page if the user is not authenticated
 firebase.auth().onAuthStateChanged((user) => {
     if (!user) {
-        window.location.href = './auth/login.html';
+        window.location.href = './index.html';
     }
 });
 
@@ -18,7 +18,7 @@ logoutButton.addEventListener('click', () => {
     firebase.auth().signOut()
     .then(() => {
         // Redirect to login page or desired page
-        window.location.href = './auth/login.html';
+        window.location.href = '/index.html';
     })
     .catch((error) => {
         // Handle logout error
@@ -128,6 +128,6 @@ firebase.auth().onAuthStateChanged((user) => {
         }
         });
     } else {
-        window.location.href = './auth/login.html';
+        window.location.href = './index.html';
     }
 });

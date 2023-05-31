@@ -9,23 +9,14 @@
   <body>
     <div class="app">
       <div class="auth-section">
-        <button id="signup-button" onclick="location.href = 'signup.html';" class="auth-button">Sign Up</button>
-        <button id="login-button" onclick="location.href = 'login.html';" class="auth-button">Log In</button>
-        <button id="logout-button" class="auth-button">Log Out</button>
+        <button id="signup-button" onclick="location.href = './auth/signup.html';" class="auth-button">Sign Up</button>
+        <button id="login-button" onclick="location.href = './auth/login.html';" class="auth-button">Log In</button>
       </div>
       <h1 class="app-title">Vouchr</h1>
-      <form id="add-movie-form">
-        <label for="title">Title:</label>
-        <input type="text" id="title" name="title"><br><br>
-        <select id="search"></select><br><br>
-        <input type="submit" value="Add Movie">
-      </form>
-      <ul id="movie-list"></ul>
 
       <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-app.js"></script>
       <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-database.js"></script>
       <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-auth.js"></script>
-      <script src="app.js" type="module"></script>
     </div>  
   </body>
 </html>
