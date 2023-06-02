@@ -3,20 +3,22 @@
   <head>
     <meta charset="UTF-8">
     <link rel="shortcut icon" href="https://png.pngitem.com/pimgs/s/51-519814_ticket-clip-art-ticket-hd-png-download.png"/>
-    <link rel="stylesheet" href="../app.css">
+    <link rel="stylesheet" href="auth.css">
     <title>Vouchr Login</title>
   </head>
   <body>
     <div class="app">
-      <button id="signup-button" onclick="location.href = 'signup.html';">Sign Up</button>
-      <h1>Login</h1>
-      <form id="login-form">
+      <div class="main">
+      <button class="auth-button" id="signup-button" onclick="location.href = 'signup.html';">Sign Up</button>
+      <h1 class="title">Login</h1>
+      <form id="login-form" class="form">
         <label for="email">Email:</label>
         <input type="email" id="email" name="email"><br><br>
         <label for="password">Password:</label>
         <input type="password" id="password" name="password"><br><br>
-        <input type="submit" value="Login">
+        <input type="submit" class="auth-button" value="Login">
       </form>
+      </div>
     </div>
     <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-auth.js"></script>
