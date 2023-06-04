@@ -1,5 +1,4 @@
 import { options } from './config/tmdb.js';
-import { getMovie } from './functions/tmdb-api.js';
 
 // Initialize Firebase app
 import { firebaseConfig } from './config/firebase.js';
