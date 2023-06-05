@@ -45,13 +45,13 @@
 
 .auth-button:hover,
 .auth-button:active {
-  background-color: initial;
-  background-position: 0 0;
-  color: #FF4742;
+    background-color: initial;
+    background-position: 0 0;
+    color: #FF4742;
 }
 
 .auth-button:active {
-  opacity: .5;
+    opacity: .5;
 }
 
 .auth-section {
