@@ -15,16 +15,13 @@
     padding: 50px;
 }
 
-#signup-button,
-#login-button {
+#alt-button {
     background: #f07571;
     border: 1px solid #f07571;
 }
 
-#signup-button:hover,
-#signup-button:active,
-#login-button:hover,
-#login-button:active {
+#alt-button:hover,
+#alt-button:active {
     background-color: white;
     background-position: 0 0;
     color: #f07571;
