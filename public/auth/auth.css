@@ -20,6 +20,16 @@
     border: 1px solid #f07571;
 }
 
+#signup-button:hover,
+#signup-button:active,
+#login-button:hover,
+#login-button:active {
+    background-color: initial;
+    background-position: 0 0;
+    color: #f07571;
+    
+}
+
 .auth-button {
     background: #FF4742;
     border: 1px solid #FF4742;
