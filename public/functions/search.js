@@ -1,7 +1,7 @@
 import options from '../config/tmdb-api.js';
 
-export function search() {
+export function search(element) {
     var searchElement;
-    searchElement = 5;
+    searchElement = element;
     return searchElement;
 }
