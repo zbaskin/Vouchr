@@ -7,4 +7,4 @@ This is a very, very early demo of the user interface. In the future, these movi
 ![Vouchr UI](https://github.com/zbaskin/Vouchr/blob/main/vouchr-ui.JPG)
 
 # NOTICE
-I am going on a trip and will be inactive for two weeks.
+After many months, I am getting back into it.
