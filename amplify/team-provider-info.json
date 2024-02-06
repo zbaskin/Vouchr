@@ -1,0 +1,15 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-vouchr-dev-114120-authRole",
+      "UnauthRoleArn": "arn:aws:iam::893627752101:role/amplify-vouchr-dev-114120-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::893627752101:role/amplify-vouchr-dev-114120-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-vouchr-dev-114120-deployment",
+      "UnauthRoleName": "amplify-vouchr-dev-114120-unauthRole",
+      "StackName": "amplify-vouchr-dev-114120",
+      "StackId": "arn:aws:cloudformation:us-east-1:893627752101:stack/amplify-vouchr-dev-114120/8e554130-c50e-11ee-9000-0e37b8297d99",
+      "AmplifyAppId": "d259y9lkn1bqh5"
+    }
+  }
+}
