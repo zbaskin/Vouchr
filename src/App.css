@@ -1,0 +1,36 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.container {
+  width: 400;
+  margin: "0 auto";
+  display: "flex";
+  flex-direction: "column";
+  justify-content: "center";
+  padding: 20;
+}
+
+.todo { margin-bottom: 15 }
+
+.input {
+  border: "none";
+  background-color: "#ddd";
+  margin-bottom: 10;
+  padding: 8;
+  font-size: 18;
+}
+
+.todoName { font-size: 20; font-weight: "bold" }
+.todoDescription { margin-bottom: 0 }
+
+.createButton {
+  background-color: "black";
+  color: "white";
+  outline: "none";
+  font-size: 18;
+  padding: "12px 0px";
+}
