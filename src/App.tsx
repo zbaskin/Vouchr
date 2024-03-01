@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 
 import { generateClient } from 'aws-amplify/api';
 
-import { createTodo } from './graphql/mutations';
+import { createTicket, createTodo } from './graphql/mutations';
 import { listTodos } from './graphql/queries';
 import { type CreateTodoInput, type Todo } from './API';
 
@@ -62,7 +62,7 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
     <div className="container">
       <Heading level={1}>Hello {user?.username}</Heading>
       <Button onClick={signOut}>Sign out</Button>
-      <h2>Amplify Todos</h2>
+      <h2>Ticket Collection</h2>
       <input
         onChange={(event) =>
           setFormState({ ...formState, name: event.target.value })

@@ -1,6 +1,36 @@
+type Ticket @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String!
+  type: EventType!
+  seat: String
+  venue: String
+  city: String
+  date: AWSDate
+  time: AWSTime
+  ticketsID: ID! @index(name: "byTicketCollection")
+}
+
+type TicketCollection @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  Tickets: [Ticket] @hasMany(indexName: "byTicketCollection", fields: ["id"])
+}
+
+enum EventType {
+  MOVIE
+  CONCERT
+  SPORT
+  FLIGHT
+}
+
 type Todo @model @auth(rules: [{allow: public}]) {
   id: ID!
   name: String!
   description: String
+}
+
+type User @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  username: String!
+  Tickets: TicketCollection @hasOne
 }
  
