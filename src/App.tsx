@@ -22,13 +22,13 @@ const client = generateClient();
 
 type AppProps = {
   signOut?: UseAuthenticator["signOut"]; //() => void;
-  user: AuthUser;
+  user?: AuthUser;
 };
 
 const App: React.FC<AppProps> = ({ signOut, user }) => {
   const [formState, setFormState] = useState<CreateTicketInput>(initialState);
   const [tickets, setTickets] = useState<Ticket[] | CreateTicketInput[]>([]);
-  const [ticketCollection] = useState(user.userId); 
+  const [ticketCollection] = useState(user?.userId); 
   
   useEffect(() => {
     fetchUser();
@@ -40,7 +40,7 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
       const ticketData = await client.graphql({
         query: ticketsByTicketsID,
         variables: {
-          ticketsID: ticketCollection,
+          ticketsID: ticketCollection as string,
         }
       });
       const tickets = ticketData.data.ticketsByTicketsID.items;
@@ -72,7 +72,7 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
       const userData = await client.graphql({
         query: getUser,
         variables: {
-          id: user.userId,
+          id: user?.userId as string,
         }
       });
       //const ticketCollection = userData.data.getUser?.userTicketsId ? userData.data.getUser.userTicketsId : '';
@@ -91,8 +91,8 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
         query: createUser,
         variables: {
           input: {
-            "id": user.userId,
-            "username": user.username,
+            "id": user?.userId,
+            "username": user?.username as string,
             "userTicketsId": ticketCollection,
           }
         }
@@ -108,7 +108,7 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
         query: createTicketCollection,
         variables: {
           input: {
-            "id": user.userId,
+            "id": user?.userId,
           }
         }
       });
@@ -127,7 +127,7 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
       <h2>Ticket Collection</h2>
       <input
         onChange={(event) =>
-          setFormState({ ...formState, name: event.target.value, ticketsID: ticketCollection })
+          setFormState({ ...formState, name: event.target.value, ticketsID: ticketCollection as string })
         }
         className="input"
         value={formState.name}
