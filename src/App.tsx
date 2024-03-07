@@ -75,8 +75,6 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
           id: user?.userId as string,
         }
       });
-      //const ticketCollection = userData.data.getUser?.userTicketsId ? userData.data.getUser.userTicketsId : '';
-      //setTicketCollection(ticketCollection);
       if (!userData.data.getUser) addUser();
     } catch (err) {
       console.log('error fetching user');
@@ -112,8 +110,6 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
           }
         }
       });
-      //const ticketCollection = ticketCollectionData.data.createTicketCollection.id;
-      //setTicketCollection(ticketCollection);
     } catch (err) {
       console.log('error creating collection:', err);
     }
