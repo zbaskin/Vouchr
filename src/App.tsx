@@ -120,7 +120,7 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
       <Heading level={1}>Hello {user?.username}</Heading>
       <Button onClick={signOut}>Sign out</Button>
 
-      <h2>Ticket Collection</h2>
+      <h2>Ticket Collection!</h2>
       <input
         onChange={(event) =>
           setFormState({ ...formState, name: event.target.value, ticketsID: ticketCollection as string })
