@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 
 import { generateClient } from 'aws-amplify/api';
 
-import { createTicket, createTicketCollection, createUser } from './graphql/mutations';
+import { createTicket, createTicketCollection, createUser, deleteTicket } from './graphql/mutations';
 import { ticketsByTicketsID, getUser } from './graphql/queries';
 import { 
   type CreateTicketInput, 
@@ -65,6 +65,53 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
     } catch (err) {
       console.log('error creating ticket:', err);
     }
+  }
+
+  async function removeTicket(ticketID: string | null | undefined) {
+    try {
+      if (!formState.name || !formState.type || ticketID === null || ticketID === undefined) return;
+      await client.graphql({
+        query: deleteTicket,
+        variables: {
+          input: ({ id: ticketID }),
+        },
+      });
+      handleRemoveTicket(ticketID);
+    } catch (err) {
+      console.log('error removing ticket:', err);
+    }
+  }
+
+  function handleRemoveTicket(ticketID: string) {
+    const updatedTickets = { ...tickets };
+    console.log(updatedTickets);
+    updatedTickets.filter(
+      (ticket) => {
+        ticket.name !== ticketID
+      }
+    );
+    console.log(updatedTickets);
+    setTickets(updatedTickets);
+    
+    
+    /*const updatedTickets = Object.fromEntries(
+      Object.entries().filter()
+    );
+
+    const removeEntriesByCategory = (category: string) => {
+      setTickets((prevEntries) => {
+        const updatedEntries = Object.fromEntries(
+          Object.entries(prevEntries).filter(
+            ([, ticket]) => ticket.id !== ticketID
+          )
+        );
+        return updatedEntries;
+      });
+    };*/
+
+    /*const updatedTickets = { ...tickets };
+    delete updatedTickets[0];
+    setTickets(updatedTickets);*/
   }
 
   async function fetchUser() {
@@ -135,6 +182,7 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
       {tickets.map((ticket, index) => (
         <div key={ticket.id ? ticket.id : index} className="ticket">
           <p className="ticketName">{ticket.name}</p>
+          <button onClick={()=>removeTicket(ticket.id)}>Remove</button>
         </div>
       ))}
     </div>
