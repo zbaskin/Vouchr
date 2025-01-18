@@ -69,7 +69,7 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
 
   async function removeTicket(ticketID: string | null | undefined) {
     try {
-      if (!formState.name || !formState.type || ticketID === null || ticketID === undefined) return;
+      if (ticketID === null || ticketID === undefined) return;
       await client.graphql({
         query: deleteTicket,
         variables: {
@@ -85,33 +85,14 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
   function handleRemoveTicket(ticketID: string) {
     const updatedTickets = { ...tickets };
     console.log(updatedTickets);
-    updatedTickets.filter(
-      (ticket) => {
-        ticket.name !== ticketID
+    for (const key in updatedTickets) {
+      if (updatedTickets[key].id === ticketID) {
+        delete updatedTickets[key];
+        break;
       }
-    );
+    }
     console.log(updatedTickets);
     setTickets(updatedTickets);
-    
-    
-    /*const updatedTickets = Object.fromEntries(
-      Object.entries().filter()
-    );
-
-    const removeEntriesByCategory = (category: string) => {
-      setTickets((prevEntries) => {
-        const updatedEntries = Object.fromEntries(
-          Object.entries(prevEntries).filter(
-            ([, ticket]) => ticket.id !== ticketID
-          )
-        );
-        return updatedEntries;
-      });
-    };*/
-
-    /*const updatedTickets = { ...tickets };
-    delete updatedTickets[0];
-    setTickets(updatedTickets);*/
   }
 
   async function fetchUser() {
