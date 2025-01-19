@@ -62,6 +62,7 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
           input: ticket,
         },
       });
+      await fetchTickets();
     } catch (err) {
       console.log('error creating ticket:', err);
     }
@@ -76,22 +77,18 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
           input: ({ id: ticketID }),
         },
       });
-      handleRemoveTicket(ticketID);
+      await fetchTickets();
+      await handleRemoveTicket(ticketID);
     } catch (err) {
       console.log('error removing ticket:', err);
     }
   }
 
-  function handleRemoveTicket(ticketID: string) {
-    const updatedTickets = { ...tickets };
-    console.log(updatedTickets);
-    for (const key in updatedTickets) {
-      if (updatedTickets[key].id === ticketID) {
-        delete updatedTickets[key];
-        break;
-      }
-    }
-    console.log(updatedTickets);
+  async function handleRemoveTicket(ticketID: string) {
+    const updatedTickets = [ ...tickets ];
+    updatedTickets.forEach((ticket, index) => {
+      if (ticket.id === ticketID) updatedTickets.splice(index, 1);
+    });
     setTickets(updatedTickets);
   }
 
@@ -145,8 +142,8 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
 
   return (
     <div className="container">
-      <Heading level={1}>Hello {user?.username}</Heading>
-      <Button onClick={signOut}>Sign out</Button>
+      <Heading className="greetingHeader" level={1}>Hello {user?.username}</Heading>
+      <Button className="signOutButton" onClick={signOut}>Sign out</Button>
 
       <h2>Ticket Collection!</h2>
       <input
@@ -160,12 +157,14 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
       <button className="createButton" onClick={addTicket}>
         Create Ticket
       </button>
-      {tickets.map((ticket, index) => (
-        <div key={ticket.id ? ticket.id : index} className="ticket">
-          <p className="ticketName">{ticket.name}</p>
-          <button onClick={()=>removeTicket(ticket.id)}>Remove</button>
-        </div>
-      ))}
+      <div className="ticketCollection">
+        {tickets.map((ticket, index) => (
+          <div key={ticket.id ? ticket.id : index} className="ticket">
+            <button className="removeButton" onClick={()=>removeTicket(ticket.id)}>X</button>
+            <p className="ticketName">{ticket.name}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
