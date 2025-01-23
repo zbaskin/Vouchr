@@ -16,8 +16,9 @@ export const onCreateTicket = /* GraphQL */ `subscription OnCreateTicket($filter
     seat
     venue
     city
-    date
-    time
+    eventDate
+    eventTime
+    timeCreated
     ticketsID
     createdAt
     updatedAt
@@ -36,8 +37,9 @@ export const onUpdateTicket = /* GraphQL */ `subscription OnUpdateTicket($filter
     seat
     venue
     city
-    date
-    time
+    eventDate
+    eventTime
+    timeCreated
     ticketsID
     createdAt
     updatedAt
@@ -56,8 +58,9 @@ export const onDeleteTicket = /* GraphQL */ `subscription OnDeleteTicket($filter
     seat
     venue
     city
-    date
-    time
+    eventDate
+    eventTime
+    timeCreated
     ticketsID
     createdAt
     updatedAt

@@ -16,8 +16,9 @@ export const getTicket = /* GraphQL */ `query GetTicket($id: ID!) {
     seat
     venue
     city
-    date
-    time
+    eventDate
+    eventTime
+    timeCreated
     ticketsID
     createdAt
     updatedAt
@@ -38,8 +39,9 @@ export const listTickets = /* GraphQL */ `query ListTickets(
       seat
       venue
       city
-      date
-      time
+      eventDate
+      eventTime
+      timeCreated
       ticketsID
       createdAt
       updatedAt
@@ -74,8 +76,9 @@ export const ticketsByTicketsID = /* GraphQL */ `query TicketsByTicketsID(
       seat
       venue
       city
-      date
-      time
+      eventDate
+      eventTime
+      timeCreated
       ticketsID
       createdAt
       updatedAt

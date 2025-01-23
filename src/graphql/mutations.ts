@@ -19,8 +19,9 @@ export const createTicket = /* GraphQL */ `mutation CreateTicket(
     seat
     venue
     city
-    date
-    time
+    eventDate
+    eventTime
+    timeCreated
     ticketsID
     createdAt
     updatedAt
@@ -42,8 +43,9 @@ export const updateTicket = /* GraphQL */ `mutation UpdateTicket(
     seat
     venue
     city
-    date
-    time
+    eventDate
+    eventTime
+    timeCreated
     ticketsID
     createdAt
     updatedAt
@@ -65,8 +67,9 @@ export const deleteTicket = /* GraphQL */ `mutation DeleteTicket(
     seat
     venue
     city
-    date
-    time
+    eventDate
+    eventTime
+    timeCreated
     ticketsID
     createdAt
     updatedAt
