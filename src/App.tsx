@@ -1,10 +1,8 @@
 import './App.css';
 import { useEffect, useState } from 'react';
 
-import { generateClient } from 'aws-amplify/api';
+import { fetchTickets, addTicket, removeTicket, fetchUser, addUser, addTicketCollection } from './ticketService';
 
-import { createTicket, createTicketCollection, createUser, deleteTicket } from './graphql/mutations';
-import { ticketsByTicketsID, getUser } from './graphql/queries';
 import { 
   type CreateTicketInput, 
   type Ticket,
@@ -18,7 +16,6 @@ import { type AuthUser } from "aws-amplify/auth";
 import { type UseAuthenticator } from "@aws-amplify/ui-react-core";
 
 const initialState: CreateTicketInput = { name: '', type: EventType.MOVIE, ticketsID: '' };
-const client = generateClient();
 
 type AppProps = {
   signOut?: UseAuthenticator["signOut"]; //() => void;
@@ -31,114 +28,40 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
   const [ticketCollection] = useState(user?.userId); 
   
   useEffect(() => {
-    fetchUser();
-    fetchTickets();
+    handleFetchUser();
+    handleFetchTickets();
   }, []);
 
-  async function fetchTickets() {
-    try {
-      const ticketData = await client.graphql({
-        query: ticketsByTicketsID,
-        variables: {
-          ticketsID: ticketCollection as string,
-        }
-      });
-      const tickets = ticketData.data.ticketsByTicketsID.items;
-      setTickets(tickets);
-    } catch (err) {
-      console.log('error fetching tickets');
-    }
-  }
+  const handleFetchTickets = async () => {
+    if (!ticketCollection) return;
+    const fetchedTickets = await fetchTickets(ticketCollection);
+    setTickets(fetchedTickets);
+  };
 
-  async function addTicket() {
-    try {
-      if (!formState.name || !formState.type) return;
-      const ticket = { ...formState };
-      setTickets([...tickets, ticket]);
-      setFormState(initialState);
-      await client.graphql({
-        query: createTicket,
-        variables: {
-          input: ticket,
-        },
-      });
-      await fetchTickets();
-    } catch (err) {
-      console.log('error creating ticket:', err);
-    }
-  }
+  const handleAddTicket = async () => {
+    if (!formState.name || !formState.type) return;
+    const ticket = { ...formState, ticketsID: ticketCollection as string };
+    setTickets([...tickets, ticket]);
+    setFormState(initialState);
+    await addTicket(ticket);
+    await handleFetchTickets();
+  };
 
-  async function removeTicket(ticketID: string | null | undefined) {
-    try {
-      if (ticketID === null || ticketID === undefined) return;
-      await client.graphql({
-        query: deleteTicket,
-        variables: {
-          input: ({ id: ticketID }),
-        },
-      });
-      await fetchTickets();
-      await handleRemoveTicket(ticketID);
-    } catch (err) {
-      console.log('error removing ticket:', err);
-    }
-  }
-
-  async function handleRemoveTicket(ticketID: string) {
-    const updatedTickets = [ ...tickets ];
-    updatedTickets.forEach((ticket, index) => {
-      if (ticket.id === ticketID) updatedTickets.splice(index, 1);
-    });
+  const handleRemoveTicket = async (ticketID: string | null | undefined) => {
+    if (!ticketID) return;
+    await removeTicket(ticketID);
+    const updatedTickets = tickets.filter((ticket) => ticket.id !== ticketID);
     setTickets(updatedTickets);
-  }
+  };
 
-  async function fetchUser() {
-    try {
-      const userData = await client.graphql({
-        query: getUser,
-        variables: {
-          id: user?.userId as string,
-        }
-      });
-      if (!userData.data.getUser) addUser();
-    } catch (err) {
-      console.log('error fetching user');
-      await addUser();
+  const handleFetchUser = async () => {
+    if (!user?.userId) return;
+    const userData = await fetchUser(user.userId);
+    if (!userData) {
+      await addTicketCollection(user.userId);
+      await addUser(user.userId, user.username as string, ticketCollection as string);
     }
-  }
-
-  async function addUser() {
-    await addTicketCollection();
-    try {
-      await client.graphql({
-        query: createUser,
-        variables: {
-          input: {
-            "id": user?.userId,
-            "username": user?.username as string,
-            "userTicketsId": ticketCollection,
-          }
-        }
-      });
-    } catch (err) {
-      console.log('error creating user:', err);
-    }
-  }
-
-  async function addTicketCollection() {
-    try {
-      await client.graphql({
-        query: createTicketCollection,
-        variables: {
-          input: {
-            "id": user?.userId,
-          }
-        }
-      });
-    } catch (err) {
-      console.log('error creating collection:', err);
-    }
-  }
+  };
 
   return (
     <div className="container">
@@ -154,13 +77,13 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
         value={formState.name}
         placeholder="Name"
       />
-      <button className="createButton" onClick={addTicket}>
+      <button className="createButton" onClick={handleAddTicket}>
         Create Ticket
       </button>
       <div className="ticketCollection">
         {tickets.map((ticket, index) => (
           <div key={ticket.id ? ticket.id : index} className="ticket">
-            <button className="removeButton" onClick={()=>removeTicket(ticket.id)}>X</button>
+            <button className="removeButton" onClick={()=>handleRemoveTicket(ticket.id)}>X</button>
             <p className="ticketName">{ticket.name}</p>
           </div>
         ))}
