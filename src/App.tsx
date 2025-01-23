@@ -41,7 +41,6 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
   const handleAddTicket = async () => {
     if (!formState.name || !formState.type) return;
     const ticket = { ...formState, ticketsID: ticketCollection as string };
-    setTickets([...tickets, ticket]);
     setFormState(initialState);
     await addTicket(ticket);
     await handleFetchTickets();
@@ -63,6 +62,14 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
     }
   };
 
+  const handleSortName = () => {
+    const sortTickets = [ ...tickets ];
+    sortTickets.sort((a, b) => {
+      return a.name.localeCompare(b.name);
+    });
+    setTickets(sortTickets);
+  }
+
   return (
     <div className="container">
       <Heading className="greetingHeader" level={1}>Hello {user?.username}</Heading>
@@ -79,6 +86,9 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
       />
       <button className="createButton" onClick={handleAddTicket}>
         Create Ticket
+      </button>
+      <button className="createButton" onClick={handleSortName}>
+        Sort By Name
       </button>
       <div className="ticketCollection">
         {tickets.map((ticket, index) => (

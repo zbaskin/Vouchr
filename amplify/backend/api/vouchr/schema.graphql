@@ -7,7 +7,7 @@ type Ticket @model @auth(rules: [{allow: public}]) {
   city: String
   eventDate: AWSDate
   eventTime: AWSTime
-  timeCreated: AWSTime
+  timeCreated: AWSTimestamp
   ticketsID: ID! @index(name: "byTicketCollection")
 }
 
