@@ -76,6 +76,7 @@ export const onCreateTicketCollection = /* GraphQL */ `subscription OnCreateTick
 ) {
   onCreateTicketCollection(filter: $filter) {
     id
+    sort
     Tickets {
       nextToken
       __typename
@@ -94,6 +95,7 @@ export const onUpdateTicketCollection = /* GraphQL */ `subscription OnUpdateTick
 ) {
   onUpdateTicketCollection(filter: $filter) {
     id
+    sort
     Tickets {
       nextToken
       __typename
@@ -112,6 +114,7 @@ export const onDeleteTicketCollection = /* GraphQL */ `subscription OnDeleteTick
 ) {
   onDeleteTicketCollection(filter: $filter) {
     id
+    sort
     Tickets {
       nextToken
       __typename
@@ -131,6 +134,7 @@ export const onCreateUser = /* GraphQL */ `subscription OnCreateUser($filter: Mo
     username
     Tickets {
       id
+      sort
       createdAt
       updatedAt
       __typename
@@ -151,6 +155,7 @@ export const onUpdateUser = /* GraphQL */ `subscription OnUpdateUser($filter: Mo
     username
     Tickets {
       id
+      sort
       createdAt
       updatedAt
       __typename
@@ -171,6 +176,7 @@ export const onDeleteUser = /* GraphQL */ `subscription OnDeleteUser($filter: Mo
     username
     Tickets {
       id
+      sort
       createdAt
       updatedAt
       __typename

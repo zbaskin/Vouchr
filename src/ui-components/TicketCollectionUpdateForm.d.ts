@@ -5,7 +5,7 @@
  **************************************************************************/
 
 import * as React from "react";
-import { GridProps } from "@aws-amplify/ui-react";
+import { GridProps, SelectFieldProps } from "@aws-amplify/ui-react";
 import { TicketCollection } from "../API.ts";
 export declare type EscapeHatchProps = {
     [elementHierarchy: string]: Record<string, unknown>;
@@ -22,11 +22,16 @@ export declare type ValidationResponse = {
     errorMessage?: string;
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
-export declare type TicketCollectionUpdateFormInputValues = {};
-export declare type TicketCollectionUpdateFormValidationValues = {};
+export declare type TicketCollectionUpdateFormInputValues = {
+    sort?: string;
+};
+export declare type TicketCollectionUpdateFormValidationValues = {
+    sort?: ValidationFunction<string>;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type TicketCollectionUpdateFormOverridesProps = {
     TicketCollectionUpdateFormGrid?: PrimitiveOverrideProps<GridProps>;
+    sort?: PrimitiveOverrideProps<SelectFieldProps>;
 } & EscapeHatchProps;
 export declare type TicketCollectionUpdateFormProps = React.PropsWithChildren<{
     overrides?: TicketCollectionUpdateFormOverridesProps | undefined | null;

@@ -11,7 +11,7 @@ export type CreateTicketInput = {
   city?: string | null,
   eventDate?: string | null,
   eventTime?: string | null,
-  timeCreated?: number | null,
+  timeCreated: number,
   ticketsID: string,
 };
 
@@ -121,7 +121,7 @@ export type Ticket = {
   city?: string | null,
   eventDate?: string | null,
   eventTime?: string | null,
-  timeCreated?: number | null,
+  timeCreated: number,
   ticketsID: string,
   createdAt: string,
   updatedAt: string,
@@ -146,17 +146,33 @@ export type DeleteTicketInput = {
 
 export type CreateTicketCollectionInput = {
   id?: string | null,
+  sort?: SortType | null,
 };
 
+export enum SortType {
+  ALPHABETICAL = "ALPHABETICAL",
+  EVENT_TYPE = "EVENT_TYPE",
+  EVENT_DATE = "EVENT_DATE",
+  TIME_CREATED = "TIME_CREATED",
+}
+
+
 export type ModelTicketCollectionConditionInput = {
+  sort?: ModelSortTypeInput | null,
   and?: Array< ModelTicketCollectionConditionInput | null > | null,
   or?: Array< ModelTicketCollectionConditionInput | null > | null,
   not?: ModelTicketCollectionConditionInput | null,
 };
 
+export type ModelSortTypeInput = {
+  eq?: SortType | null,
+  ne?: SortType | null,
+};
+
 export type TicketCollection = {
   __typename: "TicketCollection",
   id: string,
+  sort?: SortType | null,
   Tickets?: ModelTicketConnection | null,
   createdAt: string,
   updatedAt: string,
@@ -170,6 +186,7 @@ export type ModelTicketConnection = {
 
 export type UpdateTicketCollectionInput = {
   id: string,
+  sort?: SortType | null,
 };
 
 export type DeleteTicketCollectionInput = {
@@ -234,6 +251,7 @@ export enum ModelSortDirection {
 
 export type ModelTicketCollectionFilterInput = {
   id?: ModelIDInput | null,
+  sort?: ModelSortTypeInput | null,
   and?: Array< ModelTicketCollectionFilterInput | null > | null,
   or?: Array< ModelTicketCollectionFilterInput | null > | null,
   not?: ModelTicketCollectionFilterInput | null,
@@ -319,6 +337,7 @@ export type ModelSubscriptionIntInput = {
 
 export type ModelSubscriptionTicketCollectionFilterInput = {
   id?: ModelSubscriptionIDInput | null,
+  sort?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionTicketCollectionFilterInput | null > | null,
   or?: Array< ModelSubscriptionTicketCollectionFilterInput | null > | null,
 };
@@ -346,7 +365,7 @@ export type CreateTicketMutation = {
     city?: string | null,
     eventDate?: string | null,
     eventTime?: string | null,
-    timeCreated?: number | null,
+    timeCreated: number,
     ticketsID: string,
     createdAt: string,
     updatedAt: string,
@@ -369,7 +388,7 @@ export type UpdateTicketMutation = {
     city?: string | null,
     eventDate?: string | null,
     eventTime?: string | null,
-    timeCreated?: number | null,
+    timeCreated: number,
     ticketsID: string,
     createdAt: string,
     updatedAt: string,
@@ -392,7 +411,7 @@ export type DeleteTicketMutation = {
     city?: string | null,
     eventDate?: string | null,
     eventTime?: string | null,
-    timeCreated?: number | null,
+    timeCreated: number,
     ticketsID: string,
     createdAt: string,
     updatedAt: string,
@@ -408,6 +427,7 @@ export type CreateTicketCollectionMutation = {
   createTicketCollection?:  {
     __typename: "TicketCollection",
     id: string,
+    sort?: SortType | null,
     Tickets?:  {
       __typename: "ModelTicketConnection",
       nextToken?: string | null,
@@ -426,6 +446,7 @@ export type UpdateTicketCollectionMutation = {
   updateTicketCollection?:  {
     __typename: "TicketCollection",
     id: string,
+    sort?: SortType | null,
     Tickets?:  {
       __typename: "ModelTicketConnection",
       nextToken?: string | null,
@@ -444,6 +465,7 @@ export type DeleteTicketCollectionMutation = {
   deleteTicketCollection?:  {
     __typename: "TicketCollection",
     id: string,
+    sort?: SortType | null,
     Tickets?:  {
       __typename: "ModelTicketConnection",
       nextToken?: string | null,
@@ -466,6 +488,7 @@ export type CreateUserMutation = {
     Tickets?:  {
       __typename: "TicketCollection",
       id: string,
+      sort?: SortType | null,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -488,6 +511,7 @@ export type UpdateUserMutation = {
     Tickets?:  {
       __typename: "TicketCollection",
       id: string,
+      sort?: SortType | null,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -510,6 +534,7 @@ export type DeleteUserMutation = {
     Tickets?:  {
       __typename: "TicketCollection",
       id: string,
+      sort?: SortType | null,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -534,7 +559,7 @@ export type GetTicketQuery = {
     city?: string | null,
     eventDate?: string | null,
     eventTime?: string | null,
-    timeCreated?: number | null,
+    timeCreated: number,
     ticketsID: string,
     createdAt: string,
     updatedAt: string,
@@ -560,7 +585,7 @@ export type ListTicketsQuery = {
       city?: string | null,
       eventDate?: string | null,
       eventTime?: string | null,
-      timeCreated?: number | null,
+      timeCreated: number,
       ticketsID: string,
       createdAt: string,
       updatedAt: string,
@@ -590,7 +615,7 @@ export type TicketsByTicketsIDQuery = {
       city?: string | null,
       eventDate?: string | null,
       eventTime?: string | null,
-      timeCreated?: number | null,
+      timeCreated: number,
       ticketsID: string,
       createdAt: string,
       updatedAt: string,
@@ -607,6 +632,7 @@ export type GetTicketCollectionQuery = {
   getTicketCollection?:  {
     __typename: "TicketCollection",
     id: string,
+    sort?: SortType | null,
     Tickets?:  {
       __typename: "ModelTicketConnection",
       nextToken?: string | null,
@@ -628,6 +654,7 @@ export type ListTicketCollectionsQuery = {
     items:  Array< {
       __typename: "TicketCollection",
       id: string,
+      sort?: SortType | null,
       createdAt: string,
       updatedAt: string,
     } | null >,
@@ -647,6 +674,7 @@ export type GetUserQuery = {
     Tickets?:  {
       __typename: "TicketCollection",
       id: string,
+      sort?: SortType | null,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -692,7 +720,7 @@ export type OnCreateTicketSubscription = {
     city?: string | null,
     eventDate?: string | null,
     eventTime?: string | null,
-    timeCreated?: number | null,
+    timeCreated: number,
     ticketsID: string,
     createdAt: string,
     updatedAt: string,
@@ -714,7 +742,7 @@ export type OnUpdateTicketSubscription = {
     city?: string | null,
     eventDate?: string | null,
     eventTime?: string | null,
-    timeCreated?: number | null,
+    timeCreated: number,
     ticketsID: string,
     createdAt: string,
     updatedAt: string,
@@ -736,7 +764,7 @@ export type OnDeleteTicketSubscription = {
     city?: string | null,
     eventDate?: string | null,
     eventTime?: string | null,
-    timeCreated?: number | null,
+    timeCreated: number,
     ticketsID: string,
     createdAt: string,
     updatedAt: string,
@@ -751,6 +779,7 @@ export type OnCreateTicketCollectionSubscription = {
   onCreateTicketCollection?:  {
     __typename: "TicketCollection",
     id: string,
+    sort?: SortType | null,
     Tickets?:  {
       __typename: "ModelTicketConnection",
       nextToken?: string | null,
@@ -768,6 +797,7 @@ export type OnUpdateTicketCollectionSubscription = {
   onUpdateTicketCollection?:  {
     __typename: "TicketCollection",
     id: string,
+    sort?: SortType | null,
     Tickets?:  {
       __typename: "ModelTicketConnection",
       nextToken?: string | null,
@@ -785,6 +815,7 @@ export type OnDeleteTicketCollectionSubscription = {
   onDeleteTicketCollection?:  {
     __typename: "TicketCollection",
     id: string,
+    sort?: SortType | null,
     Tickets?:  {
       __typename: "ModelTicketConnection",
       nextToken?: string | null,
@@ -806,6 +837,7 @@ export type OnCreateUserSubscription = {
     Tickets?:  {
       __typename: "TicketCollection",
       id: string,
+      sort?: SortType | null,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -827,6 +859,7 @@ export type OnUpdateUserSubscription = {
     Tickets?:  {
       __typename: "TicketCollection",
       id: string,
+      sort?: SortType | null,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -848,6 +881,7 @@ export type OnDeleteUserSubscription = {
     Tickets?:  {
       __typename: "TicketCollection",
       id: string,
+      sort?: SortType | null,
       createdAt: string,
       updatedAt: string,
     } | null,

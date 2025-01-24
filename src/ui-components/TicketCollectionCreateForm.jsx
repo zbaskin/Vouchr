@@ -6,7 +6,7 @@
 
 /* eslint-disable */
 import * as React from "react";
-import { Button, Flex, Grid } from "@aws-amplify/ui-react";
+import { Button, Flex, Grid, SelectField } from "@aws-amplify/ui-react";
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
 import { generateClient } from "aws-amplify/api";
 import { createTicketCollection } from "../graphql/mutations";
@@ -22,12 +22,18 @@ export default function TicketCollectionCreateForm(props) {
     overrides,
     ...rest
   } = props;
-  const initialValues = {};
+  const initialValues = {
+    sort: "",
+  };
+  const [sort, setSort] = React.useState(initialValues.sort);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
+    setSort(initialValues.sort);
     setErrors({});
   };
-  const validations = {};
+  const validations = {
+    sort: [],
+  };
   const runValidationTasks = async (
     fieldName,
     currentValue,
@@ -53,7 +59,9 @@ export default function TicketCollectionCreateForm(props) {
       padding="20px"
       onSubmit={async (event) => {
         event.preventDefault();
-        let modelFields = {};
+        let modelFields = {
+          sort,
+        };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
             if (Array.isArray(modelFields[fieldName])) {
@@ -106,6 +114,51 @@ export default function TicketCollectionCreateForm(props) {
       {...getOverrideProps(overrides, "TicketCollectionCreateForm")}
       {...rest}
     >
+      <SelectField
+        label="Sort"
+        placeholder="Please select an option"
+        isDisabled={false}
+        value={sort}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              sort: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.sort ?? value;
+          }
+          if (errors.sort?.hasError) {
+            runValidationTasks("sort", value);
+          }
+          setSort(value);
+        }}
+        onBlur={() => runValidationTasks("sort", sort)}
+        errorMessage={errors.sort?.errorMessage}
+        hasError={errors.sort?.hasError}
+        {...getOverrideProps(overrides, "sort")}
+      >
+        <option
+          children="Alphabetical"
+          value="ALPHABETICAL"
+          {...getOverrideProps(overrides, "sortoption0")}
+        ></option>
+        <option
+          children="Event type"
+          value="EVENT_TYPE"
+          {...getOverrideProps(overrides, "sortoption1")}
+        ></option>
+        <option
+          children="Event date"
+          value="EVENT_DATE"
+          {...getOverrideProps(overrides, "sortoption2")}
+        ></option>
+        <option
+          children="Time created"
+          value="TIME_CREATED"
+          {...getOverrideProps(overrides, "sortoption3")}
+        ></option>
+      </SelectField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}

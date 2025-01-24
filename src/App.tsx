@@ -1,21 +1,31 @@
 import './App.css';
 import { useEffect, useState } from 'react';
 
-import { fetchTickets, addTicket, removeTicket, fetchUser, addUser, addTicketCollection } from './ticketService';
+import { 
+  fetchTickets, 
+  addTicket, 
+  removeTicket, 
+  fetchUser, 
+  addUser, 
+  addTicketCollection,
+  fetchSortType,
+  updateSortType,
+} from './ticketService';
 
 import { 
   type CreateTicketInput, 
   type Ticket,
   EventType, 
+  SortType,
 } from './API';
 
-import { withAuthenticator, Button, Heading } from '@aws-amplify/ui-react';
+import { withAuthenticator, Button } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 
 import { type AuthUser } from "aws-amplify/auth";
 import { type UseAuthenticator } from "@aws-amplify/ui-react-core";
 
-const initialState: CreateTicketInput = { name: '', type: EventType.MOVIE, ticketsID: '' };
+const initialState: CreateTicketInput = { name: '', type: EventType.MOVIE, ticketsID: '', timeCreated: Date.now() };
 
 type AppProps = {
   signOut?: UseAuthenticator["signOut"]; //() => void;
@@ -25,7 +35,8 @@ type AppProps = {
 const App: React.FC<AppProps> = ({ signOut, user }) => {
   const [formState, setFormState] = useState<CreateTicketInput>(initialState);
   const [tickets, setTickets] = useState<Ticket[] | CreateTicketInput[]>([]);
-  const [ticketCollection] = useState(user?.userId); 
+  const [ticketCollection] = useState(user?.userId);
+  const [isLoading, setIsLoading] = useState(false);
   
   useEffect(() => {
     handleFetchUser();
@@ -34,13 +45,27 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
 
   const handleFetchTickets = async () => {
     if (!ticketCollection) return;
+    setIsLoading(true);
     const fetchedTickets = await fetchTickets(ticketCollection);
+    const sortType = await fetchSortType(ticketCollection);
+    if (sortType === SortType.ALPHABETICAL) {
+      fetchedTickets.sort((a, b) => {
+        return a.name.localeCompare(b.name);
+      });
+    }
+    if (sortType === SortType.TIME_CREATED) {
+      fetchedTickets.sort((a, b) => {
+        return b.timeCreated - a.timeCreated;
+      });
+    }
     setTickets(fetchedTickets);
+    setIsLoading(false);
   };
 
   const handleAddTicket = async () => {
     if (!formState.name || !formState.type) return;
     const ticket = { ...formState, ticketsID: ticketCollection as string };
+    ticket.timeCreated = Date.now();
     setFormState(initialState);
     await addTicket(ticket);
     await handleFetchTickets();
@@ -62,41 +87,52 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
     }
   };
 
-  const handleSortName = () => {
-    const sortTickets = [ ...tickets ];
-    sortTickets.sort((a, b) => {
-      return a.name.localeCompare(b.name);
-    });
-    setTickets(sortTickets);
+  const handleUpdateSort = async (collectionSortType: SortType) => {
+    if (!ticketCollection) return;
+    await updateSortType(ticketCollection, collectionSortType);
+    await handleFetchTickets();
   }
 
   return (
     <div className="container">
-      <Heading className="greetingHeader" level={1}>Hello {user?.username}</Heading>
-      <Button className="signOutButton" onClick={signOut}>Sign out</Button>
-
-      <h2>Ticket Collection!</h2>
-      <input
-        onChange={(event) =>
-          setFormState({ ...formState, name: event.target.value, ticketsID: ticketCollection as string })
-        }
-        className="input"
-        value={formState.name}
-        placeholder="Name"
-      />
-      <button className="createButton" onClick={handleAddTicket}>
-        Create Ticket
-      </button>
-      <button className="createButton" onClick={handleSortName}>
-        Sort By Name
-      </button>
+      <div className="signOutButton">
+        <Button onClick={signOut}>Sign out</Button>
+      </div>
+      <h2>{user?.username ? user.username.concat("'s") : (<h2>Your</h2>) } Ticket Collection</h2>
+      <div className="formInput">
+        <input
+          onChange={(event) =>
+            setFormState({ ...formState, name: event.target.value, ticketsID: ticketCollection as string })
+          }
+          className="input"
+          value={formState.name}
+          placeholder="Name"
+        />
+        <button className="createButton" onClick={handleAddTicket}>
+          Create Ticket
+        </button>
+      </div>
+      <div className="sortButtons">
+        <button className="sortButton" onClick={()=>handleUpdateSort(SortType.ALPHABETICAL)}>
+          Sort By Name
+        </button>
+        <button className="sortButton" onClick={()=>handleUpdateSort(SortType.TIME_CREATED)}>
+          Sort By Date Added
+        </button>
+      </div>
       <div className="ticketCollection">
-        {tickets.map((ticket, index) => (
-          <div key={ticket.id ? ticket.id : index} className="ticket">
-            <button className="removeButton" onClick={()=>handleRemoveTicket(ticket.id)}>X</button>
-            <p className="ticketName">{ticket.name}</p>
-          </div>
-        ))}
+        {isLoading ? (
+          <p>Loading tickets...</p>
+        ) : tickets.length > 0 ? (
+          tickets.map((ticket, index) => (
+            <div key={ticket.id ? ticket.id : index} className="ticket">
+              <button className="removeButton" onClick={()=>handleRemoveTicket(ticket.id)}>X</button>
+              <p className="ticketName">{ticket.name}</p>
+            </div>
+          ))
+        ) : (
+          <p>No tickets available.</p>
+        )}
       </div>
     </div>
   );

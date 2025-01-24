@@ -86,6 +86,7 @@ export const createTicketCollection = /* GraphQL */ `mutation CreateTicketCollec
 ) {
   createTicketCollection(input: $input, condition: $condition) {
     id
+    sort
     Tickets {
       nextToken
       __typename
@@ -105,6 +106,7 @@ export const updateTicketCollection = /* GraphQL */ `mutation UpdateTicketCollec
 ) {
   updateTicketCollection(input: $input, condition: $condition) {
     id
+    sort
     Tickets {
       nextToken
       __typename
@@ -124,6 +126,7 @@ export const deleteTicketCollection = /* GraphQL */ `mutation DeleteTicketCollec
 ) {
   deleteTicketCollection(input: $input, condition: $condition) {
     id
+    sort
     Tickets {
       nextToken
       __typename
@@ -146,6 +149,7 @@ export const createUser = /* GraphQL */ `mutation CreateUser(
     username
     Tickets {
       id
+      sort
       createdAt
       updatedAt
       __typename
@@ -169,6 +173,7 @@ export const updateUser = /* GraphQL */ `mutation UpdateUser(
     username
     Tickets {
       id
+      sort
       createdAt
       updatedAt
       __typename
@@ -192,6 +197,7 @@ export const deleteUser = /* GraphQL */ `mutation DeleteUser(
     username
     Tickets {
       id
+      sort
       createdAt
       updatedAt
       __typename

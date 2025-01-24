@@ -14,7 +14,9 @@
   padding: 20;
 }
 
-.todo { margin-bottom: 15 }
+.signOutButton {
+  float: right;
+}
 
 .input {
   border: "none";
@@ -24,12 +26,21 @@
   font-size: 18;
 }
 
-.todoName { font-size: 20; font-weight: "bold" }
-.todoDescription { margin-bottom: 0 }
-
 .createButton {
   background-color: black;
   color: white;
+  outline: none;
+  font-size: 18;
+  padding: 12px 5px;
+  margin-left: 15px;
+}
+
+.sortButtons {
+  margin-top: 15px;
+}
+
+.sortButton {
+  background-color: #FFE0F5;
   outline: none;
   font-size: 18;
   padding: 12px 5px;

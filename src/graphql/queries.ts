@@ -95,6 +95,7 @@ export const ticketsByTicketsID = /* GraphQL */ `query TicketsByTicketsID(
 export const getTicketCollection = /* GraphQL */ `query GetTicketCollection($id: ID!) {
   getTicketCollection(id: $id) {
     id
+    sort
     Tickets {
       nextToken
       __typename
@@ -116,6 +117,7 @@ export const listTicketCollections = /* GraphQL */ `query ListTicketCollections(
   listTicketCollections(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
       id
+      sort
       createdAt
       updatedAt
       __typename
@@ -134,6 +136,7 @@ export const getUser = /* GraphQL */ `query GetUser($id: ID!) {
     username
     Tickets {
       id
+      sort
       createdAt
       updatedAt
       __typename

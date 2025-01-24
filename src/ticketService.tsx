@@ -1,6 +1,13 @@
 import { generateClient } from 'aws-amplify/api';
-import { createTicket, createTicketCollection, createUser, deleteTicket } from './graphql/mutations';
-import { ticketsByTicketsID, getUser } from './graphql/queries';
+import { 
+  createTicket, 
+  createTicketCollection, 
+  createUser, 
+  deleteTicket, 
+  updateTicketCollection, 
+} from './graphql/mutations';
+import { ticketsByTicketsID, getUser, getTicketCollection } from './graphql/queries';
+import { SortType } from './API'
 
 const client = generateClient();
 
@@ -15,6 +22,33 @@ export async function fetchTickets(ticketCollection: string) {
   } catch (err) {
     console.error('Error fetching tickets:', err);
     return [];
+  }
+}
+
+// Fetch sort type of Ticket Collection
+export async function fetchSortType(ticketCollection: string) {
+  try {
+    const collectionData = await client.graphql({
+      query: getTicketCollection,
+      variables: { id: ticketCollection },
+    });
+    return collectionData.data.getTicketCollection?.sort;
+  } catch (err) {
+    console.error('Error fetching sort type:', err);
+    return;
+  }
+}
+
+// Update sort type of Ticket Collection
+export async function updateSortType(ticketCollection: string, sortType: SortType) {
+  try {
+    await client.graphql({
+      query: updateTicketCollection,
+      variables: { input: { id: ticketCollection, sort: sortType } },
+    });
+  } catch (err) {
+    console.error('Error updating sort type:', err);
+    return;
   }
 }
 
