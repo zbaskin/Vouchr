@@ -62,9 +62,16 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
     setIsLoading(false);
   };
 
+  const handleUpdateSort = async (collectionSortType: SortType) => {
+    if (!ticketCollection) return;
+    await updateSortType(ticketCollection, collectionSortType);
+    await handleFetchTickets();
+  }
+
   const handleAddTicket = async () => {
     if (!formState.name || !formState.type) return;
-    const ticket = { ...formState, ticketsID: ticketCollection as string };
+    const ticket = { ...formState };
+    ticket.ticketsID = ticketCollection as string;
     ticket.timeCreated = Date.now();
     setFormState(initialState);
     await addTicket(ticket);
@@ -87,32 +94,88 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
     }
   };
 
-  const handleUpdateSort = async (collectionSortType: SortType) => {
-    if (!ticketCollection) return;
-    await updateSortType(ticketCollection, collectionSortType);
-    await handleFetchTickets();
-  }
-
   return (
-    <div className="container">
-      <div className="signOutButton">
-        <Button onClick={signOut}>Sign out</Button>
-      </div>
+    <div className="appContainer">
       <h2>{user?.username ? user.username.concat("'s") : (<h2>Your</h2>) } Ticket Collection</h2>
-      <div className="formInput">
-        <input
-          onChange={(event) =>
-            setFormState({ ...formState, name: event.target.value, ticketsID: ticketCollection as string })
-          }
-          className="input"
-          value={formState.name}
-          placeholder="Name"
-        />
-        <button className="createButton" onClick={handleAddTicket}>
+      <div className="headerButtonContainer">
+        <Button onClick={signOut}>Sign out</Button>
+        <button className="createTicketButton" onClick={handleAddTicket}>
           Create Ticket
         </button>
       </div>
-      <div className="sortButtons">
+      <div className="ticketInputContainer">
+        <input
+          onChange={(event) => 
+            setFormState({ 
+              ...formState, 
+              name: event.target.value,
+            })
+          }
+          className="ticketInput"
+          value={formState.name}
+          placeholder="Movie Name"
+        />
+        <input
+          onChange={(event) => 
+            setFormState({ 
+              ...formState, 
+              venue: event.target.value,
+            })
+          }
+          className="ticketInput"
+          value={formState.venue || ""}
+          placeholder="Theater Name"
+        />
+        <div className="ticketInputSmall">
+          <input
+            onChange={(event) => 
+              setFormState({ 
+                ...formState, 
+                eventDate: event.target.value,
+              })
+            }
+            className="ticketInput"
+            value={formState.eventDate || ""}
+            placeholder="Date"
+          />
+          <input
+            onChange={(event) => 
+              setFormState({ 
+                ...formState, 
+                eventTime: event.target.value,
+              })
+            }
+            className="ticketInput"
+            value={formState.eventTime || ""}
+            placeholder="Time"
+          />
+        </div>
+        <div className="ticketInputSmall">
+          <input
+            onChange={(event) => 
+              setFormState({ 
+                ...formState, 
+                theater: event.target.value,
+              })
+            }
+            className="ticketInput"
+            value={formState.theater || ""}
+            placeholder="Room"
+          />
+          <input
+            onChange={(event) => 
+              setFormState({ 
+                ...formState, 
+                seat: event.target.value,
+              })
+            }
+            className="ticketInput"
+            value={formState.seat || ""}
+            placeholder="Seat"
+          />
+        </div>
+      </div>
+      <div className="sortButtonContainer">
         <button className="sortButton" onClick={()=>handleUpdateSort(SortType.ALPHABETICAL)}>
           Sort By Name
         </button>
@@ -125,9 +188,14 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
           <p>Loading tickets...</p>
         ) : tickets.length > 0 ? (
           tickets.map((ticket, index) => (
-            <div key={ticket.id ? ticket.id : index} className="ticket">
-              <button className="removeButton" onClick={()=>handleRemoveTicket(ticket.id)}>X</button>
-              <p className="ticketName">{ticket.name}</p>
+            <div key={ticket.id ? ticket.id : index} className="ticketObject">
+              <button className="removeTicketButton" onClick={()=>handleRemoveTicket(ticket.id)}>X</button>
+              <p className="ticketProperty">{ticket.name}</p>
+              <p className="ticketProperty">{ticket.venue}</p>
+              <p className="ticketProperty">{ticket.eventDate}</p>
+              <p className="ticketProperty">{ticket.eventTime}</p>
+              <p className="ticketProperty">{ticket.theater}</p>
+              <p className="ticketProperty">{ticket.seat}</p>
             </div>
           ))
         ) : (

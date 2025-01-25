@@ -2,8 +2,9 @@ type Ticket @model @auth(rules: [{allow: public}]) {
   id: ID!
   name: String!
   type: EventType!
-  seat: String
   venue: String
+  theater: String
+  seat: String
   city: String
   eventDate: AWSDate
   eventTime: AWSTime

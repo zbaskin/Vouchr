@@ -13,8 +13,9 @@ export const onCreateTicket = /* GraphQL */ `subscription OnCreateTicket($filter
     id
     name
     type
-    seat
     venue
+    theater
+    seat
     city
     eventDate
     eventTime
@@ -34,8 +35,9 @@ export const onUpdateTicket = /* GraphQL */ `subscription OnUpdateTicket($filter
     id
     name
     type
-    seat
     venue
+    theater
+    seat
     city
     eventDate
     eventTime
@@ -55,8 +57,9 @@ export const onDeleteTicket = /* GraphQL */ `subscription OnDeleteTicket($filter
     id
     name
     type
-    seat
     venue
+    theater
+    seat
     city
     eventDate
     eventTime
