@@ -1,0 +1,91 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.appContainer {
+  margin: "0 auto";
+  display: "flex";
+  flex-direction: "column";
+  justify-content: "center";
+}
+
+.ticketInputContainer {
+  background-color: #D9E9E9;
+  max-width: 150px;
+  min-width: 150px;
+  margin-top: 10px;
+  flex-direction: column;
+  justify-content: center;
+  height: 150px;
+  padding: 5px;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 5px;
+  border-color: black;
+}
+
+.ticketInput {
+  border: "none";
+  background-color: "#ddd";
+  margin-bottom: 5px;
+  width: 100%;
+}
+
+.ticketInputSmall {
+  display: flex;
+  width: 100%;
+}
+
+.createTicketButton {
+  background-color: black;
+  color: white;
+  outline: none;
+  padding: 8px 5px;
+  margin-left: 15px;
+}
+
+.sortButtonContainer {
+  margin-top: 15px;
+}
+
+.sortButton {
+  background-color: #FFE0F5;
+  outline: none;
+  padding: 2px 5px;
+  margin-left: 15px;
+}
+
+.ticketCollection {
+  background-color: #D9E9E9;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  justify-content: center;
+  gap: 20px;
+  width: 530px;
+  padding: 20px;
+  margin-top: 10px;
+}
+
+.ticketObject {
+  background-color: #F9F9F9;
+  min-width: 150px;
+  max-width: 150px;
+  height: 150px;
+  font-size: 12px;
+}
+
+.removeTicketButton {
+  float: right;
+}
+
+.ticketProperty {
+  width: 100%;
+}
+
+
+
+
+
