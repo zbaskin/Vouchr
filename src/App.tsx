@@ -1,5 +1,6 @@
 import './App.css';
 import { useEffect, useState } from 'react';
+import DatePicker from 'react-datepicker';
 
 import { 
   fetchTickets, 
@@ -37,6 +38,8 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
   const [tickets, setTickets] = useState<Ticket[] | CreateTicketInput[]>([]);
   const [ticketCollection] = useState(user?.userId);
   const [isLoading, setIsLoading] = useState(false);
+  const [eventDate, setEventDate] = useState(new Date());
+  const [eventTime, setEventTime] = useState(new Date());
   
   useEffect(() => {
     handleFetchUser();
@@ -94,6 +97,13 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
     }
   };
 
+  const clearTime = (date: Date) => {
+    date.setHours(0);
+    date.setMinutes(0);
+    date.setSeconds(0);
+    date.setMilliseconds(0);
+  }
+
   return (
     <div className="appContainer">
       <h2>{user?.username ? user.username.concat("'s") : (<h2>Your</h2>) } Ticket Collection</h2>
@@ -127,27 +137,30 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
           placeholder="Theater Name"
         />
         <div className="ticketInputSmall">
-          <input
-            onChange={(event) => 
-              setFormState({ 
-                ...formState, 
-                eventDate: event.target.value,
-              })
-            }
-            className="ticketInput"
-            value={formState.eventDate || ""}
-            placeholder="Date"
+          <DatePicker
+            className="ticketInput" 
+            selected={eventDate}
+            maxDate={new Date()}
+            onChange={(event) => {
+              if (!event) return;
+              const date = event;
+              clearTime(date);
+              setEventDate(date);
+            }}
           />
-          <input
-            onChange={(event) => 
-              setFormState({ 
-                ...formState, 
-                eventTime: event.target.value,
-              })
-            }
-            className="ticketInput"
-            value={formState.eventTime || ""}
-            placeholder="Time"
+          <DatePicker
+            className="ticketInput" 
+            selected={eventTime}
+            showTimeSelect
+            showTimeSelectOnly
+            timeIntervals={5}
+            dateFormat="h:mm aa"
+            onChange={(event) => {
+              if (!event) return;
+              const time = event;
+              setEventTime(time);
+              console.log(time);
+            }}
           />
         </div>
         <div className="ticketInputSmall">
