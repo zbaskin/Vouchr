@@ -35,11 +35,11 @@ type AppProps = {
 
 const App: React.FC<AppProps> = ({ signOut, user }) => {
   const [formState, setFormState] = useState<CreateTicketInput>(initialState);
+  const [showForm, setShowForm] = useState(false);
   const [tickets, setTickets] = useState<Ticket[] | CreateTicketInput[]>([]);
   const [ticketCollection] = useState(user?.userId);
   const [isLoading, setIsLoading] = useState(false);
-  const [eventDate, setEventDate] = useState(new Date());
-  const [eventTime, setEventTime] = useState(new Date());
+  const [eventDateTime, setEventDateTime] = useState(new Date());
   
   useEffect(() => {
     handleFetchUser();
@@ -61,6 +61,9 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
         return b.timeCreated - a.timeCreated;
       });
     }
+    if (sortType === SortType.EVENT_DATE) {
+      // FILL SORT LOGIC HERE
+    }
     setTickets(fetchedTickets);
     setIsLoading(false);
   };
@@ -76,6 +79,9 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
     const ticket = { ...formState };
     ticket.ticketsID = ticketCollection as string;
     ticket.timeCreated = Date.now();
+    const dateTime = parseDateTime();
+    ticket.eventDate = dateTime[0];
+    ticket.eventTime = dateTime[1];
     setFormState(initialState);
     await addTicket(ticket);
     await handleFetchTickets();
@@ -97,11 +103,52 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
     }
   };
 
-  const clearTime = (date: Date) => {
-    date.setHours(0);
-    date.setMinutes(0);
-    date.setSeconds(0);
-    date.setMilliseconds(0);
+  const parseDateTime = () => {
+    const dateTime = eventDateTime;
+
+    const month = dateTime.getMonth() + 1;
+    const day = dateTime.getDate();
+    const year = dateTime.getFullYear();
+    const hour = dateTime.getHours();
+    const minute = dateTime.getMinutes();
+
+    var dateString = year + "-";
+    if (month < 10) dateString += "0";
+    dateString += month + "-";
+    if (day < 10) dateString += "0";
+    dateString += day;
+
+    var timeString = "";
+    if (hour < 10) timeString += "0";
+    timeString += hour + ":";
+    if (minute < 10) timeString += "0";
+    timeString += minute + ":00";
+
+    return [dateString, timeString];
+  }
+
+  const handleEventDate = (date: Date) => {
+    const newDate = eventDateTime;
+    const month = date.getMonth();
+    const day = date.getDate();
+    const year = date.getFullYear();
+    newDate.setMonth(month);
+    newDate.setDate(day);
+    newDate.setFullYear(year);
+    setEventDateTime(newDate);
+  }
+
+  const handleEventTime = (time: Date) => {
+    const newTime = eventDateTime;
+    const hour = time.getHours();
+    const minute = time.getMinutes();
+    newTime.setHours(hour);
+    newTime.setMinutes(minute);
+    setEventDateTime(newTime);
+  }
+
+  const toggleFormDisplay = () => {
+    setShowForm(!showForm);
   }
 
   return (
@@ -109,91 +156,99 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
       <h2>{user?.username ? user.username.concat("'s") : (<h2>Your</h2>) } Ticket Collection</h2>
       <div className="headerButtonContainer">
         <Button onClick={signOut}>Sign out</Button>
-        <button className="createTicketButton" onClick={handleAddTicket}>
-          Create Ticket
+        <button className="createTicketButton" onClick={toggleFormDisplay}>
+          {!showForm ? <span>Create Ticket</span> : <span>Close</span>}
         </button>
       </div>
-      <div className="ticketInputContainer">
-        <input
-          onChange={(event) => 
-            setFormState({ 
-              ...formState, 
-              name: event.target.value,
-            })
-          }
-          className="ticketInput"
-          value={formState.name}
-          placeholder="Movie Name"
-        />
-        <input
-          onChange={(event) => 
-            setFormState({ 
-              ...formState, 
-              venue: event.target.value,
-            })
-          }
-          className="ticketInput"
-          value={formState.venue || ""}
-          placeholder="Theater Name"
-        />
-        <div className="ticketInputSmall">
-          <DatePicker
-            className="ticketInput" 
-            selected={eventDate}
-            maxDate={new Date()}
-            onChange={(event) => {
-              if (!event) return;
-              const date = event;
-              clearTime(date);
-              setEventDate(date);
-            }}
-          />
-          <DatePicker
-            className="ticketInput" 
-            selected={eventTime}
-            showTimeSelect
-            showTimeSelectOnly
-            timeIntervals={5}
-            dateFormat="h:mm aa"
-            onChange={(event) => {
-              if (!event) return;
-              const time = event;
-              setEventTime(time);
-              console.log(time);
-            }}
-          />
-        </div>
-        <div className="ticketInputSmall">
+      {showForm &&
+      <div className="ticketForm">
+        <div className="ticketInputContainer">
           <input
             onChange={(event) => 
               setFormState({ 
                 ...formState, 
-                theater: event.target.value,
+                name: event.target.value,
               })
             }
             className="ticketInput"
-            value={formState.theater || ""}
-            placeholder="Room"
+            value={formState.name}
+            placeholder="Movie Name"
           />
           <input
             onChange={(event) => 
               setFormState({ 
                 ...formState, 
-                seat: event.target.value,
+                venue: event.target.value,
               })
             }
             className="ticketInput"
-            value={formState.seat || ""}
-            placeholder="Seat"
+            value={formState.venue || ""}
+            placeholder="Theater Name"
           />
+          <div className="ticketInputSmall">
+            <DatePicker
+              className="ticketInput" 
+              selected={eventDateTime}
+              maxDate={new Date()}
+              onChange={(event) => {
+                if (!event) return;
+                const date = event;
+                handleEventDate(date);
+              }}
+            />
+            <DatePicker
+              className="ticketInput" 
+              selected={eventDateTime}
+              showTimeSelect
+              showTimeSelectOnly
+              timeIntervals={5}
+              dateFormat="h:mm aa"
+              onChange={(event) => {
+                if (!event) return;
+                const time = event;
+                handleEventTime(time);
+              }}
+            />
+          </div>
+          <div className="ticketInputSmall">
+            <input
+              onChange={(event) => 
+                setFormState({ 
+                  ...formState, 
+                  theater: event.target.value,
+                })
+              }
+              className="ticketInput"
+              value={formState.theater || ""}
+              placeholder="Room"
+            />
+            <input
+              onChange={(event) => 
+                setFormState({ 
+                  ...formState, 
+                  seat: event.target.value,
+                })
+              }
+              className="ticketInput"
+              value={formState.seat || ""}
+              placeholder="Seat"
+            />
+          </div>
         </div>
+        <button className="createTicketButton" onClick={handleAddTicket}>
+          Submit
+        </button>
       </div>
+      }
       <div className="sortButtonContainer">
         <button className="sortButton" onClick={()=>handleUpdateSort(SortType.ALPHABETICAL)}>
           Sort By Name
         </button>
         <button className="sortButton" onClick={()=>handleUpdateSort(SortType.TIME_CREATED)}>
           Sort By Date Added
+        </button>
+        <button className="sortButton" onClick={()=>handleUpdateSort(SortType.EVENT_DATE)}>
+          Sort By Date Seen
         </button>
       </div>
       <div className="ticketCollection">
