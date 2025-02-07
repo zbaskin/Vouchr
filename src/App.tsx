@@ -13,6 +13,9 @@ import {
   updateSortType,
 } from './ticketService';
 
+import TicketObject from './components/Ticket';
+import TicketForm from './components/TicketForm'
+
 import { 
   type CreateTicketInput, 
   type Ticket,
@@ -74,7 +77,12 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
     await handleFetchTickets();
   }
 
-  const handleAddTicket = async () => {
+  const handleAddTicket = async (newTicket: CreateTicketInput) => {
+    if (!newTicket.name || !newTicket.ticketsID) return;
+    setTickets((prevTickets) => [...prevTickets, newTicket]);
+    await addTicket(newTicket);
+    await handleFetchTickets();
+    /*
     if (!formState.name || !formState.type) return;
     const ticket = { ...formState };
     ticket.ticketsID = ticketCollection as string;
@@ -85,6 +93,7 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
     setFormState(initialState);
     await addTicket(ticket);
     await handleFetchTickets();
+    */
   };
 
   const handleRemoveTicket = async (ticketID: string | null | undefined) => {
@@ -161,6 +170,11 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
         </button>
       </div>
       {showForm &&
+      <TicketForm
+        ticketCollection={ticketCollection}
+        onAddTicket={handleAddTicket}
+      />
+      /*
       <div className="ticketForm">
         <div className="ticketInputContainer">
           <input
@@ -239,6 +253,7 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
           Submit
         </button>
       </div>
+      */
       }
       <div className="sortButtonContainer">
         <button className="sortButton" onClick={()=>handleUpdateSort(SortType.ALPHABETICAL)}>
@@ -256,6 +271,18 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
           <p>Loading tickets...</p>
         ) : tickets.length > 0 ? (
           tickets.map((ticket, index) => (
+            <TicketObject
+              key={ticket.id || index} 
+              id={ticket.id || ""} 
+              name={ticket.name} 
+              venue={ticket.venue || ""}
+              eventDate={ticket.eventDate || ""}
+              eventTime={ticket.eventTime || ""}
+              theater={ticket.theater || ""}
+              seat={ticket.seat || ""}
+              onRemove={handleRemoveTicket}
+            />
+            /*
             <div key={ticket.id ? ticket.id : index} className="ticketObject">
               <button className="removeTicketButton" onClick={()=>handleRemoveTicket(ticket.id)}>X</button>
               <p className="ticketProperty">{ticket.name}</p>
@@ -265,6 +292,7 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
               <p className="ticketProperty">{ticket.theater}</p>
               <p className="ticketProperty">{ticket.seat}</p>
             </div>
+            */
           ))
         ) : (
           <p>No tickets available.</p>
