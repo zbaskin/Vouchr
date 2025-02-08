@@ -13,7 +13,7 @@ type TicketProps = {
 };
 
 const handleTicketName = (name: String) => {
-    return name.substring(0, 20);
+    return name.substring(0, 15);
 }
 
 const handleTicketDate = (date: String) => {
@@ -43,11 +43,14 @@ const Ticket: React.FC<TicketProps> = ({
         <button className="removeTicketButton" onClick={() => onRemove(id)}>X</button>
         <div className="ticketVenue">{venue}</div>
         <div className="ticketName">{handleTicketName(name)}</div>
-        <div className="ticketDetails">{handleTicketDate(eventDate)}</div>
-        <div className="ticketDetails">{handleTicketTime(eventTime)}</div>
-        <div className="ticketDetails">{theater}</div>
-        <div className="ticketSeat">{seat}</div>
-        <div className="ticketBarcode"></div>
+        <div className="ticketDateTime">
+            {handleTicketDate(eventDate)} &nbsp;
+            {handleTicketTime(eventTime)}
+        </div>
+        <div className="ticketInfo">
+            <div>Seat <span className="ticketSeat">{seat}</span></div>
+            <div>Theater <span>{theater}</span></div>
+        </div>
         <div className="ticketFooter">Vouchr Tickets</div>
     </div>
   );

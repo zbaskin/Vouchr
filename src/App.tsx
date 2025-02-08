@@ -21,7 +21,7 @@ import {
   SortType,
 } from './API';
 
-import { withAuthenticator, Button } from '@aws-amplify/ui-react';
+import { withAuthenticator } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 
 import { type AuthUser } from "aws-amplify/auth";
@@ -59,7 +59,21 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
       });
     }
     if (sortType === SortType.EVENT_DATE) {
-      // FILL SORT LOGIC HERE
+      fetchedTickets.sort((a, b) => {
+        const aDate = a.eventDate || "";
+        const bDate = b.eventDate || "";
+        const aTime = a.eventTime || "";
+        const bTime = b.eventTime || "";
+        const [aHour, aMinute] = aTime.substring(0, 5).split(':');
+        const [bHour, bMinute] = bTime.substring(0, 5).split(':');
+        const aDateTime = new Date(aDate);
+        const bDateTime = new Date(bDate);
+        aDateTime.setHours(parseInt(aHour));
+        aDateTime.setMinutes(parseInt(aMinute));
+        bDateTime.setHours(parseInt(bHour));
+        bDateTime.setMinutes(parseInt(bMinute));
+        return bDateTime.getTime() - aDateTime.getTime();
+      });
     }
     setTickets(fetchedTickets);
     setIsLoading(false);
@@ -102,7 +116,7 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
     <div className="appContainer">
       <h2>{user?.username ? user.username.concat("'s") : (<h2>Your</h2>) } Ticket Collection</h2>
       <div className="headerButtonContainer">
-        <Button onClick={signOut}>Sign out</Button>
+        <button className="signoutButton" onClick={signOut}>Sign out</button>
         <button className="createTicketButton" onClick={toggleFormDisplay}>
           {!showForm ? <span>Create Ticket</span> : <span>Close</span>}
         </button>

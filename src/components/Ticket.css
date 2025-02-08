@@ -1,23 +1,38 @@
 .removeTicketButton {
-    float: right;
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    width: 20px;
+    height: 20px;
+    border: 1px solid black;
+    text-align: center;
+    line-height: 12px;
+    font-weight: bold;
+    font-size: 12px;
+    cursor: pointer;
+    padding: 0;
 }
 
 .ticketObject {
     background-color: white;
-    width: 250px; /* Adjust based on preference */
-    height: auto;
+    width: 175px;
+    height: 175px;
     padding: 10px;
-    border: 1px solid #ccc; /* Light border like the ticket */
-    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2); /* Soft shadow */
-    font-family: "Arial", sans-serif;
+    border: 1px solid #ccc;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+    font-family: Arial, sans-serif;
     font-size: 14px;
     text-align: center;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
   
 .ticketVenue {
     font-size: 12px;
     font-weight: bold;
+    text-align: left;
 }
   
 .ticketName {
@@ -27,15 +42,27 @@
     margin: 5px 0;
 }
   
-.ticketDetails {
+.ticketDateTime {
     font-size: 12px;
     line-height: 1.5;
 }
-  
-.ticketSeat {
-    font-size: 18px;
+
+.ticketInfo {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
     font-weight: bold;
     margin-top: 10px;
+}
+  
+.ticketSeat {
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 10px;
+    background-color: black;
+    color: white;
+    padding: 3px;
+    border-radius: 3px;
 }
   
 .ticketBarcode {
@@ -56,4 +83,3 @@
     color: gray;
     margin-top: 5px;
 }
-  

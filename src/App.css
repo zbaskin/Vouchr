@@ -6,10 +6,18 @@
 }
 
 .appContainer {
-  margin: "0 auto";
-  display: "flex";
-  flex-direction: "column";
-  justify-content: "center";
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  user-select: none;
+}
+
+.signoutButton {
+  background-color: black;
+  color: white;
+  padding: 8px 5px;
+  outline: none;
 }
 
 .sortButtonContainer {
@@ -26,7 +34,7 @@
 .ticketCollection {
   background-color: #D9E9E9;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
   justify-content: center;
   gap: 20px;
   width: 1000px;
