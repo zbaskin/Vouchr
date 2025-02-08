@@ -16,19 +16,39 @@ const handleTicketName = (name: String) => {
     return name.substring(0, 20);
 }
 
+const handleTicketDate = (date: String) => {
+    const [year, month, day] = date.split('-');
+    return `${month}/${day}/${year}`;
+}
+
+const handleTicketTime = (time: String) => {
+    const t = time.substring(0, 5);
+    const hour = parseInt(t.split(':')[0]);
+    const minute = t.split(':')[1];
+    if (hour === 12) {
+        return `${t}pm`;
+    } else if (hour > 12) {
+        return `${hour-12}:${minute}pm`;
+    } else if (hour === 0) {
+        return `${hour+12}:${minute}am`;
+    }
+    return `${hour}:${minute}am`;
+}
+
 const Ticket: React.FC<TicketProps> = ({ 
     id, name, venue, eventDate, eventTime, theater, seat, onRemove
 }) => {
   return (
     <div className="ticketObject">
         <button className="removeTicketButton" onClick={() => onRemove(id)}>X</button>
-        <p className="ticketVenue">{venue}</p>
-        <p className="ticketName">{handleTicketName(name)}</p>
-        <p className="ticketDetails">{eventDate}</p>
-        <p className="ticketDetails">{eventTime}</p>
-        <p className="ticketDetails">{theater}</p>
-        <p className="ticketSeat">{seat}</p>
+        <div className="ticketVenue">{venue}</div>
+        <div className="ticketName">{handleTicketName(name)}</div>
+        <div className="ticketDetails">{handleTicketDate(eventDate)}</div>
+        <div className="ticketDetails">{handleTicketTime(eventTime)}</div>
+        <div className="ticketDetails">{theater}</div>
+        <div className="ticketSeat">{seat}</div>
         <div className="ticketBarcode"></div>
+        <div className="ticketFooter">Vouchr Tickets</div>
     </div>
   );
 };

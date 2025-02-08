@@ -1,23 +1,5 @@
-:root {
-    --ticketWidth: 150px;
-  }
-
-.ticketObject2 {
-    background-color: #F9F9F9;
-    min-width: var(--ticketWidth);
-    max-width: var(--ticketWidth);
-    height: var(--ticketWidth);
-    font-size: 12px;
-    border-width: 1px;
-    border-style: solid;
-}
-  
 .removeTicketButton {
     float: right;
-}
-  
-.ticketProperty {
-    width: 100%;
 }
 
 .ticketObject {
@@ -69,7 +51,7 @@
     margin: 10px auto;
 }
   
-.ticket-footer {
+.ticketFooter {
     font-size: 10px;
     color: gray;
     margin-top: 5px;
