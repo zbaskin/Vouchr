@@ -2,7 +2,7 @@
     --ticketWidth: 150px;
   }
 
-.ticketObject {
+.ticketObject2 {
     background-color: #F9F9F9;
     min-width: var(--ticketWidth);
     max-width: var(--ticketWidth);
@@ -19,3 +19,59 @@
 .ticketProperty {
     width: 100%;
 }
+
+.ticketObject {
+    background-color: white;
+    width: 250px; /* Adjust based on preference */
+    height: auto;
+    padding: 10px;
+    border: 1px solid #ccc; /* Light border like the ticket */
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2); /* Soft shadow */
+    font-family: "Arial", sans-serif;
+    font-size: 14px;
+    text-align: center;
+    position: relative;
+}
+  
+.ticketVenue {
+    font-size: 12px;
+    font-weight: bold;
+}
+  
+.ticketName {
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin: 5px 0;
+}
+  
+.ticketDetails {
+    font-size: 12px;
+    line-height: 1.5;
+}
+  
+.ticketSeat {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+  
+.ticketBarcode {
+    width: 80%;
+    height: 30px;
+    background: repeating-linear-gradient(
+        90deg,
+      black 0px,
+      black 2px,
+      white 2px,
+      white 4px
+    ); /* Simulated barcode */
+    margin: 10px auto;
+}
+  
+.ticket-footer {
+    font-size: 10px;
+    color: gray;
+    margin-top: 5px;
+}
+  

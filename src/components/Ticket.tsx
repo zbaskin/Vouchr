@@ -12,18 +12,23 @@ type TicketProps = {
   onRemove: (id: string) => void;
 };
 
+const handleTicketName = (name: String) => {
+    return name.substring(0, 20);
+}
+
 const Ticket: React.FC<TicketProps> = ({ 
     id, name, venue, eventDate, eventTime, theater, seat, onRemove
 }) => {
   return (
     <div className="ticketObject">
         <button className="removeTicketButton" onClick={() => onRemove(id)}>X</button>
-        <p className="ticketProperty">{name}</p>
-        <p className="ticketProperty">{venue}</p>
-        <p className="ticketProperty">{eventDate}</p>
-        <p className="ticketProperty">{eventTime}</p>
-        <p className="ticketProperty">{theater}</p>
-        <p className="ticketProperty">{seat}</p>
+        <p className="ticketVenue">{venue}</p>
+        <p className="ticketName">{handleTicketName(name)}</p>
+        <p className="ticketDetails">{eventDate}</p>
+        <p className="ticketDetails">{eventTime}</p>
+        <p className="ticketDetails">{theater}</p>
+        <p className="ticketSeat">{seat}</p>
+        <div className="ticketBarcode"></div>
     </div>
   );
 };
