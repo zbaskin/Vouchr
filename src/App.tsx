@@ -37,11 +37,19 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
   const [tickets, setTickets] = useState<Ticket[] | CreateTicketInput[]>([]);
   const [ticketCollection] = useState(user?.userId);
   const [isLoading, setIsLoading] = useState(false);
+  const [width, setWidth] = useState(window.innerWidth);
+  const [isMobile, setIsMobile] = useState(width < 500);
   
   useEffect(() => {
     handleFetchUser();
     handleFetchTickets();
+    window.addEventListener("resize", handleResize);
   }, []);
+
+  const handleResize = () => {
+    setWidth(window.innerWidth);
+    setIsMobile(window.innerWidth < 500)
+  };
 
   const handleFetchTickets = async () => {
     if (!ticketCollection) return;
@@ -138,7 +146,7 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
           Sort By Date Seen
         </button>
       </div>
-      <div className="ticketCollection">
+      <div className={"ticketCollection " + (isMobile ? "tcMobile" : "tcDesktop")}>
         {isLoading ? (
           <p>Loading tickets...</p>
         ) : tickets.length > 0 ? (

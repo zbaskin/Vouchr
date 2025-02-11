@@ -22,13 +22,16 @@
 
 .sortButtonContainer {
   margin-top: 15px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 10px
 }
 
 .sortButton {
   background-color: #FFE0F5;
   outline: none;
   padding: 2px 5px;
-  margin-left: 15px;
 }
 
 .ticketCollection {
@@ -37,9 +40,16 @@
   grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
   justify-content: center;
   gap: 20px;
-  width: 1000px;
   padding: 20px;
   margin-top: 10px;
+}
+
+.tcDesktop {
+  width: 1000px;
+}
+
+.tcMobile {
+  width: 410px;
 }
 
 .react-datepicker__aria-live {
