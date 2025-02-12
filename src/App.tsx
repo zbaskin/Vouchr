@@ -12,8 +12,8 @@ import {
   updateSortType,
 } from './ticketService';
 
-import TicketObject from './components/Ticket';
-import TicketForm from './components/TicketForm'
+import TicketForm from './components/TicketForm';
+import TicketCollection from './components/TicketCollection';
 
 import { 
   type CreateTicketInput, 
@@ -40,6 +40,7 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
   const [width, setWidth] = useState(window.innerWidth);
   const [isMobile, setIsMobile] = useState(width < 500);
   
+
   useEffect(() => {
     handleFetchUser();
     handleFetchTickets();
@@ -48,7 +49,7 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
 
   const handleResize = () => {
     setWidth(window.innerWidth);
-    setIsMobile(window.innerWidth < 500)
+    setIsMobile(window.innerWidth < 500);
   };
 
   const handleFetchTickets = async () => {
@@ -146,27 +147,13 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
           Sort By Date Seen
         </button>
       </div>
-      <div className={"ticketCollection " + (isMobile ? "tcMobile" : "tcDesktop")}>
-        {isLoading ? (
-          <p>Loading tickets...</p>
-        ) : tickets.length > 0 ? (
-          tickets.map((ticket, index) => (
-            <TicketObject
-              key={ticket.id || index} 
-              id={ticket.id || ""} 
-              name={ticket.name} 
-              venue={ticket.venue || ""}
-              eventDate={ticket.eventDate || ""}
-              eventTime={ticket.eventTime || ""}
-              theater={ticket.theater || ""}
-              seat={ticket.seat || ""}
-              onRemove={handleRemoveTicket}
-            />
-          ))
-        ) : (
-          <p>No tickets available.</p>
-        )}
-      </div>
+      <TicketCollection 
+        tickets={tickets as Ticket[]}
+        onRemoveTicket={handleRemoveTicket}
+        isLoading={isLoading}
+        isMobile={isMobile}
+      />
+      
     </div>
   );
 };

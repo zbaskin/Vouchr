@@ -34,24 +34,6 @@
   padding: 2px 5px;
 }
 
-.ticketCollection {
-  background-color: #D9E9E9;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
-  justify-content: center;
-  gap: 20px;
-  padding: 20px;
-  margin-top: 10px;
-}
-
-.tcDesktop {
-  width: 1000px;
-}
-
-.tcMobile {
-  width: 410px;
-}
-
 .react-datepicker__aria-live {
   display: none;
 }
