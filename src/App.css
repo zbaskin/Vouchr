@@ -1,7 +1,3 @@
-:root {
-  --ticketWidth: 150px;
-}
-
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -10,86 +6,32 @@
 }
 
 .appContainer {
-  margin: "0 auto";
-  display: "flex";
-  flex-direction: "column";
-  justify-content: "center";
-}
-
-.ticketInputContainer {
-  background-color: #D9E9E9;
-  max-width: 250px;
-  min-width: 250px;
-  margin: 10px auto;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  padding: 5px;
-  border-style: solid;
-  border-width: 1px;
-  border-radius: 5px;
-  border-color: black;
+  user-select: none;
 }
 
-.ticketInput {
-  border: "none";
-  background-color: "#ddd";
-  margin-bottom: 5px;
-  width: 100%;
-}
-
-.ticketInputSmall {
-  display: flex;
-  width: 100%;
-}
-
-.createTicketButton {
+.signoutButton {
   background-color: black;
   color: white;
-  outline: none;
   padding: 8px 5px;
-  margin-left: 15px;
+  outline: none;
 }
 
 .sortButtonContainer {
   margin-top: 15px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 10px
 }
 
 .sortButton {
   background-color: #FFE0F5;
   outline: none;
   padding: 2px 5px;
-  margin-left: 15px;
-}
-
-.ticketCollection {
-  background-color: #D9E9E9;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  justify-content: center;
-  gap: 20px;
-  width: 530px;
-  padding: 20px;
-  margin-top: 10px;
-}
-
-.ticketObject {
-  background-color: #F9F9F9;
-  min-width: var(--ticketWidth);
-  max-width: var(--ticketWidth);
-  height: var(--ticketWidth);
-  font-size: 12px;
-  border-width: 1px;
-  border-style: solid;
-}
-
-.removeTicketButton {
-  float: right;
-}
-
-.ticketProperty {
-  width: 100%;
 }
 
 .react-datepicker__aria-live {
