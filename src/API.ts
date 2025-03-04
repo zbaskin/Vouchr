@@ -248,12 +248,6 @@ export type ModelTicketFilterInput = {
   not?: ModelTicketFilterInput | null,
 };
 
-export enum ModelSortDirection {
-  ASC = "ASC",
-  DESC = "DESC",
-}
-
-
 export type ModelTicketCollectionFilterInput = {
   id?: ModelIDInput | null,
   sort?: ModelSortTypeInput | null,
@@ -282,6 +276,12 @@ export type ModelUserConnection = {
   items:  Array<User | null >,
   nextToken?: string | null,
 };
+
+export enum ModelSortDirection {
+  ASC = "ASC",
+  DESC = "DESC",
+}
+
 
 export type ModelSubscriptionTicketFilterInput = {
   id?: ModelSubscriptionIDInput | null,
@@ -605,37 +605,6 @@ export type ListTicketsQuery = {
   } | null,
 };
 
-export type TicketsByTicketsIDQueryVariables = {
-  ticketsID: string,
-  sortDirection?: ModelSortDirection | null,
-  filter?: ModelTicketFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type TicketsByTicketsIDQuery = {
-  ticketsByTicketsID?:  {
-    __typename: "ModelTicketConnection",
-    items:  Array< {
-      __typename: "Ticket",
-      id: string,
-      name: string,
-      type: EventType,
-      venue?: string | null,
-      theater?: string | null,
-      seat?: string | null,
-      city?: string | null,
-      eventDate?: string | null,
-      eventTime?: string | null,
-      timeCreated: number,
-      ticketsID: string,
-      createdAt: string,
-      updatedAt: string,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
-};
-
 export type GetTicketCollectionQueryVariables = {
   id: string,
 };
@@ -712,6 +681,37 @@ export type ListUsersQuery = {
       createdAt: string,
       updatedAt: string,
       userTicketsId?: string | null,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type TicketsByTicketsIDQueryVariables = {
+  ticketsID: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelTicketFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type TicketsByTicketsIDQuery = {
+  ticketsByTicketsID?:  {
+    __typename: "ModelTicketConnection",
+    items:  Array< {
+      __typename: "Ticket",
+      id: string,
+      name: string,
+      type: EventType,
+      venue?: string | null,
+      theater?: string | null,
+      seat?: string | null,
+      city?: string | null,
+      eventDate?: string | null,
+      eventTime?: string | null,
+      timeCreated: number,
+      ticketsID: string,
+      createdAt: string,
+      updatedAt: string,
     } | null >,
     nextToken?: string | null,
   } | null,

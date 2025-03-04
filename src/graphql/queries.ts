@@ -57,44 +57,6 @@ export const listTickets = /* GraphQL */ `query ListTickets(
   APITypes.ListTicketsQueryVariables,
   APITypes.ListTicketsQuery
 >;
-export const ticketsByTicketsID = /* GraphQL */ `query TicketsByTicketsID(
-  $ticketsID: ID!
-  $sortDirection: ModelSortDirection
-  $filter: ModelTicketFilterInput
-  $limit: Int
-  $nextToken: String
-) {
-  ticketsByTicketsID(
-    ticketsID: $ticketsID
-    sortDirection: $sortDirection
-    filter: $filter
-    limit: $limit
-    nextToken: $nextToken
-  ) {
-    items {
-      id
-      name
-      type
-      venue
-      theater
-      seat
-      city
-      eventDate
-      eventTime
-      timeCreated
-      ticketsID
-      createdAt
-      updatedAt
-      __typename
-    }
-    nextToken
-    __typename
-  }
-}
-` as GeneratedQuery<
-  APITypes.TicketsByTicketsIDQueryVariables,
-  APITypes.TicketsByTicketsIDQuery
->;
 export const getTicketCollection = /* GraphQL */ `query GetTicketCollection($id: ID!) {
   getTicketCollection(id: $id) {
     id
@@ -170,3 +132,41 @@ export const listUsers = /* GraphQL */ `query ListUsers(
   }
 }
 ` as GeneratedQuery<APITypes.ListUsersQueryVariables, APITypes.ListUsersQuery>;
+export const ticketsByTicketsID = /* GraphQL */ `query TicketsByTicketsID(
+  $ticketsID: ID!
+  $sortDirection: ModelSortDirection
+  $filter: ModelTicketFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  ticketsByTicketsID(
+    ticketsID: $ticketsID
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      name
+      type
+      venue
+      theater
+      seat
+      city
+      eventDate
+      eventTime
+      timeCreated
+      ticketsID
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.TicketsByTicketsIDQueryVariables,
+  APITypes.TicketsByTicketsIDQuery
+>;
