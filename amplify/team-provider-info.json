@@ -13,13 +13,18 @@
     },
     "categories": {
       "auth": {
-        "vouchr579787dc": {}
+        "vouchr579787dc": {},
+        "vouchr5dd0fa20": {},
+        "vouchr2dd1309e": {}
       },
       "hosting": {
         "amplifyhosting": {
           "appId": "doepn2g1hqu7o",
           "type": "manual"
         }
+      },
+      "api": {
+        "vouchr": {}
       }
     }
   },
