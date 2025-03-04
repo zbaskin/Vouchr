@@ -15,7 +15,19 @@
       "auth": {
         "vouchr579787dc": {},
         "vouchr5dd0fa20": {},
-        "vouchr2dd1309e": {}
+        "vouchr8491ec5f": {
+          "userPoolId": "us-east-1_g3MmcXey3",
+          "userPoolName": "vouchr579787dc_userpool_579787dc-dev",
+          "webClientId": "5lvm7jtlp43p0gjbiucfumoosj",
+          "nativeClientId": "1o2hdrmobdcijm3ve5bhn2kvlm",
+          "identityPoolId": "us-east-1:0034afa3-c2bb-4941-8f26-d1d5bb877cee",
+          "identityPoolName": "vouchr579787dc_identitypool_579787dc__dev",
+          "allowUnauthenticatedIdentities": false,
+          "authRoleArn": "arn:aws:iam::893627752101:role/amplify-vouchr-dev-165829-authRole",
+          "authRoleName": "amplify-vouchr-dev-165829-authRole",
+          "unauthRoleArn": "arn:aws:iam::893627752101:role/amplify-vouchr-dev-165829-unauthRole",
+          "unauthRoleName": "amplify-vouchr-dev-165829-unauthRole"
+        }
       },
       "hosting": {
         "amplifyhosting": {

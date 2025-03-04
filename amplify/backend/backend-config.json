@@ -24,32 +24,6 @@
     }
   },
   "auth": {
-    "vouchr2dd1309e": {
-      "customAuth": false,
-      "dependsOn": [],
-      "frontendAuthConfig": {
-        "mfaConfiguration": "OFF",
-        "mfaTypes": [
-          "SMS"
-        ],
-        "passwordProtectionSettings": {
-          "passwordPolicyCharacters": [],
-          "passwordPolicyMinLength": 8
-        },
-        "signupAttributes": [
-          "EMAIL"
-        ],
-        "socialProviders": [],
-        "usernameAttributes": [
-          "EMAIL"
-        ],
-        "verificationMechanisms": [
-          "EMAIL"
-        ]
-      },
-      "providerPlugin": "awscloudformation",
-      "service": "Cognito"
-    },
     "vouchr579787dc": {
       "customAuth": false,
       "dependsOn": [],
@@ -73,6 +47,13 @@
       },
       "providerPlugin": "awscloudformation",
       "service": "Cognito"
+    },
+    "vouchr8491ec5f": {
+      "customAuth": false,
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "Cognito",
+      "serviceType": "imported"
     }
   },
   "hosting": {
@@ -83,6 +64,94 @@
     }
   },
   "parameters": {
+    "AMPLIFY_auth_vouchr8491ec5f_allowUnauthenticatedIdentities": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "vouchr8491ec5f"
+        }
+      ]
+    },
+    "AMPLIFY_auth_vouchr8491ec5f_authRoleArn": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "vouchr8491ec5f"
+        }
+      ]
+    },
+    "AMPLIFY_auth_vouchr8491ec5f_authRoleName": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "vouchr8491ec5f"
+        }
+      ]
+    },
+    "AMPLIFY_auth_vouchr8491ec5f_identityPoolId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "vouchr8491ec5f"
+        }
+      ]
+    },
+    "AMPLIFY_auth_vouchr8491ec5f_identityPoolName": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "vouchr8491ec5f"
+        }
+      ]
+    },
+    "AMPLIFY_auth_vouchr8491ec5f_nativeClientId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "vouchr8491ec5f"
+        }
+      ]
+    },
+    "AMPLIFY_auth_vouchr8491ec5f_unauthRoleArn": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "vouchr8491ec5f"
+        }
+      ]
+    },
+    "AMPLIFY_auth_vouchr8491ec5f_unauthRoleName": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "vouchr8491ec5f"
+        }
+      ]
+    },
+    "AMPLIFY_auth_vouchr8491ec5f_userPoolId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "vouchr8491ec5f"
+        }
+      ]
+    },
+    "AMPLIFY_auth_vouchr8491ec5f_userPoolName": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "vouchr8491ec5f"
+        }
+      ]
+    },
+    "AMPLIFY_auth_vouchr8491ec5f_webClientId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "vouchr8491ec5f"
+        }
+      ]
+    },
     "AMPLIFY_hosting_amplifyhosting_appId": {
       "usedBy": [
         {
