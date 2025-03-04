@@ -4,12 +4,16 @@
       "dependsOn": [],
       "output": {
         "authConfig": {
-          "additionalAuthenticationProviders": [],
+          "additionalAuthenticationProviders": [
+            {
+              "authenticationType": "AWS_IAM"
+            }
+          ],
           "defaultAuthentication": {
             "apiKeyConfig": {
-              "apiKeyExpirationDate": "2026-03-04T01:24:57.274Z",
+              "apiKeyExpirationDate": "2026-01-18T00:15:57.290Z",
               "apiKeyExpirationDays": 365,
-              "description": ""
+              "description": "api key description"
             },
             "authenticationType": "API_KEY"
           }
@@ -43,13 +47,6 @@
       },
       "providerPlugin": "awscloudformation",
       "service": "Cognito"
-    },
-    "vouchr8491ec5f": {
-      "customAuth": false,
-      "dependsOn": [],
-      "providerPlugin": "awscloudformation",
-      "service": "Cognito",
-      "serviceType": "imported"
     }
   },
   "hosting": {
@@ -60,94 +57,6 @@
     }
   },
   "parameters": {
-    "AMPLIFY_auth_vouchr8491ec5f_allowUnauthenticatedIdentities": {
-      "usedBy": [
-        {
-          "category": "auth",
-          "resourceName": "vouchr8491ec5f"
-        }
-      ]
-    },
-    "AMPLIFY_auth_vouchr8491ec5f_authRoleArn": {
-      "usedBy": [
-        {
-          "category": "auth",
-          "resourceName": "vouchr8491ec5f"
-        }
-      ]
-    },
-    "AMPLIFY_auth_vouchr8491ec5f_authRoleName": {
-      "usedBy": [
-        {
-          "category": "auth",
-          "resourceName": "vouchr8491ec5f"
-        }
-      ]
-    },
-    "AMPLIFY_auth_vouchr8491ec5f_identityPoolId": {
-      "usedBy": [
-        {
-          "category": "auth",
-          "resourceName": "vouchr8491ec5f"
-        }
-      ]
-    },
-    "AMPLIFY_auth_vouchr8491ec5f_identityPoolName": {
-      "usedBy": [
-        {
-          "category": "auth",
-          "resourceName": "vouchr8491ec5f"
-        }
-      ]
-    },
-    "AMPLIFY_auth_vouchr8491ec5f_nativeClientId": {
-      "usedBy": [
-        {
-          "category": "auth",
-          "resourceName": "vouchr8491ec5f"
-        }
-      ]
-    },
-    "AMPLIFY_auth_vouchr8491ec5f_unauthRoleArn": {
-      "usedBy": [
-        {
-          "category": "auth",
-          "resourceName": "vouchr8491ec5f"
-        }
-      ]
-    },
-    "AMPLIFY_auth_vouchr8491ec5f_unauthRoleName": {
-      "usedBy": [
-        {
-          "category": "auth",
-          "resourceName": "vouchr8491ec5f"
-        }
-      ]
-    },
-    "AMPLIFY_auth_vouchr8491ec5f_userPoolId": {
-      "usedBy": [
-        {
-          "category": "auth",
-          "resourceName": "vouchr8491ec5f"
-        }
-      ]
-    },
-    "AMPLIFY_auth_vouchr8491ec5f_userPoolName": {
-      "usedBy": [
-        {
-          "category": "auth",
-          "resourceName": "vouchr8491ec5f"
-        }
-      ]
-    },
-    "AMPLIFY_auth_vouchr8491ec5f_webClientId": {
-      "usedBy": [
-        {
-          "category": "auth",
-          "resourceName": "vouchr8491ec5f"
-        }
-      ]
-    },
     "AMPLIFY_hosting_amplifyhosting_appId": {
       "usedBy": [
         {
