@@ -4,8 +4,10 @@
     "apiName": "vouchr",
     "serviceName": "AppSync",
     "defaultAuthType": {
-      "mode": "AMAZON_COGNITO_USER_POOLS",
-      "cognitoUserPoolId": "authvouchr8491ec5f"
+      "mode": "API_KEY",
+      "expirationTime": 365,
+      "apiKeyExpirationDate": "2026-03-04T00:47:10.843Z",
+      "keyDescription": ""
     },
     "conflictResolution": {},
     "additionalAuthTypes": []
