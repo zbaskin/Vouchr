@@ -25,5 +25,32 @@
         }
       }
     }
+  },
+  "main": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-vouchr-main-212122-authRole",
+      "UnauthRoleArn": "arn:aws:iam::893627752101:role/amplify-vouchr-main-212122-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::893627752101:role/amplify-vouchr-main-212122-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-vouchr-main-212122-deployment",
+      "UnauthRoleName": "amplify-vouchr-main-212122-unauthRole",
+      "StackName": "amplify-vouchr-main-212122",
+      "StackId": "arn:aws:cloudformation:us-east-1:893627752101:stack/amplify-vouchr-main-212122/5d9f6370-f89f-11ef-8b7d-123f20f81245",
+      "AmplifyAppId": "doepn2g1hqu7o"
+    },
+    "categories": {
+      "auth": {
+        "vouchr579787dc": {}
+      },
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "doepn2g1hqu7o",
+          "type": "manual"
+        }
+      },
+      "api": {
+        "vouchr": {}
+      }
+    }
   }
 }
