@@ -12,6 +12,7 @@ import {
   updateSortType,
 } from './ticketService';
 
+import Navbar from './components/Navbar';
 import TicketForm from './components/TicketForm';
 import TicketCollection from './components/TicketCollection';
 
@@ -123,7 +124,8 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
 
   return (
     <div className="appContainer">
-      <h2>{user?.username ? user.username.concat("'s") : (<h2>Your</h2>) } Ticket Collection</h2>
+      <Navbar />
+      <h2 className="title">{user?.username ? user.username.concat("'s") : (<h2>Your</h2>) } Ticket Collection</h2>
       <div className="headerButtonContainer">
         <button className="signoutButton" onClick={signOut}>Sign out</button>
         <button className="createTicketButton" onClick={toggleFormDisplay}>

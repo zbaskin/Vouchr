@@ -11,11 +11,19 @@
   flex-direction: column;
   justify-content: center;
   user-select: none;
+  background-color: var(--background);
+}
+
+.title {
+  font-family: "Arista";
+  color: var(--primary-dark);
+  font-size: 40px;
+  margin: 0;
 }
 
 .signoutButton {
-  background-color: black;
-  color: white;
+  background-color: var(--primary);
+  color: var(--secondary-content);
   padding: 8px 5px;
   outline: none;
 }
@@ -25,13 +33,16 @@
   display: flex;
   flex-direction: row;
   justify-content: center;
-  gap: 10px
+  gap: 10px;
 }
 
 .sortButton {
-  background-color: #FFE0F5;
   outline: none;
   padding: 2px 5px;
+  color: var(--primary);
+  background-color: var(--secondary-content);
+  border-width: 2px;
+  border-color: var(--primary);
 }
 
 .react-datepicker__aria-live {

@@ -1,5 +1,5 @@
 .ticketInputContainer {
-    background-color: #D9E9E9;
+    background-color: var(--primary-content);
     max-width: 250px;
     min-width: 250px;
     margin: 10px auto;
@@ -27,9 +27,9 @@
 }
   
 .createTicketButton {
-    background-color: black;
-    color: white;
     outline: none;
     padding: 8px 5px;
     margin-left: 15px;
+    color: var(--secondary-content);
+    background-color: var(--primary);
 }

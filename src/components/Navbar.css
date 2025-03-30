@@ -1,0 +1,57 @@
+.navbarContainer {
+    background-color: var(--primary);
+    height: 100px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    padding: 0 10px
+}
+
+.logoImage {
+    height: 80px;
+    float: left;
+}
+
+.logoText {
+    font-family: "Arista";
+    color: #c9b461;
+    font-size: 5em;
+    margin: 0;
+    margin-left: 25px;
+    justify-content: center;
+    align-items: center;
+    float: left;
+}
+
+.navbarLinks {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    float: right;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    padding: 0 10px;
+    gap: 10px;
+    color: var();
+    background-color: var();
+}
+
+.link {
+    color: var(--copy);
+    background-color: white;
+    float: left;
+    height: 50px;
+    width: 75px;
+    flex-direction: row;
+    align-content: center;
+    justify-content: center;
+    gap: 10px;
+    color: var(--primary);
+    background-color: var(--secondary-content);
+}

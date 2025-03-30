@@ -7,7 +7,7 @@
 }
 
 .tickets {
-    background-color: #D9E9E9;
+    background-color: var(--secondary-content);
     display: grid;
     flex-wrap: wrap;
     grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
@@ -15,6 +15,8 @@
     gap: 20px;
     padding: 20px;
     margin-top: 10px;
+    color: var(--copy);
+    background-color: var(--primary-content);
 }
 
 .pagination {

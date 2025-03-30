@@ -1,0 +1,31 @@
+@font-face {
+    font-family: "Arista";
+    src: url('arista.ttf');
+}
+
+:root {
+    --primary: #801616;
+    --primary-content: #f0a5a5;
+    --primary-dark: #540f0f;
+    --primary-light: #ac1d1d;
+    
+    --secondary: #806516;
+    --secondary-content: #f0dda5;
+    --secondary-dark: #54430f;
+    --secondary-light: #ac871d;
+    
+    --background: #f0efef;
+    --foreground: #fbfbfb;
+    --border: #e1dede;
+    
+    --copy: #282424;
+    --copy-light: #6b6161;
+    --copy-lighter: #928787;
+    
+    --success: #168016;
+    --warning: #808016;
+    --error: #801616;
+    --success-content: #a5f0a5;
+    --warning-content: #f0f0a5;
+    --error-content: #f0a5a5;
+}
