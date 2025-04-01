@@ -11,8 +11,6 @@ type TicketCollectionProps = {
     isMobile: boolean;
 }
 
-
-
 const TicketCollection: React.FC<TicketCollectionProps> = ({ 
     tickets, onRemoveTicket, isLoading, isMobile 
 }) => {
@@ -31,7 +29,7 @@ const TicketCollection: React.FC<TicketCollectionProps> = ({
         <div className={"ticketCollection " + (isMobile ? "tcMobile" : "tcDesktop")}>
             <div className="tickets">
                 {isLoading ? (
-                    <p>Loading tickets...</p>
+                    <p className="ticketStatus">Loading tickets...</p>
                 ) : tickets.length > 0 ? (
                     displayedTickets.map((ticket, index) => (
                         <TicketObject
@@ -47,7 +45,7 @@ const TicketCollection: React.FC<TicketCollectionProps> = ({
                         />
                     ))
                 ) : (
-                    <p>No tickets available.</p>
+                    <p className="ticketStatus">No tickets available.</p>
                 )}
             </div>
             {totalPages > 1 && (

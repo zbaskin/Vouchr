@@ -123,8 +123,8 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
   }
 
   return (
-    <div className="appContainer">
-      <Navbar />
+    <div className={"appContainer " + (isMobile ? "containerMobile" : "containerDesktop")}>
+      <Navbar isMobile={isMobile} />
       <h2 className="title">{user?.username ? user.username.concat("'s") : (<h2>Your</h2>) } Ticket Collection</h2>
       <div className="headerButtonContainer">
         <button className="signoutButton" onClick={signOut}>Sign out</button>

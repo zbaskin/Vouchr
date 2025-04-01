@@ -1,3 +1,11 @@
+.navDesktop {
+    width: 1000px;
+}
+
+.navMobile {
+    width: 410px;
+}
+
 .navbarContainer {
     background-color: var(--primary);
     height: 100px;
@@ -54,4 +62,12 @@
     gap: 10px;
     color: var(--primary);
     background-color: var(--secondary-content);
+}
+
+.menuIcon {
+    color: var(--secondary-content);
+    padding: 10px;
+    height: 100px;
+    width: 100px;
+    cursor: pointer;
 }

@@ -22,7 +22,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 15px;
+    margin: 15px 0;
     color: var(--copy);
     gap: 10px;
 }
@@ -39,11 +39,15 @@
   
 .pagination button:disabled {
     background-color: #ccc;
-    color: var(--primary);
+    color: white;
     cursor: not-allowed;
 }
   
 .pagination span {
     font-size: 14px;
     font-weight: bold;
+}
+
+.ticketStatus {
+    color: var(--secondary-content);
 }

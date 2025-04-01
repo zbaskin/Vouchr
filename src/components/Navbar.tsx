@@ -1,21 +1,29 @@
 import React from "react";
 import "./Navbar.css";
+import { MenuIcon } from 'lucide-react';
 
-type NavbarProps = {};
+type NavbarProps = {
+    isMobile: boolean;
+};
 
-const Navbar: React.FC<NavbarProps> = () => {
+const Navbar: React.FC<NavbarProps> = ({ isMobile }) => {
   return (
-    <div className="navbarContainer">
+    <div className={"navbarContainer " + (isMobile ? "navMobile" : "navDesktop")}>
         <div className="logo">
             <img className="logoImage" src="./gold-logo.png" />
-            <p className="logoText">Vouchr</p>
+            {!isMobile && <p className="logoText">Vouchr</p>}
         </div>
-        <ul className="navbarLinks">
-            <li className="link"><a href="#">Home</a></li>
-            <li className="link"><a href="#">About</a></li>
-            <li className="link"><a href="#">Tickets</a></li>
-            <li className="link"><a href="#">Settings</a></li>
-        </ul>
+        {!isMobile ? 
+            <ul className="navbarLinks">
+                <li className="link"><a href="#">Home</a></li>
+                <li className="link"><a href="#">About</a></li>
+                <li className="link"><a href="#">Tickets</a></li>
+                <li className="link"><a href="#">Settings</a></li>
+            </ul> 
+        : 
+            <MenuIcon className="menuIcon" />
+        }
+        
     </div>
   );
 };
