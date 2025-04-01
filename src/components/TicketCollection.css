@@ -7,7 +7,6 @@
 }
 
 .tickets {
-    background-color: var(--secondary-content);
     display: grid;
     flex-wrap: wrap;
     grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
@@ -16,7 +15,7 @@
     padding: 20px;
     margin-top: 10px;
     color: var(--copy);
-    background-color: var(--primary-content);
+    background-color: var(--primary);
 }
 
 .pagination {
@@ -24,12 +23,13 @@
     justify-content: center;
     align-items: center;
     margin-top: 15px;
+    color: var(--copy);
     gap: 10px;
 }
   
 .pagination button {
-    background-color: #007bff;
-    color: white;
+    background-color: var(--primary);
+    color: var(--secondary-content);
     border: none;
     padding: 8px 12px;
     cursor: pointer;
@@ -39,6 +39,7 @@
   
 .pagination button:disabled {
     background-color: #ccc;
+    color: var(--primary);
     cursor: not-allowed;
 }
   
