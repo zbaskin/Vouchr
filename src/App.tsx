@@ -121,7 +121,7 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
   const toggleFormDisplay = () => {
     setShowForm(!showForm);
   }
-
+  // TEST
   return (
     <div className={"appContainer " + (isMobile ? "containerMobile" : "containerDesktop")}>
       <Navbar isMobile={isMobile} />
