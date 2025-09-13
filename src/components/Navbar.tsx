@@ -32,7 +32,8 @@ const Navbar: React.FC<NavbarProps> = ({ isMobile }) => {
                     </NavLink>
                 </li>
             </ul>
-            /*<ul className="navbarLinks" role="menubar">
+            /*
+            <ul className="navbarLinks" role="menubar">
                 <li className="link" role="none">
                     <NavLink to="/" end className={({ isActive }) => (isActive ? "navLink active" : "navLink")}>
                         Home
@@ -58,7 +59,8 @@ const Navbar: React.FC<NavbarProps> = ({ isMobile }) => {
                         Sign Out
                     </NavLink>
                 </li>
-            </ul>*/
+            </ul>
+            */
         : 
             <MenuIcon className="menuIcon" aria-label="Open menu" />
         }
