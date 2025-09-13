@@ -22,8 +22,12 @@ a:hover {
   color: var(--primary-light);
 }
 
-body {
+html, body {
   margin: 0;
+  padding: 0;
+}
+
+body {
   display: flex;
   min-width: 320px;
   min-height: 100vh;

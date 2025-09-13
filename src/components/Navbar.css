@@ -1,16 +1,20 @@
-.navDesktop {
-    width: 1000px;
-}
-
-.navMobile {
-    width: 410px;
-}
-
 .navbarContainer {
     background-color: var(--primary);
     height: 100px;
     display: flex;
     justify-content: space-between;
+
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    padding-inline: 20px;
+}
+
+@media (min-width: 1024px) {
+    .navbarContainer {
+        padding-left: calc((100vw - 1000px) / 2);
+        padding-right: calc((100vw - 1000px) / 2);
+    }
 }
 
 .logo {
@@ -55,7 +59,7 @@
     background-color: white;
     float: left;
     height: 50px;
-    width: 75px;
+    width: 100px;
     flex-direction: row;
     align-content: center;
     justify-content: center;
@@ -70,4 +74,12 @@
     height: 100px;
     width: 100px;
     cursor: pointer;
+}
+
+.navLink {
+    text-decoration: none;
+}
+
+.navLink.active {
+    text-decoration: underline;
 }

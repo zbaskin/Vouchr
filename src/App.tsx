@@ -1,5 +1,6 @@
 import './App.css';
 import { useEffect, useState } from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
 
 import { 
   fetchTickets, 
@@ -9,7 +10,7 @@ import {
   addUser, 
   addTicketCollection,
   fetchSortType,
-  updateSortType,
+  /*updateSortType,*/
 } from './ticketService';
 
 import Navbar from './components/Navbar';
@@ -33,8 +34,15 @@ type AppProps = {
   user?: AuthUser;
 };
 
-const App: React.FC<AppProps> = ({ signOut, user }) => {
-  const [showForm, setShowForm] = useState(false);
+const Settings: React.FC = () => (
+  <div>
+    <h2>Settings</h2>
+    <p>Settings coming soon.</p>
+  </div>
+);
+
+const App: React.FC<AppProps> = ({ /*signOut,*/ user }) => {
+  /*const [showForm, setShowForm] = useState(false);*/
   const [tickets, setTickets] = useState<Ticket[] | CreateTicketInput[]>([]);
   const [ticketCollection] = useState(user?.userId);
   const [isLoading, setIsLoading] = useState(false);
@@ -89,11 +97,13 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
     setIsLoading(false);
   };
 
+  /*
   const handleUpdateSort = async (collectionSortType: SortType) => {
     if (!ticketCollection) return;
     await updateSortType(ticketCollection, collectionSortType);
     await handleFetchTickets();
   }
+  */
 
   const handleAddTicket = async (newTicket: CreateTicketInput) => {
     if (!newTicket.name || !newTicket.ticketsID) return;
@@ -118,11 +128,45 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
     }
   };
 
+  /*
   const toggleFormDisplay = () => {
     setShowForm(!showForm);
   }
-  // TEST
+  */
+
   return (
+    <>
+      <Navbar isMobile={isMobile} />
+      <main className="appBody">
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <TicketCollection
+                tickets={tickets as Ticket[]}
+                onRemoveTicket={handleRemoveTicket}
+                isLoading={isLoading}
+                isMobile={isMobile}
+              />
+            }
+          />
+          <Route
+            path="/new"
+            element={
+              <TicketForm
+                ticketCollection={ticketCollection}
+                onAddTicket={handleAddTicket}
+              />
+            }
+          />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </main>
+    </>
+
+    
+    /*
     <div className={"appContainer " + (isMobile ? "containerMobile" : "containerDesktop")}>
       <Navbar isMobile={isMobile} />
       <h2 className="title">{user?.username ? user.username.concat("'s") : (<h2>Your</h2>) } Ticket Collection</h2>
@@ -157,6 +201,7 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
       />
       
     </div>
+    */
   );
 };
 
