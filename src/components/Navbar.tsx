@@ -11,7 +11,7 @@ const Navbar: React.FC<NavbarProps> = ({ isMobile }) => {
   return (
     <div className={"navbarContainer"}>
         <div className="logo">
-            <img className="logoImage" src="./gold-logo.png" />
+            <img className="logoImage" src="/src/assets/gold-logo.png" />
             {!isMobile && <p className="logoText">Vouchr</p>}
         </div>
         {!isMobile ? 
