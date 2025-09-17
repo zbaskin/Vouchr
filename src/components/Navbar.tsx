@@ -2,6 +2,7 @@ import "./Navbar.css";
 import { MenuIcon } from 'lucide-react';
 import { createSearchParams, NavLink } from 'react-router-dom';
 import { SortType } from '../API';
+import logoUrl from '../assets/gold-logo.png';
 
 type NavbarProps = {
     isMobile: boolean;
@@ -15,7 +16,7 @@ export default function Navbar({ isMobile, sortType, onChangeSort, onSignOut }: 
     return (
         <div className={"navbarContainer"}>
             <div className="logo">
-                <img className="logoImage" src="./src/assets/gold-logo.png" />
+                <img className="logoImage" src={logoUrl} alt="Vouchr logo" />
                 {!isMobile && <p className="logoText">Vouchr</p>}
             </div>
             {!isMobile ? 
