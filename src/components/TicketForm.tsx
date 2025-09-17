@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import { type CreateTicketInput, EventType } from "../API";
-import "./TicketForm.css"; // Ensure correct styles are applied
+import "react-datepicker/dist/react-datepicker.css";
+import "./TicketForm.css";
 
 type TicketFormProps = {
   ticketCollection: string | undefined;
