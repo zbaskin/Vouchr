@@ -1,6 +1,6 @@
 import "./Navbar.css";
 import { MenuIcon } from 'lucide-react';
-import { createSearchParams, NavLink } from 'react-router-dom';
+import { createSearchParams, NavLink, useLocation, matchPath } from 'react-router-dom';
 import { SortType } from '../API';
 import logoUrl from '../assets/gold-logo.png';
 
@@ -13,11 +13,34 @@ type NavbarProps = {
 
 export default function Navbar({ isMobile, sortType, onChangeSort, onSignOut }: NavbarProps) {
     const qs = "?" + createSearchParams({ sort: sortType }).toString();
+    const { pathname } = useLocation();
+    
+    const HIDE_SORT_PATTERNS = [
+        "/new",
+        "/settings"
+    ];
+
+    const HIDE_ADD_PATTERNS = [
+        "/settings"
+    ];
+
+    const hideSort = HIDE_SORT_PATTERNS.some(p =>
+        matchPath({ path: p, end: true }, pathname) ||
+        matchPath({ path: p, end: false }, pathname)
+    );
+
+    const hideAddTicket = HIDE_ADD_PATTERNS.some(p =>
+        matchPath({ path: p, end: true }, pathname) ||
+        matchPath({ path: p, end: false }, pathname)
+    );
+
     return (
-        <div className={"navbarContainer"}>
+        <div className="navbarContainer">
             <div className="logo">
-                <img className="logoImage" src={logoUrl} alt="Vouchr logo" />
-                {!isMobile && <p className="logoText">Vouchr</p>}
+                <NavLink to={{ pathname: "/" }} end className="logoLink">
+                    <img className="logoImage" src={logoUrl} alt="Vouchr logo" />
+                    {!isMobile && <p className="logoText">Vouchr</p>}
+                </NavLink>
             </div>
             {!isMobile ? 
                 <ul className="navbarLinks" role="menubar">
@@ -29,28 +52,32 @@ export default function Navbar({ isMobile, sortType, onChangeSort, onSignOut }: 
                             Collection
                         </NavLink>
                     </li>
-                    <li role="none" className="link">
-                        <NavLink 
-                            to={{ pathname: "/new", search: qs }} 
-                            className={({ isActive }) => (
-                                isActive ? "navLink active" : "navLink"
-                            )}>
-                            Add Ticket
-                        </NavLink>
-                    </li>
-                    <li role="none" className="link">
-                        <label className="navLink sortLabel" htmlFor="sortSel">Sort</label>
-                        <select
-                            id="sortSel"
-                            value={sortType}
-                            onChange={e => onChangeSort(e.target.value as SortType)}
-                            className="sortSelect"
-                        >
-                            <option value={SortType.TIME_CREATED}>Newest</option>
-                            <option value={SortType.EVENT_DATE}>Event Date</option>
-                            <option value={SortType.ALPHABETICAL}>Title A–Z</option>
-                        </select>
-                    </li>
+                    {!hideAddTicket && (
+                        <li role="none" className="link">
+                            <NavLink 
+                                to={{ pathname: "/new" }} 
+                                className={({ isActive }) => (
+                                    isActive ? "navLink active" : "navLink"
+                                )}>
+                                Add Ticket
+                            </NavLink>
+                        </li>
+                    )}
+                    {!hideSort && (
+                        <li role="none" className="link">
+                            <label className="navLink sortLabel" htmlFor="sortSel">Sort</label>
+                            <select
+                                id="sortSel"
+                                value={sortType}
+                                onChange={e => onChangeSort(e.target.value as SortType)}
+                                className="sortSelect"
+                            >
+                                <option value={SortType.TIME_CREATED}>Newest</option>
+                                <option value={SortType.EVENT_DATE}>Event Date</option>
+                                <option value={SortType.ALPHABETICAL}>Title A–Z</option>
+                            </select>
+                        </li>
+                    )}
                     <li role="none" className="link">
                         <NavLink to={{ pathname: "/settings" }} 
                             className={({ isActive }) => (
