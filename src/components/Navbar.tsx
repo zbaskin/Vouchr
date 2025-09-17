@@ -15,7 +15,7 @@ export default function Navbar({ isMobile, sortType, onChangeSort, onSignOut }: 
     return (
         <div className={"navbarContainer"}>
             <div className="logo">
-                <img className="logoImage" src="../assets/gold-logo.png" />
+                <img className="logoImage" src="./src/assets/gold-logo.png" />
                 {!isMobile && <p className="logoText">Vouchr</p>}
             </div>
             {!isMobile ? 
