@@ -16,12 +16,12 @@ export default function Navbar({ isMobile, sortType, onChangeSort, onSignOut }: 
     const { pathname } = useLocation();
     
     const HIDE_SORT_PATTERNS = [
-        "/new",
-        "/settings"
+        "/app/new",
+        "/app/settings"
     ];
 
     const HIDE_ADD_PATTERNS = [
-        "/settings"
+        "/app/settings"
     ];
 
     const hideSort = HIDE_SORT_PATTERNS.some(p =>
@@ -37,7 +37,7 @@ export default function Navbar({ isMobile, sortType, onChangeSort, onSignOut }: 
     return (
         <div className="navbarContainer">
             <div className="logo">
-                <NavLink to={{ pathname: "/" }} end className="logoLink">
+                <NavLink to={{ pathname: "/app" }} end className="logoLink">
                     <img className="logoImage" src={logoUrl} alt="Vouchr logo" />
                     {!isMobile && <p className="logoText">Vouchr</p>}
                 </NavLink>
@@ -45,7 +45,7 @@ export default function Navbar({ isMobile, sortType, onChangeSort, onSignOut }: 
             {!isMobile ? 
                 <ul className="navbarLinks" role="menubar">
                     <li role="none" className="link">
-                        <NavLink to={{ pathname: "/", search: qs }} end 
+                        <NavLink to={{ pathname: "/app/collection", search: qs }} end 
                             className={({ isActive }) => (
                                 isActive ? "navLink active" : "navLink"
                             )}>
@@ -55,7 +55,7 @@ export default function Navbar({ isMobile, sortType, onChangeSort, onSignOut }: 
                     {!hideAddTicket && (
                         <li role="none" className="link">
                             <NavLink 
-                                to={{ pathname: "/new" }} 
+                                to={{ pathname: "/app/new" }} 
                                 className={({ isActive }) => (
                                     isActive ? "navLink active" : "navLink"
                                 )}>
@@ -79,7 +79,7 @@ export default function Navbar({ isMobile, sortType, onChangeSort, onSignOut }: 
                         </li>
                     )}
                     <li role="none" className="link">
-                        <NavLink to={{ pathname: "/settings" }} 
+                        <NavLink to={{ pathname: "/app/settings" }} 
                             className={({ isActive }) => (
                                 isActive ? "navLink active" : "navLink"
                             )}>
