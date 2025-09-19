@@ -37,7 +37,7 @@ export default function Navbar({ isMobile, sortType, onChangeSort, onSignOut }: 
     return (
         <div className="navbarContainer">
             <div className="logo">
-                <NavLink to={{ pathname: "/app" }} end className="logoLink">
+                <NavLink to={{ pathname: "/app/collection" }} end className="logoLink">
                     <img className="logoImage" src={logoUrl} alt="Vouchr logo" />
                     {!isMobile && <p className="logoText">Vouchr</p>}
                 </NavLink>
