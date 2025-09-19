@@ -165,62 +165,6 @@ const TicketForm: React.FC<TicketFormProps> = ({ ticketCollection, onAddTicket }
             </div>
         </section>
     );
-
-
-    /*
-    return (
-        <div className="ticketForm">
-            <div className="ticketInputContainer">
-                <input
-                onChange={(event) => setFormState({ ...formState, name: event.target.value })}
-                className="ticketInput"
-                value={formState.name}
-                placeholder="Movie Name"
-                />
-                <input
-                onChange={(event) => setFormState({ ...formState, venue: event.target.value })}
-                className="ticketInput"
-                value={formState.venue || ""}
-                placeholder="Theater Name"
-                />
-                <div className="ticketInputSmall">
-                <DatePicker
-                    className="ticketInput"
-                    selected={eventDateTime}
-                    maxDate={new Date()}
-                    onChange={(date) => date && setEventDateTime(date)}
-                />
-                <DatePicker
-                    className="ticketInput"
-                    selected={eventDateTime}
-                    showTimeSelect
-                    showTimeSelectOnly
-                    timeIntervals={5}
-                    dateFormat="h:mm aa"
-                    onChange={(time) => time && setEventDateTime(time)}
-                />
-                </div>
-                <div className="ticketInputSmall">
-                <input
-                    onChange={(event) => setFormState({ ...formState, theater: event.target.value })}
-                    className="ticketInput"
-                    value={formState.theater || ""}
-                    placeholder="Room"
-                />
-                <input
-                    onChange={(event) => setFormState({ ...formState, seat: event.target.value })}
-                    className="ticketInput"
-                    value={formState.seat || ""}
-                    placeholder="Seat"
-                />
-                </div>
-            </div>
-            <button className="createTicketButton" onClick={handleSubmit}>
-                Submit
-            </button>
-        </div>
-    );
-    */
 };
 
 export default TicketForm;
