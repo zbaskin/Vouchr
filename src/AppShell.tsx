@@ -1,6 +1,6 @@
 import './AppShell.css';
 import { useEffect, useState } from 'react';
-import { Routes, Route, Navigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams, Outlet } from 'react-router-dom';
 
 import { 
   fetchTickets, 
@@ -14,8 +14,8 @@ import {
 } from './ticketService';
 
 import Navbar from './components/Navbar';
-import TicketForm from './components/TicketForm';
-import TicketCollection from './components/TicketCollection';
+//import TicketForm from './components/TicketForm';
+//import TicketCollection from './components/TicketCollection';
 
 import { 
   type CreateTicketInput, 
@@ -28,6 +28,15 @@ import '@aws-amplify/ui-react/styles.css';
 
 import { type AuthUser } from "aws-amplify/auth";
 import { type UseAuthenticator } from "@aws-amplify/ui-react-core";
+
+export type AppOutletContext = {
+  tickets: (Ticket | CreateTicketInput)[];
+  isLoading: boolean;
+  isMobile: boolean;
+  ticketCollection?: string;
+  handleAddTicket: (t: CreateTicketInput) => Promise<void>;
+  handleRemoveTicket: (id: string | null | undefined) => Promise<void>;
+};
 
 type AppShellProps = {
   signOut?: UseAuthenticator["signOut"];
@@ -64,12 +73,14 @@ const sortTickets = (items: Ticket[], sort: SortType): Ticket[] => {
   return copy;
 };
 
-const Settings: React.FC = () => (
+/*const Settings: React.FC = () => (
   <div>
     <h2>Settings</h2>
     <p>Settings coming soon.</p>
   </div>
-);
+);*/
+
+
 
 const AppShell: React.FC<AppShellProps> = ({ signOut, user }) => {
   const [tickets, setTickets] = useState<Ticket[] | CreateTicketInput[]>([]);
@@ -165,30 +176,14 @@ const AppShell: React.FC<AppShellProps> = ({ signOut, user }) => {
         onSignOut={signOut}
       />
       <main className="appBody">
-        <Routes>
-          <Route
-            path="collection"
-            element={
-              <TicketCollection
-                tickets={tickets as Ticket[]}
-                onRemoveTicket={handleRemoveTicket}
-                isLoading={isLoading}
-                isMobile={isMobile}
-              />
-            }
-          />
-          <Route
-            path="new"
-            element={
-              <TicketForm
-                ticketCollection={ticketCollection}
-                onAddTicket={handleAddTicket}
-              />
-            }
-          />
-          <Route path="settings" element={<Settings />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
+        <Outlet context={{
+          tickets,
+          isLoading,
+          isMobile,
+          handleAddTicket,
+          handleRemoveTicket,
+          ticketCollection,
+        } satisfies AppOutletContext} />
       </main>
     </>
   );

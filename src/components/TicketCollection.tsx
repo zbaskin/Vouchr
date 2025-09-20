@@ -1,19 +1,21 @@
 import React, { useState } from "react";
 import TicketObject from "./Ticket"; 
 import "./TicketCollection.css";
-import { type Ticket } from '../API';
+//import { type Ticket } from '../API';
+import { useOutletContext } from "react-router-dom";
+import type { AppOutletContext } from "../AppShell";
 
 
-type TicketCollectionProps = {
+/*type TicketCollectionProps = {
     tickets: Ticket[];
     onRemoveTicket: (id: string) => void;
     isLoading: boolean;
     isMobile: boolean;
-}
+}*/
 
-const TicketCollection: React.FC<TicketCollectionProps> = ({ 
-    tickets, onRemoveTicket, isLoading, isMobile 
-}) => {
+const TicketCollection: React.FC = () => { 
+    const { tickets, handleRemoveTicket, isLoading, isMobile } = useOutletContext<AppOutletContext>();
+
     const [page, setPage] = useState(1);
     const TICKETS_PER_PAGE = isMobile ? 8 : 15;
     
@@ -34,14 +36,14 @@ const TicketCollection: React.FC<TicketCollectionProps> = ({
                     displayedTickets.map((ticket, index) => (
                         <TicketObject
                             key={ticket.id || index} 
-                            id={ticket.id} 
+                            id={ticket.id || ""} 
                             name={ticket.name} 
                             venue={ticket.venue as string}
                             eventDate={ticket.eventDate as string}
                             eventTime={ticket.eventTime as string}
                             theater={ticket.theater as string}
                             seat={ticket.seat as string}
-                            onRemove={onRemoveTicket}
+                            onRemove={handleRemoveTicket}
                         />
                     ))
                 ) : (

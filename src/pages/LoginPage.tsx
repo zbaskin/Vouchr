@@ -8,7 +8,7 @@ export default function LoginPage() {
 
     useEffect(() => {
         if (authStatus === 'authenticated') {
-            navigate('/app', { replace: true });
+            navigate('/app/collection', { replace: true });
         }
     }, [authStatus, navigate]);
 

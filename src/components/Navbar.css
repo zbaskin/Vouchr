@@ -31,7 +31,7 @@
 
 .logoText {
     font-family: "Arista";
-    color: #c9b461;
+    color: var(--secondary-content); /*#c9b461;*/
     font-size: 5em;
     margin: 0;
     margin-left: 25px;

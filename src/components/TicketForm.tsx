@@ -3,15 +3,18 @@ import DatePicker from "react-datepicker";
 import { type CreateTicketInput, EventType } from "../API";
 import "react-datepicker/dist/react-datepicker.css";
 import "./TicketForm.css";
+import { useOutletContext } from "react-router-dom";
+import type { AppOutletContext } from "../AppShell";
 
-type TicketFormProps = {
+/*type TicketFormProps = {
   ticketCollection: string | undefined;
   onAddTicket: (ticket: CreateTicketInput) => void;
-};
+};*/
 
 const initialState: CreateTicketInput = { name: '', type: EventType.MOVIE, ticketsID: '', timeCreated: Date.now() };
 
-const TicketForm: React.FC<TicketFormProps> = ({ ticketCollection, onAddTicket }) => {
+const TicketForm: React.FC = () => { 
+    const { ticketCollection, handleAddTicket } = useOutletContext<AppOutletContext>();
     const [formState, setFormState] = useState<CreateTicketInput>(initialState);
 
     const [eventDateTime, setEventDateTime] = useState(new Date());
@@ -41,7 +44,7 @@ const TicketForm: React.FC<TicketFormProps> = ({ ticketCollection, onAddTicket }
             eventTime
         };
         setFormState(initialState); // Reset form
-        onAddTicket(newTicket);
+        handleAddTicket(newTicket);
     };
 
     return (
