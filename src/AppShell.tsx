@@ -72,7 +72,7 @@ const sortTickets = (items: Ticket[], sort: SortType): Ticket[] => {
   return copy;
 };
 
-const AppShell: React.FC<AppShellProps> = ({ signOut, user }) => {
+const AppShell: React.FC<AppShellProps> = ({ user }) => {
   const [tickets, setTickets] = useState<Ticket[] | CreateTicketInput[]>([]);
   const [ticketCollection] = useState(user?.userId);
   const [isLoading, setIsLoading] = useState(false);
@@ -160,11 +160,7 @@ const AppShell: React.FC<AppShellProps> = ({ signOut, user }) => {
 
   const handleSignOut = async () => {
     try {
-      if (typeof signOut === "function") {
-        await signOut();
-      } else {
-        await amplifySignOut({ global: false });
-      }
+      await amplifySignOut({ global: false });
     } finally {
       window.location.replace("/");
     }
