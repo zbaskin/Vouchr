@@ -12,8 +12,6 @@ export default function App() {
             <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<LoginPage />} />
 
-            
-
             {/* Anything under /app requires auth */}
             <Route path="/app/*" element={<ProtectedApp />}>
                 <Route index element={<Navigate to="collection" replace />} />

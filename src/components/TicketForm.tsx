@@ -6,11 +6,6 @@ import "./TicketForm.css";
 import { useOutletContext } from "react-router-dom";
 import type { AppOutletContext } from "../AppShell";
 
-/*type TicketFormProps = {
-  ticketCollection: string | undefined;
-  onAddTicket: (ticket: CreateTicketInput) => void;
-};*/
-
 const initialState: CreateTicketInput = { name: '', type: EventType.MOVIE, ticketsID: '', timeCreated: Date.now() };
 
 const TicketForm: React.FC = () => { 

@@ -14,8 +14,6 @@ import {
 } from './ticketService';
 
 import Navbar from './components/Navbar';
-//import TicketForm from './components/TicketForm';
-//import TicketCollection from './components/TicketCollection';
 
 import { 
   type CreateTicketInput, 
@@ -72,15 +70,6 @@ const sortTickets = (items: Ticket[], sort: SortType): Ticket[] => {
   }
   return copy;
 };
-
-/*const Settings: React.FC = () => (
-  <div>
-    <h2>Settings</h2>
-    <p>Settings coming soon.</p>
-  </div>
-);*/
-
-
 
 const AppShell: React.FC<AppShellProps> = ({ signOut, user }) => {
   const [tickets, setTickets] = useState<Ticket[] | CreateTicketInput[]>([]);

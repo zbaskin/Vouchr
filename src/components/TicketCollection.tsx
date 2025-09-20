@@ -1,17 +1,8 @@
 import React, { useState } from "react";
 import TicketObject from "./Ticket"; 
 import "./TicketCollection.css";
-//import { type Ticket } from '../API';
 import { useOutletContext } from "react-router-dom";
 import type { AppOutletContext } from "../AppShell";
-
-
-/*type TicketCollectionProps = {
-    tickets: Ticket[];
-    onRemoveTicket: (id: string) => void;
-    isLoading: boolean;
-    isMobile: boolean;
-}*/
 
 const TicketCollection: React.FC = () => { 
     const { tickets, handleRemoveTicket, isLoading, isMobile } = useOutletContext<AppOutletContext>();
