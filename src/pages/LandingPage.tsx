@@ -1,8 +1,10 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Ticket } from 'lucide-react'
 import logoUrl from '../assets/red-logo.png'
 import "./LandingPage.css"
+
+import { Ticket, Menu as MenuIcon, X as CloseIcon } from 'lucide-react'
+import { useState } from 'react'
 
 // Tailwind + CSS-variables color bridge
 // This version reads colors from your global.css via CSS variables.
@@ -11,6 +13,7 @@ import "./LandingPage.css"
 // --primary, --primary-fg, --accent, --border, --ring
 
 export default function LandingPage() {
+  const [open, setOpen] = useState(false)
   return (
     <div className="min-h-dvh bg-[var(--bg,white)] text-[var(--text,#0a0a0a)] dark:bg-[var(--bg,#0b0b0b)] dark:text-[var(--text,#fafafa)]">
       {/* Decorative background tied to your palette */}
@@ -30,21 +33,77 @@ export default function LandingPage() {
       </div>
 
       {/* Top nav */}
-      <header className="sticky top-0 z-20 backdrop-blur supports-[backdrop-filter]:bg-[color:var(--surface,rgba(255,255,255,.7))] dark:supports-[backdrop-filter]:bg-[color:var(--surface,rgba(10,10,10,.6))]">
+      <header
+        className={
+            "sticky top-0 z-20 " +
+            (open
+                ? "bg-[color:var(--surface,white)] dark:bg-[color:var(--surface,#0b0b0b)] shadow"
+                : "backdrop-blur supports-[backdrop-filter]:bg-[color:var(--surface,rgba(255,255,255,.7))] dark:supports-[backdrop-filter]:bg-[color:var(--surface,rgba(10,10,10,.6))]"
+            )
+        }
+      >
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
-          <Link to="/" className="group inline-flex items-center gap-2">
+            <Link to="/" className="group inline-flex items-center gap-2">
             <img className="landingLogo" src={logoUrl} alt="Vouchr logo" />
-            
             <span className="text-xl font-bold tracking-tight landingTitle title">Vouchr</span>
-          </Link>
-          <nav className="flex items-center gap-2 sm:gap-3">
-            <a href="#features" className="rounded-xl px-3 py-2 text-lg font-medium hover:bg-[var(--surface-2,#f6f6f6)] dark:hover:bg-[var(--surface-2,#191919)]">Features</a>
-            <a href="#how" className="rounded-xl px-3 py-2 text-lg font-medium hover:bg-[var(--surface-2,#f6f6f6)] dark:hover:bg-[var(--surface-2,#191919)]">How it works</a>
-            <Link to="/login" className="rounded-xl px-3 py-2 text-lg font-semibold ring-1 ring-inset ring-[var(--border,#d4d4d4)] hover:bg-[var(--surface-2,#f6f6f6)] dark:ring-[var(--border,#2a2a2a)] dark:hover:bg-[var(--surface-2,#191919)]">Log in</Link>
-            <Link to="/login" className="hidden sm:inline-flex items-center rounded-xl bg-[var(--primary,#0a0a0a)] px-4 py-2 text-lg font-semibold !text-[var(--primary-fg,#ffffff)] shadow hover:brightness-95">Create account</Link>
-          </nav>
+            </Link>
+
+            {/* Desktop nav */}
+            <nav className="hidden sm:flex items-center gap-2 sm:gap-3">
+                <a href="#features" className="rounded-xl px-3 py-2 text-lg font-medium hover:bg-[var(--surface-2,#f6f6f6)] dark:hover:bg-[var(--surface-2,#191919)]">Features</a>
+                <a href="#how" className="rounded-xl px-3 py-2 text-lg font-medium hover:bg-[var(--surface-2,#f6f6f6)] dark:hover:bg-[var(--surface-2,#191919)]">How it works</a>
+                <Link to="/login" className="rounded-xl px-3 py-2 text-lg font-semibold ring-1 ring-inset ring-[var(--border,#d4d4d4)] hover:bg-[var(--surface-2,#f6f6f6)] dark:ring-[var(--border,#2a2a2a)] dark:hover:bg-[var(--surface-2,#191919)]">Log in</Link>
+                <Link to="/login" className="hidden sm:inline-flex items-center rounded-xl bg-[var(--primary,#0a0a0a)] px-4 py-2 text-lg font-semibold !text-[var(--primary-fg,#ffffff)] shadow hover:brightness-95">Create account</Link>
+            </nav>
+
+            {/* Mobile trigger */}
+            <button
+                type="button"
+                onClick={() => setOpen((v) => !v)}
+                className="sm:hidden inline-flex items-center justify-center rounded-md p-2 ring-1 ring-[var(--border,#d4d4d4)] hover:bg-[var(--surface-2,#f6f6f6)] dark:ring-[var(--border,#2a2a2a)] dark:hover:bg-[var(--surface-2,#191919)]"
+                aria-label={open ? "Close menu" : "Open menu"}
+                aria-expanded={open}
+                aria-controls="lp-mobile-menu"
+            >
+                {open ? <CloseIcon className="h-5 w-5" /> : <MenuIcon className="h-5 w-5" />}
+            </button>
         </div>
-      </header>
+
+        {/* Mobile sheet */}
+        {open && (
+            <div
+            className="sm:hidden fixed inset-0 z-30 bg-black/40"
+            onClick={() => setOpen(false)}
+            role="presentation"
+            >
+                <div
+                    id="lp-mobile-menu"
+                    role="dialog"
+                    aria-modal="true"
+                    aria-label="Site navigation"
+                    className="ml-auto h-full w-72 p-4 shadow-2xl ring-1 ring-[var(--border,#e5e5e5)] dark:ring-[var(--border,#2a2a2a)] lpMenuPanel"
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    <div className="mb-3 flex items-center justify-between">
+                        <span className="text-base font-semibold">Menu</span>
+                        <button
+                            className="rounded-md p-2 hover:bg-[var(--surface-2,#f6f6f6)] dark:hover:bg-[var(--surface-2,#191919)]"
+                            onClick={() => setOpen(false)}
+                            aria-label="Close menu"
+                        >
+                            <CloseIcon className="h-5 w-5" />
+                        </button>
+                    </div>
+                    <nav className="grid gap-1">
+                        <a href="#features" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2 text-base font-medium hover:bg-[var(--surface-2,#f6f6f6)] dark:hover:bg-[var(--surface-2,#191919)]">Features</a>
+                        <a href="#how" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2 text-base font-medium hover:bg-[var(--surface-2,#f6f6f6)] dark:hover:bg-[var(--surface-2,#191919)]">How it works</a>
+                        <Link to="/login" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2 text-base font-semibold ring-1 ring-inset ring-[var(--border,#d4d4d4)] hover:bg-[var(--surface-2,#f6f6f6)] dark:ring-[var(--border,#2a2a2a)] dark:hover:bg-[var(--surface-2,#191919)]">Log in</Link>
+                        <Link to="/login" onClick={() => setOpen(false)} className="inline-flex items-center justify-center rounded-lg bg-[var(--primary,#0a0a0a)] px-3 py-2 text-base font-semibold !text-[var(--primary-fg,#ffffff)] shadow hover:brightness-95">Create account</Link>
+                    </nav>
+                </div>
+            </div>
+        )}
+        </header>
 
       {/* Hero */}
       <section className="relative mx-auto grid max-w-6xl grid-cols-1 items-center gap-8 px-4 pb-16 pt-10 sm:pt-16 md:grid-cols-2 md:gap-12 lg:pt-24">
