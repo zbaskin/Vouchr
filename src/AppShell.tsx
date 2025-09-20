@@ -1,6 +1,6 @@
 import './AppShell.css';
 import { useEffect, useState } from 'react';
-import { useSearchParams, Outlet } from 'react-router-dom';
+import { useSearchParams, Outlet, useLocation } from 'react-router-dom';
 
 import { 
   fetchTickets, 
@@ -82,6 +82,8 @@ const AppShell: React.FC<AppShellProps> = ({ signOut, user }) => {
   const urlSort = normalizeSort(searchParams.get("sort"));
   const [sortType, setSortType] = useState<SortType>(urlSort);
   
+  const location = useLocation();
+
   useEffect(() => {
     handleFetchUser();
     handleFetchTickets();
@@ -105,6 +107,17 @@ const AppShell: React.FC<AppShellProps> = ({ signOut, user }) => {
   }, [ticketCollection]);
 
   useEffect(() => {
+    const sp = new URLSearchParams(location.search);
+    const next = normalizeSort(sp.get("sort"));
+    setSortType(next);
+    if (ticketCollection) {
+      // optional: persist to backend so it's remembered
+      updateSortType(ticketCollection, next);
+    }
+  }, [location.search, ticketCollection]);
+
+  
+  useEffect(() => {
     if (!sortType) return;
     const sp = new URLSearchParams(searchParams);
     if (sp.get("sort") !== sortType) {
@@ -115,6 +128,7 @@ const AppShell: React.FC<AppShellProps> = ({ signOut, user }) => {
       updateSortType(ticketCollection, sortType);
     }
   }, [sortType, ticketCollection]);
+  
 
   useEffect(() => {
     setTickets(prev => sortTickets(prev as Ticket[], sortType));
