@@ -33,15 +33,15 @@ export default function LandingPage() {
       <header className="sticky top-0 z-20 backdrop-blur supports-[backdrop-filter]:bg-[color:var(--surface,rgba(255,255,255,.7))] dark:supports-[backdrop-filter]:bg-[color:var(--surface,rgba(10,10,10,.6))]">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
           <Link to="/" className="group inline-flex items-center gap-2">
-            <img className="logoImage" src={logoUrl} alt="Vouchr logo" />
+            <img className="landingLogo" src={logoUrl} alt="Vouchr logo" />
             
-            <span className="text-xl font-bold tracking-tight title">Vouchr</span>
+            <span className="text-xl font-bold tracking-tight landingTitle title">Vouchr</span>
           </Link>
           <nav className="flex items-center gap-2 sm:gap-3">
-            <a href="#features" className="rounded-xl px-3 py-2 text-sm font-medium hover:bg-[var(--surface-2,#f6f6f6)] dark:hover:bg-[var(--surface-2,#191919)]">Features</a>
-            <a href="#how" className="rounded-xl px-3 py-2 text-sm font-medium hover:bg-[var(--surface-2,#f6f6f6)] dark:hover:bg-[var(--surface-2,#191919)]">How it works</a>
-            <Link to="/login" className="rounded-xl px-3 py-2 text-sm font-semibold ring-1 ring-inset ring-[var(--border,#d4d4d4)] hover:bg-[var(--surface-2,#f6f6f6)] dark:ring-[var(--border,#2a2a2a)] dark:hover:bg-[var(--surface-2,#191919)]">Log in</Link>
-            <Link to="/login" className="hidden sm:inline-flex items-center rounded-xl bg-[var(--primary,#0a0a0a)] px-4 py-2 text-sm font-semibold !text-[var(--primary-fg,#ffffff)] shadow hover:brightness-95">Create account</Link>
+            <a href="#features" className="rounded-xl px-3 py-2 text-lg font-medium hover:bg-[var(--surface-2,#f6f6f6)] dark:hover:bg-[var(--surface-2,#191919)]">Features</a>
+            <a href="#how" className="rounded-xl px-3 py-2 text-lg font-medium hover:bg-[var(--surface-2,#f6f6f6)] dark:hover:bg-[var(--surface-2,#191919)]">How it works</a>
+            <Link to="/login" className="rounded-xl px-3 py-2 text-lg font-semibold ring-1 ring-inset ring-[var(--border,#d4d4d4)] hover:bg-[var(--surface-2,#f6f6f6)] dark:ring-[var(--border,#2a2a2a)] dark:hover:bg-[var(--surface-2,#191919)]">Log in</Link>
+            <Link to="/login" className="hidden sm:inline-flex items-center rounded-xl bg-[var(--primary,#0a0a0a)] px-4 py-2 text-lg font-semibold !text-[var(--primary-fg,#ffffff)] shadow hover:brightness-95">Create account</Link>
           </nav>
         </div>
       </header>
@@ -55,7 +55,7 @@ export default function LandingPage() {
           <p className="mt-4 max-w-prose text-pretty text-lg leading-relaxed text-[color:var(--muted,#525252)]">
             Vouchr turns crumpled ticket stubs and fading memories into a living collection. Save screenings, formats, theaters, and notes—then share a profile that actually feels like <em>you</em>.
           </p>
-          <div className="mt-6 flex flex-wrap items-center gap-3">
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
             <Link to="/login" className="inline-flex items-center justify-center rounded-xl bg-[var(--primary,#0a0a0a)] px-5 py-3 text-sm font-semibold !text-[var(--primary-fg,#ffffff)] shadow hover:brightness-95">
               Get started — it’s free
             </Link>
@@ -114,30 +114,46 @@ export default function LandingPage() {
 
       {/* How it works */}
       <section id="how" className="mx-auto max-w-6xl px-4 py-12 sm:py-16">
-        <div className="grid grid-cols-1 items-center gap-8 md:grid-cols-2">
-          <div>
-            <h2 className="text-2xl font-bold sm:text-3xl">Three steps to your first collection</h2>
-            <ol className="mt-4 space-y-3">
-              {howItWorks.map((s, i) => (
-                <li key={i} className="flex items-start gap-3">
-                  <span className="mt-0.5 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--primary,#0a0a0a)] text-sm font-semibold text-[var(--primary-fg,#ffffff)]">{i+1}</span>
-                  <div>
-                    <div className="font-medium">{s.title}</div>
-                    <p className="text-sm text-[color:var(--muted,#6b7280)]">{s.desc}</p>
-                  </div>
-                </li>
-              ))}
-            </ol>
-            <div className="mt-6 flex gap-3">
-              <Link to="/login" className="inline-flex items-center rounded-xl bg-[var(--primary,#0a0a0a)] px-4 py-2 text-sm font-semibold !text-[color:var(--primary-fg,#ffffff)] hover:brightness-95">Start now</Link>
-              <a href="#demo" className="inline-flex items-center rounded-xl px-4 py-2 text-sm font-semibold ring-1 ring-inset ring-[var(--border,#d4d4d4)] hover:bg-[var(--surface-2,#f6f6f6)] dark:ring-[var(--border,#2a2a2a)] dark:hover:bg-[var(--surface-2,#191919)]">Watch demo</a>
+        <div className="grid grid-cols-1 gap-8 md:flex md:items-center md:gap-12">
+            {/* LEFT */}
+            <div className="w-full md:w-1/2 flex flex-col justify-center">
+                <h2 className="text-2xl font-bold sm:text-3xl">Three steps to your first collection</h2>
+
+                <ol className="mt-4 space-y-4">
+                    {howItWorks.map((s, i) => (
+                    <li key={i} className="grid grid-cols-[1.75rem_1fr] items-center gap-3">
+                        <span className="inline-flex h-7 w-7 items-center justify-center rounded-full
+                                        bg-[var(--primary,#0a0a0a)] text-[color:var(--primary-fg,#fff)]
+                                        text-sm font-semibold">
+                        {i + 1}
+                        </span>
+                        <div>
+                        <div className="font-medium leading-tight">{s.title}</div>
+                        <p className="mt-1 text-sm leading-snug text-[color:var(--muted,#6b7280)]">{s.desc}</p>
+                        </div>
+                    </li>
+                    ))}
+                </ol>
+
+                <div className="mt-6 w-full flex items-center justify-center gap-3">
+                    <Link to="/login" className="inline-flex items-center rounded-xl bg-[var(--primary,#0a0a0a)] px-4 py-2 text-sm font-semibold !text-[color:var(--primary-fg,#ffffff)] hover:brightness-95">Start now</Link>
+                    <a href="#demo" className="inline-flex items-center rounded-xl px-4 py-2 text-sm font-semibold ring-1 ring-inset ring-[var(--border,#d4d4d4)] hover:bg-[var(--surface-2,#f6f6f6)] dark:ring-[var(--border,#2a2a2a)] dark:hover:bg-[var(--surface-2,#191919)]">Watch demo</a>
+                </div>
             </div>
-          </div>
-          <div id="demo" className="aspect-video w-full overflow-hidden rounded-2xl border border-[var(--border,#e5e5e5)] bg-black/90 shadow-lg ring-1 ring-[var(--ring,#e5e5e5)] dark:border-[var(--border,#2a2a2a)] dark:ring-[var(--ring,#2a2a2a)]">
-            <div className="flex h-full items-center justify-center text-[color:var(--muted,#a3a3a3)]">Demo video placeholder</div>
-          </div>
+
+            {/* RIGHT */}
+            <div className="w-full md:w-1/2 self-center">
+            <div className="aspect-video w-full overflow-hidden rounded-2xl border
+                            border-[var(--border,#e5e5e5)] bg-black/90 shadow-lg
+                            ring-1 ring-[var(--ring,#e5e5e5)]">
+                <div className="flex h-full items-center justify-center text-[color:var(--muted,#a3a3a3)]">
+                    Demo video placeholder
+                </div>
+            </div>
+            </div>
         </div>
       </section>
+      
 
       {/* Social proof */}
       <section className="mx-auto max-w-5xl px-4 pb-16">
