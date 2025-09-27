@@ -1,5 +1,5 @@
 import "./AppShell.css";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Outlet, useLocation, useSearchParams } from "react-router-dom";
 import { signOut as amplifySignOut } from "aws-amplify/auth";
 
@@ -42,6 +42,7 @@ type AppShellProps = {
   user?: AuthUser;
 };
 
+/* ---------- helpers ---------- */
 const normalizeSort = (v?: string | null): SortType | null => {
   switch ((v ?? "").toUpperCase()) {
     case "ALPHABETICAL": return SortType.ALPHABETICAL;
@@ -71,89 +72,93 @@ const sortTickets = (items: Ticket[], sort: SortType): Ticket[] => {
   }
   return copy;
 };
+/* -------------------------------- */
 
 const AppShell: React.FC<AppShellProps> = ({ user }) => {
-  const [tickets, setTickets] = useState<Ticket[] | CreateTicketInput[]>([]);
-  const [ticketCollection] = useState(user?.userId);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const [width, setWidth] = useState(window.innerWidth);
-  const [isMobile, setIsMobile] = useState(width < 500);
-
   const location = useLocation();
-  const [_searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const [sortType, setSortType] = useState<SortType | null>(null);
+  const [tickets, setTickets] = useState<Ticket[] | CreateTicketInput[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [sortType, setSortType] = useState<SortType>(SortType.TIME_CREATED); // safe default
+  const ticketCollection = user?.userId;
 
+  // mobile state (matchMedia avoids extra renders)
+  const isMobile = useMemo(() => window.innerWidth < 500, []);
   useEffect(() => {
-    const handleResize = () => {
-      setWidth(window.innerWidth);
-      setIsMobile(window.innerWidth < 500);
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    const mq = window.matchMedia("(max-width: 499px)");
+    const handler = () => { /* noop, calculated when needed in Navbar props */ };
+    mq.addEventListener?.("change", handler);
+    return () => mq.removeEventListener?.("change", handler);
   }, []);
 
+  // one-time: ensure user + collection exist
   useEffect(() => {
     (async () => {
       if (!user?.userId) return;
-      const userData = await fetchUser(user.userId);
-      if (!userData) {
+      const existing = await fetchUser(user.userId);
+      if (!existing) {
         await addTicketCollection(user.userId);
-        await addUser(user.userId, user.username as string, ticketCollection as string);
+        await addUser(user.userId, user.username as string, user.userId);
       }
     })();
-  }, [user?.userId]);
+  }, [user?.userId, user?.username]);
 
-  useEffect(() => {
-    (async () => {
-      if (!ticketCollection) return;
-      setIsLoading(true);
-      const raw = await fetchTickets(ticketCollection);
-      setTickets(sortType !== null ? sortTickets(raw, sortType) : raw);
-      setIsLoading(false);
-    })();
-  }, [ticketCollection]);
-
+  // sync sortType with URL and server (runs when collection is known or URL changes)
+  const initializedSortRef = useRef(false);
   useEffect(() => {
     (async () => {
       if (!ticketCollection) return;
 
-      const sp = new URLSearchParams(location.search);
-      const urlSort = normalizeSort(sp.get("sort"));
-
-      if (urlSort !== null) {
-        if (sortType !== urlSort) setSortType(urlSort);
-        await updateSortType(ticketCollection, urlSort);
+      // URL has priority
+      const urlSort = normalizeSort(searchParams.get("sort"));
+      if (urlSort) {
+        setSortType(urlSort);
+        // fire-and-forget server update (no await needed for UI)
+        updateSortType(ticketCollection, urlSort).catch(() => {});
+        initializedSortRef.current = true;
         return;
       }
 
+      // else use server preference, else default
       const serverSort = await fetchSortType(ticketCollection);
-      const effective: SortType = serverSort ?? SortType.TIME_CREATED;
+      const effective = serverSort ?? SortType.TIME_CREATED;
       setSortType(effective);
+      const sp = new URLSearchParams(location.search);
       sp.set("sort", String(effective));
       setSearchParams(sp, { replace: true });
+      initializedSortRef.current = true;
     })();
-  }, [ticketCollection, location.search]);
+  }, [ticketCollection, location.search, searchParams, setSearchParams]);
 
+  // fetch + apply sort whenever collection or sortType changes
   useEffect(() => {
-    if (sortType === null) return;
-    setTickets(prev => sortTickets(prev as Ticket[], sortType));
-  }, [sortType]);
+    let mounted = true;
+    (async () => {
+      if (!ticketCollection || !initializedSortRef.current) return;
+      setIsLoading(true);
+      const raw = await fetchTickets(ticketCollection);
+      if (!mounted) return;
+      setTickets(sortTickets(raw, sortType));
+      setIsLoading(false);
+    })();
+    return () => { mounted = false; };
+  }, [ticketCollection, sortType]);
 
+  /* ---------- actions ---------- */
   const handleAddTicket = async (newTicket: CreateTicketInput) => {
     if (!newTicket.name || !newTicket.ticketsID) return;
-    setTickets(prev => [...prev, newTicket]);
     await addTicket(newTicket);
-    // re-fetch to get server fields (ids, timeCreated) and apply current sort
     if (ticketCollection) {
       const raw = await fetchTickets(ticketCollection);
-      setTickets(sortType !== null ? sortTickets(raw, sortType) : raw);
+      setTickets(sortTickets(raw, sortType));
     }
   };
 
   const handleRemoveTicket = async (ticketID: string | null | undefined) => {
     if (!ticketID) return;
+    const ok = window.confirm("Delete this ticket? This cannot be undone.");
+    if (!ok) return;
     await removeTicket(ticketID);
     setTickets(prev => (prev as Ticket[]).filter(t => t.id !== ticketID));
   };
@@ -170,11 +175,14 @@ const AppShell: React.FC<AppShellProps> = ({ user }) => {
     <>
       <Navbar
         isMobile={isMobile}
-        sortType={sortType ?? SortType.TIME_CREATED}
+        sortType={sortType}
         onChangeSort={(next) => {
+          // update URL (triggers fetch effect) and server preference
           const sp = new URLSearchParams(location.search);
           sp.set("sort", String(next));
           setSearchParams(sp, { replace: true });
+          setSortType(next);
+          if (ticketCollection) updateSortType(ticketCollection, next).catch(() => {});
         }}
         onSignOut={handleSignOut}
       />
