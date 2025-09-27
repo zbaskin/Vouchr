@@ -118,8 +118,8 @@ export default function LandingPage() {
             <Link to="/login" className="inline-flex items-center justify-center rounded-xl bg-[var(--primary,#0a0a0a)] px-5 py-3 text-sm font-semibold !text-[var(--primary-fg,#ffffff)] shadow hover:brightness-95">
               Get started — it’s free
             </Link>
-            <a href="#demo" className="inline-flex items-center justify-center rounded-xl px-5 py-3 text-sm font-semibold ring-1 ring-inset ring-[var(--border,#d4d4d4)] hover:bg-[var(--surface-2,#f6f6f6)] dark:ring-[var(--border,#2a2a2a)] dark:hover:bg-[var(--surface-2,#191919)]">
-              See a quick demo
+            <a href="#how" className="inline-flex items-center justify-center rounded-xl px-5 py-3 text-sm font-semibold ring-1 ring-inset ring-[var(--border,#d4d4d4)] hover:bg-[var(--surface-2,#f6f6f6)] dark:ring-[var(--border,#2a2a2a)] dark:hover:bg-[var(--surface-2,#191919)]">
+              Learn more
             </a>
           </div>
           <div className="mt-4 text-xs text-[color:var(--muted,#6b7280)]">No spam. You control your collection’s visibility.</div>
@@ -174,41 +174,27 @@ export default function LandingPage() {
       {/* How it works */}
       <section id="how" className="mx-auto max-w-6xl px-4 py-12 sm:py-16">
         <div className="grid grid-cols-1 gap-8 md:flex md:items-center md:gap-12">
-            {/* LEFT */}
-            <div className="w-full md:w-1/2 flex flex-col justify-center">
+            <div className="w-full flex flex-col justify-center">
                 <h2 className="text-2xl font-bold sm:text-3xl">Three steps to your first collection</h2>
-
-                <ol className="mt-4 space-y-4">
+                <ol className="mt-4 w-full max-w-[36rem] mx-auto px-4 space-y-4">
                     {howItWorks.map((s, i) => (
-                    <li key={i} className="grid grid-cols-[1.75rem_1fr] items-center gap-3">
-                        <span className="inline-flex h-7 w-7 items-center justify-center rounded-full
-                                        bg-[var(--primary,#0a0a0a)] text-[color:var(--primary-fg,#fff)]
-                                        text-sm font-semibold">
-                        {i + 1}
-                        </span>
-                        <div>
-                        <div className="font-medium leading-tight">{s.title}</div>
-                        <p className="mt-1 text-sm leading-snug text-[color:var(--muted,#6b7280)]">{s.desc}</p>
-                        </div>
-                    </li>
+                      <li key={i} className="grid [grid-template-columns:1rem_minmax(16rem,36rem)] items-center gap-3">
+                          <span className="inline-flex h-7 w-7 items-center justify-center rounded-full
+                                          bg-[var(--primary,#0a0a0a)] text-[color:var(--primary-fg,#fff)]
+                                          text-sm font-semibold">
+                            {i + 1}
+                          </span>
+                          <div className="text-center">
+                            <div className="font-medium leading-tight">{s.title}</div>
+                            <p className="mt-1 text-sm leading-snug text-[color:var(--muted,#6b7280)]">{s.desc}</p>
+                          </div>
+                      </li>
                     ))}
                 </ol>
 
                 <div className="mt-6 w-full flex items-center justify-center gap-3">
                     <Link to="/login" className="inline-flex items-center rounded-xl bg-[var(--primary,#0a0a0a)] px-4 py-2 text-sm font-semibold !text-[color:var(--primary-fg,#ffffff)] hover:brightness-95">Start now</Link>
-                    <a href="#demo" className="inline-flex items-center rounded-xl px-4 py-2 text-sm font-semibold ring-1 ring-inset ring-[var(--border,#d4d4d4)] hover:bg-[var(--surface-2,#f6f6f6)] dark:ring-[var(--border,#2a2a2a)] dark:hover:bg-[var(--surface-2,#191919)]">Watch demo</a>
                 </div>
-            </div>
-
-            {/* RIGHT */}
-            <div className="w-full md:w-1/2 self-center">
-            <div className="aspect-video w-full overflow-hidden rounded-2xl border
-                            border-[var(--border,#e5e5e5)] bg-black/90 shadow-lg
-                            ring-1 ring-[var(--ring,#e5e5e5)]">
-                <div className="flex h-full items-center justify-center text-[color:var(--muted,#a3a3a3)]">
-                    Demo video placeholder
-                </div>
-            </div>
             </div>
         </div>
       </section>
