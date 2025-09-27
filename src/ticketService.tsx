@@ -5,9 +5,10 @@ import {
   createUser, 
   deleteTicket, 
   updateTicketCollection, 
+  updateTicket as updateTicketMutation,
 } from './graphql/mutations';
 import { ticketsByTicketsID, getUser, getTicketCollection } from './graphql/queries';
-import { SortType } from './API'
+import { SortType, UpdateTicketInput, Ticket } from './API'
 
 const client = generateClient();
 
@@ -118,4 +119,13 @@ export async function addTicketCollection(userId: string) {
   } catch (err) {
     console.error('Error adding ticket collection:', err);
   }
+}
+
+// Edit a ticket
+export async function editTicket(input: UpdateTicketInput): Promise<Ticket> {
+  const res = await client.graphql({
+    query: updateTicketMutation,
+    variables: { input },
+  });
+  return res.data.updateTicket as Ticket;
 }

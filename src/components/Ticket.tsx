@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./Ticket.css";
+import TicketEdit, { TicketEditValues } from "./TicketEdit";
+import { Pencil, Trash2 } from "lucide-react";
 
 type TicketProps = {
   id: string;
@@ -10,6 +12,7 @@ type TicketProps = {
   theater: string;
   seat: string;
   onRemove: (id: string) => void;
+  onEdit?: (v: TicketEditValues) => Promise<void> | void;
 };
 
 const handleTicketDate = (date: string) => {
@@ -36,6 +39,7 @@ const Ticket: React.FC<TicketProps> = ({
   theater,
   seat,
   onRemove,
+  onEdit,
 }) => {
   // Overflow detection on the clamped text node
   const nameWrapRef = useRef<HTMLDivElement | null>(null);
@@ -101,17 +105,39 @@ const Ticket: React.FC<TicketProps> = ({
       closePopover();
     }
   };
+  
+  const [editing, setEditing] = useState(false);
+
+  const initialEdit: TicketEditValues = {
+    id,
+    name,
+    venue,
+    eventDate,
+    eventTime,
+    theater,
+    seat,
+  };
 
   return (
     <div className="ticketObject">
-      <button
-        className="removeTicketButton"
-        onClick={() => onRemove(id)}
-        aria-label="Remove ticket"
-        title="Remove"
-      >
-        X
-      </button>
+      <div>
+        <button
+            className="editTicketButton"
+            onClick={() => setEditing(true)}
+            aria-label="Edit ticket"
+            title="Edit"
+        >
+            <Pencil size={14} />
+        </button>
+        <button
+            className="removeTicketButton"
+            onClick={() => onRemove(id)}
+            aria-label="Remove ticket"
+            title="Remove"
+        >
+            <Trash2 size={14} />
+        </button>
+      </div>
 
       <div className="ticketVenue">{venue}</div>
 
@@ -163,6 +189,15 @@ const Ticket: React.FC<TicketProps> = ({
             <div className="titlePopoverContent">{name}</div>
           </div>
         </>
+      )}
+      
+      {editing && onEdit && (
+        <TicketEdit
+          open={editing}
+          initial={initialEdit}
+          onCancel={() => setEditing(false)}
+          onSave={async (v) => { await onEdit(v); }}
+        />
       )}
     </div>
   );

@@ -12,6 +12,7 @@ import {
   addTicketCollection,
   fetchSortType,
   updateSortType,
+  editTicket,
 } from "./ticketService";
 
 import Navbar from "./components/Navbar";
@@ -35,6 +36,9 @@ export type AppOutletContext = {
   ticketCollection?: string;
   handleAddTicket: (t: CreateTicketInput) => Promise<void>;
   handleRemoveTicket: (id: string | null | undefined) => Promise<void>;
+  handleEditTicket: (t: {
+    id: string; name: string; venue: string; eventDate: string; eventTime: string; theater: string; seat: string;
+  }) => Promise<void>;
 };
 
 type AppShellProps = {
@@ -176,6 +180,26 @@ const AppShell: React.FC<AppShellProps> = ({ user }) => {
     }
   };
 
+  const handleEditTicket: AppOutletContext["handleEditTicket"] = async (u) => {
+    if (!u?.id) return;
+    await editTicket({
+      id: u.id,
+      name: u.name,
+      venue: u.venue,
+      eventDate: u.eventDate,
+      eventTime: u.eventTime.length === 5 ? `${u.eventTime}:00` : u.eventTime, // normalize HH:mm -> HH:mm:ss
+      theater: u.theater,
+      seat: u.seat,
+    });
+
+    if (ticketCollection) {
+      const raw = await fetchTickets(ticketCollection);
+      setTickets(sortTickets(raw, sortType));
+    } else {
+      setTickets(prev => (prev as Ticket[]).map(t => (t.id === u.id ? ({ ...t, ...u }) as Ticket : t)));
+    }
+  };
+
   const handleRemoveTicket = async (ticketID: string | null | undefined) => {
     if (!ticketID) return;
     const ok = window.confirm("Delete this ticket? This cannot be undone.");
@@ -215,6 +239,7 @@ const AppShell: React.FC<AppShellProps> = ({ user }) => {
               isLoading,
               isMobile,
               handleAddTicket,
+              handleEditTicket,
               handleRemoveTicket,
               ticketCollection,
             } satisfies AppOutletContext

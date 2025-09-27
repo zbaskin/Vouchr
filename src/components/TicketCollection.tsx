@@ -5,7 +5,7 @@ import { useOutletContext } from "react-router-dom";
 import type { AppOutletContext } from "../AppShell";
 
 const TicketCollection: React.FC = () => { 
-    const { tickets, handleRemoveTicket, isLoading, isMobile } = useOutletContext<AppOutletContext>();
+    const { tickets, handleRemoveTicket, handleEditTicket, isLoading, isMobile } = useOutletContext<AppOutletContext>();
 
     const [page, setPage] = useState(1);
     const TICKETS_PER_PAGE = isMobile ? 8 : 15;
@@ -35,6 +35,7 @@ const TicketCollection: React.FC = () => {
                             theater={ticket.theater as string}
                             seat={ticket.seat as string}
                             onRemove={handleRemoveTicket}
+                            onEdit={handleEditTicket}
                         />
                     ))
                 ) : (
