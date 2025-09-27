@@ -1,5 +1,5 @@
 import "./AppShell.css";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Outlet, useLocation, useSearchParams } from "react-router-dom";
 import { signOut as amplifySignOut } from "aws-amplify/auth";
 
@@ -72,6 +72,33 @@ const sortTickets = (items: Ticket[], sort: SortType): Ticket[] => {
   }
   return copy;
 };
+
+function useMediaQuery(query: string) {
+  const get = () =>
+    typeof window !== "undefined" ? window.matchMedia(query).matches : false;
+
+  const [matches, setMatches] = useState<boolean>(get);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const mql = window.matchMedia(query);
+
+    // Set once in case query string changes
+    setMatches(mql.matches);
+
+    const onChange = (e: MediaQueryListEvent) => setMatches(e.matches);
+    // Support older browsers
+    if (mql.addEventListener) mql.addEventListener("change", onChange);
+    else mql.addListener(onChange);
+
+    return () => {
+      if (mql.removeEventListener) mql.removeEventListener("change", onChange);
+      else mql.removeListener(onChange);
+    };
+  }, [query]);
+
+  return matches;
+}
 /* -------------------------------- */
 
 const AppShell: React.FC<AppShellProps> = ({ user }) => {
@@ -84,13 +111,7 @@ const AppShell: React.FC<AppShellProps> = ({ user }) => {
   const ticketCollection = user?.userId;
 
   // mobile state (matchMedia avoids extra renders)
-  const isMobile = useMemo(() => window.innerWidth < 500, []);
-  useEffect(() => {
-    const mq = window.matchMedia("(max-width: 499px)");
-    const handler = () => { /* noop, calculated when needed in Navbar props */ };
-    mq.addEventListener?.("change", handler);
-    return () => mq.removeEventListener?.("change", handler);
-  }, []);
+  const isMobile = useMediaQuery("(max-width: 499px)");
 
   // one-time: ensure user + collection exist
   useEffect(() => {
