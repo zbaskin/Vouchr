@@ -49,7 +49,7 @@ export default function LandingPage() {
             </Link>
 
             {/* Desktop nav */}
-            <nav className="hidden sm:flex items-center gap-2 sm:gap-3">
+            <nav className="hidden lg:flex items-center gap-2 sm:gap-3">
                 <a href="#features" className="rounded-xl px-3 py-2 text-lg font-medium hover:bg-[var(--surface-2,#f6f6f6)] dark:hover:bg-[var(--surface-2,#191919)]">Features</a>
                 <a href="#how" className="rounded-xl px-3 py-2 text-lg font-medium hover:bg-[var(--surface-2,#f6f6f6)] dark:hover:bg-[var(--surface-2,#191919)]">How it works</a>
                 <Link to="/login" className="rounded-xl px-3 py-2 text-lg font-semibold ring-1 ring-inset ring-[var(--border,#d4d4d4)] hover:bg-[var(--surface-2,#f6f6f6)] dark:ring-[var(--border,#2a2a2a)] dark:hover:bg-[var(--surface-2,#191919)]">Log in</Link>
@@ -60,7 +60,7 @@ export default function LandingPage() {
             <button
                 type="button"
                 onClick={() => setOpen((v) => !v)}
-                className="sm:hidden inline-flex items-center justify-center rounded-md p-2 ring-1 ring-[var(--border,#d4d4d4)] hover:bg-[var(--surface-2,#f6f6f6)] dark:ring-[var(--border,#2a2a2a)] dark:hover:bg-[var(--surface-2,#191919)]"
+                className="lg:hidden inline-flex items-center justify-center rounded-md p-2 ring-1 ring-[var(--border,#d4d4d4)] hover:bg-[var(--surface-2,#f6f6f6)] dark:ring-[var(--border,#2a2a2a)] dark:hover:bg-[var(--surface-2,#191919)]"
                 aria-label={open ? "Close menu" : "Open menu"}
                 aria-expanded={open}
                 aria-controls="lp-mobile-menu"
@@ -72,7 +72,7 @@ export default function LandingPage() {
         {/* Mobile sheet */}
         {open && (
             <div
-            className="sm:hidden fixed inset-0 z-30 bg-black/40"
+            className="lg:hidden fixed inset-0 z-30 bg-black/40"
             onClick={() => setOpen(false)}
             role="presentation"
             >
