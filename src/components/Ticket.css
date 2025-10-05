@@ -33,6 +33,7 @@
     flex-direction: column;
     justify-content: center;
     color: var(--copy);
+    max-width: 100%;
 }
   
 .ticketVenue {
