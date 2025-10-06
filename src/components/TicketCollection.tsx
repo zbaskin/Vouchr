@@ -1,21 +1,12 @@
 import React, { useState } from "react";
 import TicketObject from "./Ticket"; 
 import "./TicketCollection.css";
-import { type Ticket } from '../API';
+import { useOutletContext } from "react-router-dom";
+import type { AppOutletContext } from "../AppShell";
 
+const TicketCollection: React.FC = () => { 
+    const { tickets, handleRemoveTicket, handleEditTicket, isLoading, isMobile } = useOutletContext<AppOutletContext>();
 
-type TicketCollectionProps = {
-    tickets: Ticket[];
-    onRemoveTicket: (id: string) => void;
-    isLoading: boolean;
-    isMobile: boolean;
-}
-
-
-
-const TicketCollection: React.FC<TicketCollectionProps> = ({ 
-    tickets, onRemoveTicket, isLoading, isMobile 
-}) => {
     const [page, setPage] = useState(1);
     const TICKETS_PER_PAGE = isMobile ? 8 : 15;
     
@@ -31,23 +22,24 @@ const TicketCollection: React.FC<TicketCollectionProps> = ({
         <div className={"ticketCollection " + (isMobile ? "tcMobile" : "tcDesktop")}>
             <div className="tickets">
                 {isLoading ? (
-                    <p>Loading tickets...</p>
+                    <p className="ticketStatus">Loading tickets...</p>
                 ) : tickets.length > 0 ? (
                     displayedTickets.map((ticket, index) => (
                         <TicketObject
                             key={ticket.id || index} 
-                            id={ticket.id} 
+                            id={ticket.id || ""} 
                             name={ticket.name} 
                             venue={ticket.venue as string}
                             eventDate={ticket.eventDate as string}
                             eventTime={ticket.eventTime as string}
                             theater={ticket.theater as string}
                             seat={ticket.seat as string}
-                            onRemove={onRemoveTicket}
+                            onRemove={handleRemoveTicket}
+                            onEdit={handleEditTicket}
                         />
                     ))
                 ) : (
-                    <p>No tickets available.</p>
+                    <p className="ticketStatus">No tickets available.</p>
                 )}
             </div>
             {totalPages > 1 && (

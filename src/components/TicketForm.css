@@ -1,5 +1,5 @@
 .ticketInputContainer {
-    background-color: #D9E9E9;
+    background-color: var(--primary-content);
     max-width: 250px;
     min-width: 250px;
     margin: 10px auto;
@@ -15,8 +15,6 @@
 }
   
 .ticketInput {
-    border: "none";
-    background-color: "#ddd";
     margin: 7px 0;
     width: 100%;
 }
@@ -27,9 +25,152 @@
 }
   
 .createTicketButton {
-    background-color: black;
-    color: white;
     outline: none;
     padding: 8px 5px;
     margin-left: 15px;
+    color: var(--secondary-content);
+    background-color: var(--primary);
 }
+
+/* --- Page shell --------------------------------------------------------- */
+.ticketFormPage {
+  max-width: 1000px;              /* matches your desktop width */
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+  text-align: left;
+}
+
+.formCard {
+  background: var(--secondary-content);
+  border: 1px solid rgba(0,0,0,.08);
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.08);
+  overflow: hidden;
+}
+
+/* --- Header ------------------------------------------------------------- */
+.formHeader {
+  background: var(--primary);
+  color: var(--secondary-content);
+  padding: 16px 20px;
+}
+
+.formTitle {
+  margin: 0;
+  font-size: 1.4rem;
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+.formSubtitle {
+  margin: 6px 0 0;
+  font-size: 0.95rem;
+  opacity: 0.9;
+}
+
+/* --- Body --------------------------------------------------------------- */
+.formBody {
+  padding: 18px 20px 8px;
+}
+
+/* Grid: 2 columns on desktop, 1 on small screens */
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 16px;
+}
+
+@media (max-width: 768px) {
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Field block */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--primary-dark);
+}
+
+/* Inputs */
+.input,
+.react-datepicker-wrapper input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border: 1.5px solid var(--border, #e1dede);
+  border-radius: 10px;
+  background: #fff;
+  font: inherit;
+  color: var(--copy, #282424);
+  outline: none;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+.input:focus,
+.react-datepicker-wrapper input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(128, 22, 22, .15);
+}
+
+/* Muted hint under a field */
+.hint {
+  font-size: 0.8rem;
+  color: var(--copy-light);
+}
+
+/* Put Date + Time side-by-side even on mobile if space allows */
+.inlineRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 16px;
+}
+@media (max-width: 480px) {
+  .inlineRow {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --- Footer / actions --------------------------------------------------- */
+.formFooter {
+  display: flex;
+  gap: 10px;
+  padding: 10px 20px 20px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  appearance: none;
+  border: none;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font: inherit;
+  cursor: pointer;
+  transition: transform .04s ease, box-shadow .15s ease, background-color .2s ease;
+}
+
+.btnPrimary {
+  background: var(--primary);
+  color: var(--secondary-content);
+  box-shadow: 0 6px 16px rgba(128, 22, 22, .25);
+}
+.btnPrimary:hover { transform: translateY(-1px); }
+
+.btnSecondary {
+  background: #fff;
+  color: var(--primary);
+  border: 1.5px solid var(--primary);
+}
+
+/* --- Remove legacy constraints (from old compact layout) ---------------- */
+.ticketInputContainer { all: unset; }
+.ticketInput,
+.ticketInputSmall { all: unset; }
+.createTicketButton { all: unset; }

@@ -1,0 +1,68 @@
+@font-face {
+    font-family: "Arista";
+    src: url('assets/arista.ttf');
+}
+
+:root {
+    --primary: #801616;
+    --primary-content: #f0a5a5;
+    --primary-dark: #540f0f;
+    --primary-light: #ac1d1d;
+    
+    --secondary: #806516;
+    --secondary-content: #f0dda5;
+    --secondary-dark: #54430f;
+    --secondary-light: #ac871d;
+    
+    --background: #f0efef;
+    --foreground: #fbfbfb;
+    --border: #e1dede;
+    
+    --copy: #282424;
+    --copy-light: #6b6161;
+    --copy-lighter: #928787;
+    
+    --success: #168016;
+    --warning: #808016;
+    --error: #801616;
+    --success-content: #a5f0a5;
+    --warning-content: #f0f0a5;
+    --error-content: #f0a5a5;
+}
+
+:root {
+  --bg: #ffffff;
+  --surface: rgba(255,255,255,.7);
+  --surface-2: #f6f6f6;
+  --text: #0a0a0a;
+  --muted: #6b7280;
+
+  --primary: #801616;        /* brand or button bg */
+  --primary-fg: #ffffff;     /* text on primary */
+  --accent: #801616;         /* secondary accent for gradients */
+
+  --border: #e5e5e5;
+  --ring: #e5e5e5;
+}
+
+/* Optional dark mode */
+.dark {
+  --bg: #0b0b0b;
+  --surface: rgba(10,10,10,.6);
+  --surface-2: #191919;
+  --text: #fafafa;
+  --muted: #a3a3a3;
+
+  --primary: #ffffff;
+  --primary-fg: #0a0a0a;
+  --accent: #8b5cf6;
+
+  --border: #2a2a2a;
+  --ring: #2a2a2a;
+}
+
+:root {
+  --bg: var(--app-background);
+  --text: var(--app-foreground);
+  /* etc. */
+}

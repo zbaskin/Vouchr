@@ -1,4 +1,4 @@
-.removeTicketButton {
+.removeTicketButton, .editTicketButton {
     position: absolute;
     top: 3px;
     right: 3px;
@@ -6,11 +6,16 @@
     height: 20px;
     border: 1px solid black;
     text-align: center;
+    justify-items: center;
     line-height: 12px;
     font-weight: bold;
     font-size: 12px;
     cursor: pointer;
     padding: 0;
+}
+
+.editTicketButton {
+    right: 26px;
 }
 
 .ticketObject {
@@ -27,6 +32,8 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    color: var(--copy);
+    max-width: 100%;
 }
   
 .ticketVenue {
@@ -59,7 +66,7 @@
     font-size: 14px;
     font-weight: bold;
     margin-top: 10px;
-    background-color: black;
+    background-color: var(--copy);
     color: white;
     padding: 3px;
     border-radius: 3px;
@@ -80,6 +87,91 @@
   
 .ticketFooter {
     font-size: 10px;
-    color: gray;
+    color: var(--copy-lighter);
     margin-top: 15px;
+}
+
+/* =========================
+   Title clamp helpers
+   (non-destructive: keep your .ticketName look)
+   ========================= */
+
+/* Add this *in addition* to your existing .ticketName styles via the extra class "titleClamp" */
+.titleClamp {
+  position: relative;   /* needed for the fade pseudo-element */
+  overflow: hidden;
+  line-height: 1.25;
+  max-height: calc(1.25em * 2); /* 2 visible lines; tweak if you want 1 or 3 */
+}
+
+/* The element we actually clamp and measure (inside .ticketName) */
+.ticketNameText {
+  display: -webkit-box;
+  line-clamp: 2;
+  -webkit-line-clamp: 2;          /* match the 2 lines above */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Show the fade ONLY when we detected overflow in JS */
+.ticketName.hasOverflow::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 40%;
+  height: 1.3em;                   /* ~ one line height */
+  /* Use the ticket background; if you have a custom card bg var, swap it in */
+  background: linear-gradient(to left, white 55%, rgba(255, 255, 255, 0));
+  pointer-events: none;
+}
+
+/* Optional: visual affordance that the title is interactive when it overflows */
+.ticketName.hasOverflow { cursor: pointer; }
+.ticketName.hasOverflow:focus { outline: 2px solid #9ca3af; outline-offset: 2px; }
+
+/* =========================
+   Full title popover
+   (fixed; does not affect layout)
+   ========================= */
+
+.titlePopoverBackdrop {
+  position: fixed;
+  inset: 0;
+  background: transparent; /* invisible click-catcher to close */
+  border: 0;
+  padding: 0;
+  margin: 0;
+  z-index: 40;
+}
+
+.titlePopover {
+  position: fixed;
+  z-index: 50;
+  max-width: min(92vw, 720px);
+}
+
+.titlePopoverContent {
+  display: block;
+  max-height: 50vh;
+  overflow: auto;
+
+  /* Keep neutral defaults; if you have CSS vars for card bg/fg, you can use them */
+  background: white;
+  color: black;
+
+  padding: 10px 12px;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  border: 1px solid rgba(0,0,0,0.08);
+
+  /* Don’t force your card typography — keep it simple */
+  font-size: inherit;
+  font-weight: inherit;
+  text-transform: inherit;
+  line-height: 1.25;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .titlePopoverContent { scroll-behavior: auto; }
 }
