@@ -23,7 +23,7 @@ import {
   SortType,
 } from "./API";
 
-import { withAuthenticator } from "@aws-amplify/ui-react";
+import { withAuthenticator, useAuthenticator } from "@aws-amplify/ui-react";
 import "@aws-amplify/ui-react/styles.css";
 
 import { type AuthUser } from "aws-amplify/auth";
@@ -114,11 +114,15 @@ const AppShell: React.FC<AppShellProps> = ({ user }) => {
   const [sortType, setSortType] = useState<SortType>(SortType.TIME_CREATED); // safe default
   const ticketCollection = user?.userId;
 
+  const { authStatus } = useAuthenticator();
+  const authReady = authStatus === "authenticated" && !!user;
+
   // mobile state (matchMedia avoids extra renders)
   const isMobile = useMediaQuery("(max-width: 499px)");
 
   // one-time: ensure user + collection exist
   useEffect(() => {
+    if (!authReady) return;
     (async () => {
       if (!user?.userId) return;
       const existing = await fetchUser(user.userId);
@@ -127,11 +131,12 @@ const AppShell: React.FC<AppShellProps> = ({ user }) => {
         await addUser(user.userId, user.username as string, user.userId);
       }
     })();
-  }, [user?.userId, user?.username]);
+  }, [authReady, user?.userId, user?.username]);
 
   // sync sortType with URL and server (runs when collection is known or URL changes)
   const initializedSortRef = useRef(false);
   useEffect(() => {
+    if (!authReady) return;
     (async () => {
       if (!ticketCollection) return;
 
@@ -154,13 +159,13 @@ const AppShell: React.FC<AppShellProps> = ({ user }) => {
       setSearchParams(sp, { replace: true });
       initializedSortRef.current = true;
     })();
-  }, [ticketCollection, location.search, searchParams, setSearchParams]);
+  }, [authReady, ticketCollection, location.search, searchParams, setSearchParams]);
 
   // fetch + apply sort whenever collection or sortType changes
   useEffect(() => {
     let mounted = true;
     (async () => {
-      if (!ticketCollection || !initializedSortRef.current) return;
+      if (!authReady || !ticketCollection || !initializedSortRef.current) return;
       setIsLoading(true);
       const raw = await fetchTickets(ticketCollection);
       if (!mounted) return;
@@ -168,7 +173,7 @@ const AppShell: React.FC<AppShellProps> = ({ user }) => {
       setIsLoading(false);
     })();
     return () => { mounted = false; };
-  }, [ticketCollection, sortType]);
+  }, [authReady, ticketCollection, sortType]);
 
   /* ---------- actions ---------- */
   const handleAddTicket = async (newTicket: CreateTicketInput) => {
@@ -215,6 +220,10 @@ const AppShell: React.FC<AppShellProps> = ({ user }) => {
       window.location.replace("/");
     }
   };
+
+  if (!authReady) {
+    return <main className="appBody" />;
+  }
 
   return (
     <>
