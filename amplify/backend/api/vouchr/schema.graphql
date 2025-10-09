@@ -33,7 +33,7 @@ type User
   ]) {
   id: ID!
   owner: String! @index(name: "byOwner", queryField: "userByOwner")  # Cognito sub
-  username: String! @unique
+  username: String!
   displayName: String
   bio: String
 
