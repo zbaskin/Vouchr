@@ -16,6 +16,7 @@ const client = generateClient();
 export async function fetchTickets(ticketCollection: string) {
   try {
     const ticketData = await client.graphql({
+      authMode: 'apiKey',
       query: ticketsByTicketsID,
       variables: { ticketsID: ticketCollection },
     });
@@ -30,6 +31,7 @@ export async function fetchTickets(ticketCollection: string) {
 export async function fetchSortType(ticketCollection: string) {
   try {
     const collectionData = await client.graphql({
+      authMode: 'apiKey',
       query: getTicketCollection,
       variables: { id: ticketCollection },
     });
@@ -44,6 +46,7 @@ export async function fetchSortType(ticketCollection: string) {
 export async function updateSortType(ticketCollection: string, sortType: SortType) {
   try {
     await client.graphql({
+      authMode: 'apiKey',
       query: updateTicketCollection,
       variables: { input: { id: ticketCollection, sort: sortType } },
     });
@@ -57,6 +60,7 @@ export async function updateSortType(ticketCollection: string, sortType: SortTyp
 export async function addTicket(ticket: any) {
   try {
     await client.graphql({
+      authMode: 'apiKey',
       query: createTicket,
       variables: { input: ticket },
     });
@@ -69,6 +73,7 @@ export async function addTicket(ticket: any) {
 export async function removeTicket(ticketID: string) {
   try {
     await client.graphql({
+      authMode: 'apiKey',
       query: deleteTicket,
       variables: { input: { id: ticketID } },
     });
@@ -81,6 +86,7 @@ export async function removeTicket(ticketID: string) {
 export async function fetchUser(userId: string) {
   try {
     const userData = await client.graphql({
+      authMode: 'apiKey',
       query: getUser,
       variables: { id: userId },
     });
@@ -95,6 +101,7 @@ export async function fetchUser(userId: string) {
 export async function addUser(userId: string, username: string, ticketCollection: string) {
   try {
     await client.graphql({
+      authMode: 'apiKey',
       query: createUser,
       variables: {
         input: {
@@ -113,6 +120,7 @@ export async function addUser(userId: string, username: string, ticketCollection
 export async function addTicketCollection(userId: string) {
   try {
     await client.graphql({
+      authMode: 'apiKey',
       query: createTicketCollection,
       variables: { input: { id: userId } },
     });
@@ -124,6 +132,7 @@ export async function addTicketCollection(userId: string) {
 // Edit a ticket
 export async function editTicket(input: UpdateTicketInput): Promise<Ticket> {
   const res = await client.graphql({
+    authMode: 'apiKey',
     query: updateTicketMutation,
     variables: { input },
   });
