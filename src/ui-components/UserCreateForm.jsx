@@ -6,7 +6,13 @@
 
 /* eslint-disable */
 import * as React from "react";
-import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
+import {
+  Button,
+  Flex,
+  Grid,
+  SwitchField,
+  TextField,
+} from "@aws-amplify/ui-react";
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
 import { generateClient } from "aws-amplify/api";
 import { createUser } from "../graphql/mutations";
@@ -23,16 +29,40 @@ export default function UserCreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
+    owner: "",
     username: "",
+    displayName: "",
+    bio: "",
+    avatarKey: "",
+    isProfilePublic: false,
   };
+  const [owner, setOwner] = React.useState(initialValues.owner);
   const [username, setUsername] = React.useState(initialValues.username);
+  const [displayName, setDisplayName] = React.useState(
+    initialValues.displayName
+  );
+  const [bio, setBio] = React.useState(initialValues.bio);
+  const [avatarKey, setAvatarKey] = React.useState(initialValues.avatarKey);
+  const [isProfilePublic, setIsProfilePublic] = React.useState(
+    initialValues.isProfilePublic
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
+    setOwner(initialValues.owner);
     setUsername(initialValues.username);
+    setDisplayName(initialValues.displayName);
+    setBio(initialValues.bio);
+    setAvatarKey(initialValues.avatarKey);
+    setIsProfilePublic(initialValues.isProfilePublic);
     setErrors({});
   };
   const validations = {
+    owner: [{ type: "Required" }],
     username: [{ type: "Required" }],
+    displayName: [],
+    bio: [],
+    avatarKey: [],
+    isProfilePublic: [{ type: "Required" }],
   };
   const runValidationTasks = async (
     fieldName,
@@ -60,7 +90,12 @@ export default function UserCreateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
+          owner,
           username,
+          displayName,
+          bio,
+          avatarKey,
+          isProfilePublic,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -115,6 +150,35 @@ export default function UserCreateForm(props) {
       {...rest}
     >
       <TextField
+        label="Owner"
+        isRequired={true}
+        isReadOnly={false}
+        value={owner}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              owner: value,
+              username,
+              displayName,
+              bio,
+              avatarKey,
+              isProfilePublic,
+            };
+            const result = onChange(modelFields);
+            value = result?.owner ?? value;
+          }
+          if (errors.owner?.hasError) {
+            runValidationTasks("owner", value);
+          }
+          setOwner(value);
+        }}
+        onBlur={() => runValidationTasks("owner", owner)}
+        errorMessage={errors.owner?.errorMessage}
+        hasError={errors.owner?.hasError}
+        {...getOverrideProps(overrides, "owner")}
+      ></TextField>
+      <TextField
         label="Username"
         isRequired={true}
         isReadOnly={false}
@@ -123,7 +187,12 @@ export default function UserCreateForm(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
+              owner,
               username: value,
+              displayName,
+              bio,
+              avatarKey,
+              isProfilePublic,
             };
             const result = onChange(modelFields);
             value = result?.username ?? value;
@@ -138,6 +207,122 @@ export default function UserCreateForm(props) {
         hasError={errors.username?.hasError}
         {...getOverrideProps(overrides, "username")}
       ></TextField>
+      <TextField
+        label="Display name"
+        isRequired={false}
+        isReadOnly={false}
+        value={displayName}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              owner,
+              username,
+              displayName: value,
+              bio,
+              avatarKey,
+              isProfilePublic,
+            };
+            const result = onChange(modelFields);
+            value = result?.displayName ?? value;
+          }
+          if (errors.displayName?.hasError) {
+            runValidationTasks("displayName", value);
+          }
+          setDisplayName(value);
+        }}
+        onBlur={() => runValidationTasks("displayName", displayName)}
+        errorMessage={errors.displayName?.errorMessage}
+        hasError={errors.displayName?.hasError}
+        {...getOverrideProps(overrides, "displayName")}
+      ></TextField>
+      <TextField
+        label="Bio"
+        isRequired={false}
+        isReadOnly={false}
+        value={bio}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              owner,
+              username,
+              displayName,
+              bio: value,
+              avatarKey,
+              isProfilePublic,
+            };
+            const result = onChange(modelFields);
+            value = result?.bio ?? value;
+          }
+          if (errors.bio?.hasError) {
+            runValidationTasks("bio", value);
+          }
+          setBio(value);
+        }}
+        onBlur={() => runValidationTasks("bio", bio)}
+        errorMessage={errors.bio?.errorMessage}
+        hasError={errors.bio?.hasError}
+        {...getOverrideProps(overrides, "bio")}
+      ></TextField>
+      <TextField
+        label="Avatar key"
+        isRequired={false}
+        isReadOnly={false}
+        value={avatarKey}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              owner,
+              username,
+              displayName,
+              bio,
+              avatarKey: value,
+              isProfilePublic,
+            };
+            const result = onChange(modelFields);
+            value = result?.avatarKey ?? value;
+          }
+          if (errors.avatarKey?.hasError) {
+            runValidationTasks("avatarKey", value);
+          }
+          setAvatarKey(value);
+        }}
+        onBlur={() => runValidationTasks("avatarKey", avatarKey)}
+        errorMessage={errors.avatarKey?.errorMessage}
+        hasError={errors.avatarKey?.hasError}
+        {...getOverrideProps(overrides, "avatarKey")}
+      ></TextField>
+      <SwitchField
+        label="Is profile public"
+        defaultChecked={false}
+        isDisabled={false}
+        isChecked={isProfilePublic}
+        onChange={(e) => {
+          let value = e.target.checked;
+          if (onChange) {
+            const modelFields = {
+              owner,
+              username,
+              displayName,
+              bio,
+              avatarKey,
+              isProfilePublic: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.isProfilePublic ?? value;
+          }
+          if (errors.isProfilePublic?.hasError) {
+            runValidationTasks("isProfilePublic", value);
+          }
+          setIsProfilePublic(value);
+        }}
+        onBlur={() => runValidationTasks("isProfilePublic", isProfilePublic)}
+        errorMessage={errors.isProfilePublic?.errorMessage}
+        hasError={errors.isProfilePublic?.hasError}
+        {...getOverrideProps(overrides, "isProfilePublic")}
+      ></SwitchField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}

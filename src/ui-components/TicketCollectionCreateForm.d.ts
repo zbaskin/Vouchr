@@ -5,7 +5,7 @@
  **************************************************************************/
 
 import * as React from "react";
-import { GridProps, SelectFieldProps } from "@aws-amplify/ui-react";
+import { GridProps, SelectFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
 export declare type EscapeHatchProps = {
     [elementHierarchy: string]: Record<string, unknown>;
 } | null;
@@ -22,15 +22,30 @@ export declare type ValidationResponse = {
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type TicketCollectionCreateFormInputValues = {
+    owner?: string;
+    title?: string;
+    description?: string;
+    visibility?: string;
     sort?: string;
+    ticketCount?: number;
 };
 export declare type TicketCollectionCreateFormValidationValues = {
+    owner?: ValidationFunction<string>;
+    title?: ValidationFunction<string>;
+    description?: ValidationFunction<string>;
+    visibility?: ValidationFunction<string>;
     sort?: ValidationFunction<string>;
+    ticketCount?: ValidationFunction<number>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type TicketCollectionCreateFormOverridesProps = {
     TicketCollectionCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
+    owner?: PrimitiveOverrideProps<TextFieldProps>;
+    title?: PrimitiveOverrideProps<TextFieldProps>;
+    description?: PrimitiveOverrideProps<TextFieldProps>;
+    visibility?: PrimitiveOverrideProps<SelectFieldProps>;
     sort?: PrimitiveOverrideProps<SelectFieldProps>;
+    ticketCount?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type TicketCollectionCreateFormProps = React.PropsWithChildren<{
     overrides?: TicketCollectionCreateFormOverridesProps | undefined | null;

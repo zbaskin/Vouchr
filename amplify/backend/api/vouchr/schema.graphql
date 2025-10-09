@@ -21,10 +21,7 @@ type User
   @model
   @auth(rules: [
     # Only the owner (the logged-in user) can mutate their own row
-    { allow: owner, ownerField: "owner", operations: [create, update, delete] },
-
-    # Owner can read their own row
-    { allow: owner, ownerField: "owner", operations: [read] },
+    { allow: owner, ownerField: "owner", operations: [create, update, delete, read] },
 
     # Optional: any signed-in user can read non-sensitive profile info
     { allow: private, operations: [read] }
@@ -41,7 +38,7 @@ type User
   avatarKey: String
 
   # If you want public-facing profiles later, flip this on per user
-  isProfilePublic: Boolean! @default(value: false)
+  isProfilePublic: Boolean!
 
   # Relationship to their collection (1:1)
   ticketsCollectionId: ID
@@ -52,10 +49,7 @@ type TicketCollection
   @model
   @auth(rules: [
     # Only owner can write
-    { allow: owner, ownerField: "owner", operations: [create, update, delete] },
-
-    # Owner can read
-    { allow: owner, ownerField: "owner", operations: [read] },
+    { allow: owner, ownerField: "owner", operations: [create, update, delete, read] },
 
     # Optional: let *signed-in* users read if collection is PUBLIC
     # (This is coarse-grained. If you later want FOLLOWERS-only, we’ll move to a Lambda gate.)
@@ -68,11 +62,11 @@ type TicketCollection
   owner: String! @index(name: "collectionsByOwner", queryField: "collectionsByOwner")
   title: String
   description: String
-  visibility: Visibility! @default(value: PRIVATE)
+  visibility: Visibility!
   sort: SortType
 
   # derived counts
-  ticketCount: Int! @default(value: 0)
+  ticketCount: Int!
 
   # one-to-many with Ticket
   Tickets: [Ticket] @hasMany(indexName: "byTicketCollection", fields: ["id"])
@@ -82,10 +76,7 @@ type Ticket
   @model
   @auth(rules: [
     # Only owner can write (create/update/delete)
-    { allow: owner, ownerField: "owner", operations: [create, update, delete] },
-
-    # Owner can read
-    { allow: owner, ownerField: "owner", operations: [read] },
+    { allow: owner, ownerField: "owner", operations: [create, update, delete, read] },
 
     # Optional: signed-in users can read if its parent collection is PUBLIC
     { allow: private, operations: [read] },
@@ -110,5 +101,5 @@ type Ticket
   ticketsID: ID! @index(name: "byTicketCollection")
 
   # Mirror the parent’s visibility at write-time (denormalized for fast reads)
-  visibility: Visibility! @default(value: PRIVATE)
+  visibility: Visibility!
 }

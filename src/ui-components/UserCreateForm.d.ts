@@ -5,7 +5,7 @@
  **************************************************************************/
 
 import * as React from "react";
-import { GridProps, TextFieldProps } from "@aws-amplify/ui-react";
+import { GridProps, SwitchFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
 export declare type EscapeHatchProps = {
     [elementHierarchy: string]: Record<string, unknown>;
 } | null;
@@ -22,15 +22,30 @@ export declare type ValidationResponse = {
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type UserCreateFormInputValues = {
+    owner?: string;
     username?: string;
+    displayName?: string;
+    bio?: string;
+    avatarKey?: string;
+    isProfilePublic?: boolean;
 };
 export declare type UserCreateFormValidationValues = {
+    owner?: ValidationFunction<string>;
     username?: ValidationFunction<string>;
+    displayName?: ValidationFunction<string>;
+    bio?: ValidationFunction<string>;
+    avatarKey?: ValidationFunction<string>;
+    isProfilePublic?: ValidationFunction<boolean>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type UserCreateFormOverridesProps = {
     UserCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
+    owner?: PrimitiveOverrideProps<TextFieldProps>;
     username?: PrimitiveOverrideProps<TextFieldProps>;
+    displayName?: PrimitiveOverrideProps<TextFieldProps>;
+    bio?: PrimitiveOverrideProps<TextFieldProps>;
+    avatarKey?: PrimitiveOverrideProps<TextFieldProps>;
+    isProfilePublic?: PrimitiveOverrideProps<SwitchFieldProps>;
 } & EscapeHatchProps;
 export declare type UserCreateFormProps = React.PropsWithChildren<{
     overrides?: UserCreateFormOverridesProps | undefined | null;
