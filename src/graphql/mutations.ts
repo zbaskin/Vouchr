@@ -8,80 +8,107 @@ type GeneratedMutation<InputType, OutputType> = string & {
   __generatedMutationOutput: OutputType;
 };
 
-export const createTicket = /* GraphQL */ `mutation CreateTicket(
-  $input: CreateTicketInput!
-  $condition: ModelTicketConditionInput
+export const createUser = /* GraphQL */ `mutation CreateUser(
+  $input: CreateUserInput!
+  $condition: ModelUserConditionInput
 ) {
-  createTicket(input: $input, condition: $condition) {
+  createUser(input: $input, condition: $condition) {
     id
-    name
-    type
-    venue
-    theater
-    seat
-    city
-    eventDate
-    eventTime
-    timeCreated
-    ticketsID
+    owner
+    username
+    displayName
+    bio
+    avatarKey
+    isProfilePublic
+    ticketsCollectionId
+    Tickets {
+      id
+      owner
+      title
+      description
+      visibility
+      sort
+      ticketCount
+      createdAt
+      updatedAt
+      __typename
+    }
     createdAt
     updatedAt
     __typename
   }
 }
 ` as GeneratedMutation<
-  APITypes.CreateTicketMutationVariables,
-  APITypes.CreateTicketMutation
+  APITypes.CreateUserMutationVariables,
+  APITypes.CreateUserMutation
 >;
-export const updateTicket = /* GraphQL */ `mutation UpdateTicket(
-  $input: UpdateTicketInput!
-  $condition: ModelTicketConditionInput
+export const updateUser = /* GraphQL */ `mutation UpdateUser(
+  $input: UpdateUserInput!
+  $condition: ModelUserConditionInput
 ) {
-  updateTicket(input: $input, condition: $condition) {
+  updateUser(input: $input, condition: $condition) {
     id
-    name
-    type
-    venue
-    theater
-    seat
-    city
-    eventDate
-    eventTime
-    timeCreated
-    ticketsID
+    owner
+    username
+    displayName
+    bio
+    avatarKey
+    isProfilePublic
+    ticketsCollectionId
+    Tickets {
+      id
+      owner
+      title
+      description
+      visibility
+      sort
+      ticketCount
+      createdAt
+      updatedAt
+      __typename
+    }
     createdAt
     updatedAt
     __typename
   }
 }
 ` as GeneratedMutation<
-  APITypes.UpdateTicketMutationVariables,
-  APITypes.UpdateTicketMutation
+  APITypes.UpdateUserMutationVariables,
+  APITypes.UpdateUserMutation
 >;
-export const deleteTicket = /* GraphQL */ `mutation DeleteTicket(
-  $input: DeleteTicketInput!
-  $condition: ModelTicketConditionInput
+export const deleteUser = /* GraphQL */ `mutation DeleteUser(
+  $input: DeleteUserInput!
+  $condition: ModelUserConditionInput
 ) {
-  deleteTicket(input: $input, condition: $condition) {
+  deleteUser(input: $input, condition: $condition) {
     id
-    name
-    type
-    venue
-    theater
-    seat
-    city
-    eventDate
-    eventTime
-    timeCreated
-    ticketsID
+    owner
+    username
+    displayName
+    bio
+    avatarKey
+    isProfilePublic
+    ticketsCollectionId
+    Tickets {
+      id
+      owner
+      title
+      description
+      visibility
+      sort
+      ticketCount
+      createdAt
+      updatedAt
+      __typename
+    }
     createdAt
     updatedAt
     __typename
   }
 }
 ` as GeneratedMutation<
-  APITypes.DeleteTicketMutationVariables,
-  APITypes.DeleteTicketMutation
+  APITypes.DeleteUserMutationVariables,
+  APITypes.DeleteUserMutation
 >;
 export const createTicketCollection = /* GraphQL */ `mutation CreateTicketCollection(
   $input: CreateTicketCollectionInput!
@@ -89,7 +116,12 @@ export const createTicketCollection = /* GraphQL */ `mutation CreateTicketCollec
 ) {
   createTicketCollection(input: $input, condition: $condition) {
     id
+    owner
+    title
+    description
+    visibility
     sort
+    ticketCount
     Tickets {
       nextToken
       __typename
@@ -109,7 +141,12 @@ export const updateTicketCollection = /* GraphQL */ `mutation UpdateTicketCollec
 ) {
   updateTicketCollection(input: $input, condition: $condition) {
     id
+    owner
+    title
+    description
+    visibility
     sort
+    ticketCount
     Tickets {
       nextToken
       __typename
@@ -129,7 +166,12 @@ export const deleteTicketCollection = /* GraphQL */ `mutation DeleteTicketCollec
 ) {
   deleteTicketCollection(input: $input, condition: $condition) {
     id
+    owner
+    title
+    description
+    visibility
     sort
+    ticketCount
     Tickets {
       nextToken
       __typename
@@ -143,75 +185,84 @@ export const deleteTicketCollection = /* GraphQL */ `mutation DeleteTicketCollec
   APITypes.DeleteTicketCollectionMutationVariables,
   APITypes.DeleteTicketCollectionMutation
 >;
-export const createUser = /* GraphQL */ `mutation CreateUser(
-  $input: CreateUserInput!
-  $condition: ModelUserConditionInput
+export const createTicket = /* GraphQL */ `mutation CreateTicket(
+  $input: CreateTicketInput!
+  $condition: ModelTicketConditionInput
 ) {
-  createUser(input: $input, condition: $condition) {
+  createTicket(input: $input, condition: $condition) {
     id
-    username
-    Tickets {
-      id
-      sort
-      createdAt
-      updatedAt
-      __typename
-    }
+    owner
+    name
+    type
+    venue
+    theater
+    seat
+    city
+    eventDate
+    eventTime
+    timeCreated
+    ticketsID
+    visibility
     createdAt
     updatedAt
-    userTicketsId
     __typename
   }
 }
 ` as GeneratedMutation<
-  APITypes.CreateUserMutationVariables,
-  APITypes.CreateUserMutation
+  APITypes.CreateTicketMutationVariables,
+  APITypes.CreateTicketMutation
 >;
-export const updateUser = /* GraphQL */ `mutation UpdateUser(
-  $input: UpdateUserInput!
-  $condition: ModelUserConditionInput
+export const updateTicket = /* GraphQL */ `mutation UpdateTicket(
+  $input: UpdateTicketInput!
+  $condition: ModelTicketConditionInput
 ) {
-  updateUser(input: $input, condition: $condition) {
+  updateTicket(input: $input, condition: $condition) {
     id
-    username
-    Tickets {
-      id
-      sort
-      createdAt
-      updatedAt
-      __typename
-    }
+    owner
+    name
+    type
+    venue
+    theater
+    seat
+    city
+    eventDate
+    eventTime
+    timeCreated
+    ticketsID
+    visibility
     createdAt
     updatedAt
-    userTicketsId
     __typename
   }
 }
 ` as GeneratedMutation<
-  APITypes.UpdateUserMutationVariables,
-  APITypes.UpdateUserMutation
+  APITypes.UpdateTicketMutationVariables,
+  APITypes.UpdateTicketMutation
 >;
-export const deleteUser = /* GraphQL */ `mutation DeleteUser(
-  $input: DeleteUserInput!
-  $condition: ModelUserConditionInput
+export const deleteTicket = /* GraphQL */ `mutation DeleteTicket(
+  $input: DeleteTicketInput!
+  $condition: ModelTicketConditionInput
 ) {
-  deleteUser(input: $input, condition: $condition) {
+  deleteTicket(input: $input, condition: $condition) {
     id
-    username
-    Tickets {
-      id
-      sort
-      createdAt
-      updatedAt
-      __typename
-    }
+    owner
+    name
+    type
+    venue
+    theater
+    seat
+    city
+    eventDate
+    eventTime
+    timeCreated
+    ticketsID
+    visibility
     createdAt
     updatedAt
-    userTicketsId
     __typename
   }
 }
 ` as GeneratedMutation<
-  APITypes.DeleteUserMutationVariables,
-  APITypes.DeleteUserMutation
+  APITypes.DeleteTicketMutationVariables,
+  APITypes.DeleteTicketMutation
 >;

@@ -2,42 +2,30 @@
 /* eslint-disable */
 //  This file was automatically generated and should not be edited.
 
-export type CreateTicketInput = {
+export type CreateUserInput = {
   id?: string | null,
-  name: string,
-  type: EventType,
-  venue?: string | null,
-  theater?: string | null,
-  seat?: string | null,
-  city?: string | null,
-  eventDate?: string | null,
-  eventTime?: string | null,
-  timeCreated: number,
-  ticketsID: string,
+  owner: string,
+  username: string,
+  displayName?: string | null,
+  bio?: string | null,
+  avatarKey?: string | null,
+  isProfilePublic: boolean,
+  ticketsCollectionId?: string | null,
 };
 
-export enum EventType {
-  MOVIE = "MOVIE",
-  CONCERT = "CONCERT",
-  SPORT = "SPORT",
-  FLIGHT = "FLIGHT",
-}
-
-
-export type ModelTicketConditionInput = {
-  name?: ModelStringInput | null,
-  type?: ModelEventTypeInput | null,
-  venue?: ModelStringInput | null,
-  theater?: ModelStringInput | null,
-  seat?: ModelStringInput | null,
-  city?: ModelStringInput | null,
-  eventDate?: ModelStringInput | null,
-  eventTime?: ModelStringInput | null,
-  timeCreated?: ModelIntInput | null,
-  ticketsID?: ModelIDInput | null,
-  and?: Array< ModelTicketConditionInput | null > | null,
-  or?: Array< ModelTicketConditionInput | null > | null,
-  not?: ModelTicketConditionInput | null,
+export type ModelUserConditionInput = {
+  owner?: ModelStringInput | null,
+  username?: ModelStringInput | null,
+  displayName?: ModelStringInput | null,
+  bio?: ModelStringInput | null,
+  avatarKey?: ModelStringInput | null,
+  isProfilePublic?: ModelBooleanInput | null,
+  ticketsCollectionId?: ModelIDInput | null,
+  and?: Array< ModelUserConditionInput | null > | null,
+  or?: Array< ModelUserConditionInput | null > | null,
+  not?: ModelUserConditionInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
 };
 
 export type ModelStringInput = {
@@ -80,19 +68,9 @@ export type ModelSizeInput = {
   between?: Array< number | null > | null,
 };
 
-export type ModelEventTypeInput = {
-  eq?: EventType | null,
-  ne?: EventType | null,
-};
-
-export type ModelIntInput = {
-  ne?: number | null,
-  eq?: number | null,
-  le?: number | null,
-  lt?: number | null,
-  ge?: number | null,
-  gt?: number | null,
-  between?: Array< number | null > | null,
+export type ModelBooleanInput = {
+  ne?: boolean | null,
+  eq?: boolean | null,
   attributeExists?: boolean | null,
   attributeType?: ModelAttributeTypes | null,
 };
@@ -113,9 +91,59 @@ export type ModelIDInput = {
   size?: ModelSizeInput | null,
 };
 
+export type User = {
+  __typename: "User",
+  id: string,
+  owner: string,
+  username: string,
+  displayName?: string | null,
+  bio?: string | null,
+  avatarKey?: string | null,
+  isProfilePublic: boolean,
+  ticketsCollectionId?: string | null,
+  Tickets?: TicketCollection | null,
+  createdAt: string,
+  updatedAt: string,
+};
+
+export type TicketCollection = {
+  __typename: "TicketCollection",
+  id: string,
+  owner: string,
+  title?: string | null,
+  description?: string | null,
+  visibility: Visibility,
+  sort?: SortType | null,
+  ticketCount: number,
+  Tickets?: ModelTicketConnection | null,
+  createdAt: string,
+  updatedAt: string,
+};
+
+export enum Visibility {
+  PUBLIC = "PUBLIC",
+  PRIVATE = "PRIVATE",
+}
+
+
+export enum SortType {
+  ALPHABETICAL = "ALPHABETICAL",
+  EVENT_TYPE = "EVENT_TYPE",
+  EVENT_DATE = "EVENT_DATE",
+  TIME_CREATED = "TIME_CREATED",
+}
+
+
+export type ModelTicketConnection = {
+  __typename: "ModelTicketConnection",
+  items:  Array<Ticket | null >,
+  nextToken?: string | null,
+};
+
 export type Ticket = {
   __typename: "Ticket",
   id: string,
+  owner: string,
   name: string,
   type: EventType,
   venue?: string | null,
@@ -126,46 +154,61 @@ export type Ticket = {
   eventTime?: string | null,
   timeCreated: number,
   ticketsID: string,
+  visibility: Visibility,
   createdAt: string,
   updatedAt: string,
 };
 
-export type UpdateTicketInput = {
+export enum EventType {
+  MOVIE = "MOVIE",
+  CONCERT = "CONCERT",
+  SPORT = "SPORT",
+  FLIGHT = "FLIGHT",
+}
+
+
+export type UpdateUserInput = {
   id: string,
-  name?: string | null,
-  type?: EventType | null,
-  venue?: string | null,
-  theater?: string | null,
-  seat?: string | null,
-  city?: string | null,
-  eventDate?: string | null,
-  eventTime?: string | null,
-  timeCreated?: number | null,
-  ticketsID?: string | null,
+  owner?: string | null,
+  username?: string | null,
+  displayName?: string | null,
+  bio?: string | null,
+  avatarKey?: string | null,
+  isProfilePublic?: boolean | null,
+  ticketsCollectionId?: string | null,
 };
 
-export type DeleteTicketInput = {
+export type DeleteUserInput = {
   id: string,
 };
 
 export type CreateTicketCollectionInput = {
   id?: string | null,
+  owner: string,
+  title?: string | null,
+  description?: string | null,
+  visibility: Visibility,
   sort?: SortType | null,
+  ticketCount: number,
 };
 
-export enum SortType {
-  ALPHABETICAL = "ALPHABETICAL",
-  EVENT_TYPE = "EVENT_TYPE",
-  EVENT_DATE = "EVENT_DATE",
-  TIME_CREATED = "TIME_CREATED",
-}
-
-
 export type ModelTicketCollectionConditionInput = {
+  owner?: ModelStringInput | null,
+  title?: ModelStringInput | null,
+  description?: ModelStringInput | null,
+  visibility?: ModelVisibilityInput | null,
   sort?: ModelSortTypeInput | null,
+  ticketCount?: ModelIntInput | null,
   and?: Array< ModelTicketCollectionConditionInput | null > | null,
   or?: Array< ModelTicketCollectionConditionInput | null > | null,
   not?: ModelTicketCollectionConditionInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+};
+
+export type ModelVisibilityInput = {
+  eq?: Visibility | null,
+  ne?: Visibility | null,
 };
 
 export type ModelSortTypeInput = {
@@ -173,66 +216,50 @@ export type ModelSortTypeInput = {
   ne?: SortType | null,
 };
 
-export type TicketCollection = {
-  __typename: "TicketCollection",
-  id: string,
-  sort?: SortType | null,
-  Tickets?: ModelTicketConnection | null,
-  createdAt: string,
-  updatedAt: string,
-};
-
-export type ModelTicketConnection = {
-  __typename: "ModelTicketConnection",
-  items:  Array<Ticket | null >,
-  nextToken?: string | null,
+export type ModelIntInput = {
+  ne?: number | null,
+  eq?: number | null,
+  le?: number | null,
+  lt?: number | null,
+  ge?: number | null,
+  gt?: number | null,
+  between?: Array< number | null > | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
 };
 
 export type UpdateTicketCollectionInput = {
   id: string,
+  owner?: string | null,
+  title?: string | null,
+  description?: string | null,
+  visibility?: Visibility | null,
   sort?: SortType | null,
+  ticketCount?: number | null,
 };
 
 export type DeleteTicketCollectionInput = {
   id: string,
 };
 
-export type CreateUserInput = {
+export type CreateTicketInput = {
   id?: string | null,
-  username: string,
-  userTicketsId?: string | null,
+  owner: string,
+  name: string,
+  type: EventType,
+  venue?: string | null,
+  theater?: string | null,
+  seat?: string | null,
+  city?: string | null,
+  eventDate?: string | null,
+  eventTime?: string | null,
+  timeCreated: number,
+  ticketsID: string,
+  visibility: Visibility,
 };
 
-export type ModelUserConditionInput = {
-  username?: ModelStringInput | null,
-  and?: Array< ModelUserConditionInput | null > | null,
-  or?: Array< ModelUserConditionInput | null > | null,
-  not?: ModelUserConditionInput | null,
-  userTicketsId?: ModelIDInput | null,
-};
-
-export type User = {
-  __typename: "User",
-  id: string,
-  username: string,
-  Tickets?: TicketCollection | null,
-  createdAt: string,
-  updatedAt: string,
-  userTicketsId?: string | null,
-};
-
-export type UpdateUserInput = {
-  id: string,
-  username?: string | null,
-  userTicketsId?: string | null,
-};
-
-export type DeleteUserInput = {
-  id: string,
-};
-
-export type ModelTicketFilterInput = {
-  id?: ModelIDInput | null,
+export type ModelTicketConditionInput = {
+  owner?: ModelStringInput | null,
   name?: ModelStringInput | null,
   type?: ModelEventTypeInput | null,
   venue?: ModelStringInput | null,
@@ -243,9 +270,59 @@ export type ModelTicketFilterInput = {
   eventTime?: ModelStringInput | null,
   timeCreated?: ModelIntInput | null,
   ticketsID?: ModelIDInput | null,
-  and?: Array< ModelTicketFilterInput | null > | null,
-  or?: Array< ModelTicketFilterInput | null > | null,
-  not?: ModelTicketFilterInput | null,
+  visibility?: ModelVisibilityInput | null,
+  and?: Array< ModelTicketConditionInput | null > | null,
+  or?: Array< ModelTicketConditionInput | null > | null,
+  not?: ModelTicketConditionInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+};
+
+export type ModelEventTypeInput = {
+  eq?: EventType | null,
+  ne?: EventType | null,
+};
+
+export type UpdateTicketInput = {
+  id: string,
+  owner?: string | null,
+  name?: string | null,
+  type?: EventType | null,
+  venue?: string | null,
+  theater?: string | null,
+  seat?: string | null,
+  city?: string | null,
+  eventDate?: string | null,
+  eventTime?: string | null,
+  timeCreated?: number | null,
+  ticketsID?: string | null,
+  visibility?: Visibility | null,
+};
+
+export type DeleteTicketInput = {
+  id: string,
+};
+
+export type ModelUserFilterInput = {
+  id?: ModelIDInput | null,
+  owner?: ModelStringInput | null,
+  username?: ModelStringInput | null,
+  displayName?: ModelStringInput | null,
+  bio?: ModelStringInput | null,
+  avatarKey?: ModelStringInput | null,
+  isProfilePublic?: ModelBooleanInput | null,
+  ticketsCollectionId?: ModelIDInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+  and?: Array< ModelUserFilterInput | null > | null,
+  or?: Array< ModelUserFilterInput | null > | null,
+  not?: ModelUserFilterInput | null,
+};
+
+export type ModelUserConnection = {
+  __typename: "ModelUserConnection",
+  items:  Array<User | null >,
+  nextToken?: string | null,
 };
 
 export enum ModelSortDirection {
@@ -256,7 +333,14 @@ export enum ModelSortDirection {
 
 export type ModelTicketCollectionFilterInput = {
   id?: ModelIDInput | null,
+  owner?: ModelStringInput | null,
+  title?: ModelStringInput | null,
+  description?: ModelStringInput | null,
+  visibility?: ModelVisibilityInput | null,
   sort?: ModelSortTypeInput | null,
+  ticketCount?: ModelIntInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
   and?: Array< ModelTicketCollectionFilterInput | null > | null,
   or?: Array< ModelTicketCollectionFilterInput | null > | null,
   not?: ModelTicketCollectionFilterInput | null,
@@ -268,35 +352,40 @@ export type ModelTicketCollectionConnection = {
   nextToken?: string | null,
 };
 
-export type ModelUserFilterInput = {
+export type ModelTicketFilterInput = {
   id?: ModelIDInput | null,
-  username?: ModelStringInput | null,
-  and?: Array< ModelUserFilterInput | null > | null,
-  or?: Array< ModelUserFilterInput | null > | null,
-  not?: ModelUserFilterInput | null,
-  userTicketsId?: ModelIDInput | null,
+  owner?: ModelStringInput | null,
+  name?: ModelStringInput | null,
+  type?: ModelEventTypeInput | null,
+  venue?: ModelStringInput | null,
+  theater?: ModelStringInput | null,
+  seat?: ModelStringInput | null,
+  city?: ModelStringInput | null,
+  eventDate?: ModelStringInput | null,
+  eventTime?: ModelStringInput | null,
+  timeCreated?: ModelIntInput | null,
+  ticketsID?: ModelIDInput | null,
+  visibility?: ModelVisibilityInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+  and?: Array< ModelTicketFilterInput | null > | null,
+  or?: Array< ModelTicketFilterInput | null > | null,
+  not?: ModelTicketFilterInput | null,
 };
 
-export type ModelUserConnection = {
-  __typename: "ModelUserConnection",
-  items:  Array<User | null >,
-  nextToken?: string | null,
-};
-
-export type ModelSubscriptionTicketFilterInput = {
+export type ModelSubscriptionUserFilterInput = {
   id?: ModelSubscriptionIDInput | null,
-  name?: ModelSubscriptionStringInput | null,
-  type?: ModelSubscriptionStringInput | null,
-  venue?: ModelSubscriptionStringInput | null,
-  theater?: ModelSubscriptionStringInput | null,
-  seat?: ModelSubscriptionStringInput | null,
-  city?: ModelSubscriptionStringInput | null,
-  eventDate?: ModelSubscriptionStringInput | null,
-  eventTime?: ModelSubscriptionStringInput | null,
-  timeCreated?: ModelSubscriptionIntInput | null,
-  ticketsID?: ModelSubscriptionIDInput | null,
-  and?: Array< ModelSubscriptionTicketFilterInput | null > | null,
-  or?: Array< ModelSubscriptionTicketFilterInput | null > | null,
+  username?: ModelSubscriptionStringInput | null,
+  displayName?: ModelSubscriptionStringInput | null,
+  bio?: ModelSubscriptionStringInput | null,
+  avatarKey?: ModelSubscriptionStringInput | null,
+  isProfilePublic?: ModelSubscriptionBooleanInput | null,
+  ticketsCollectionId?: ModelSubscriptionIDInput | null,
+  createdAt?: ModelSubscriptionStringInput | null,
+  updatedAt?: ModelSubscriptionStringInput | null,
+  and?: Array< ModelSubscriptionUserFilterInput | null > | null,
+  or?: Array< ModelSubscriptionUserFilterInput | null > | null,
+  owner?: ModelStringInput | null,
 };
 
 export type ModelSubscriptionIDInput = {
@@ -329,6 +418,25 @@ export type ModelSubscriptionStringInput = {
   notIn?: Array< string | null > | null,
 };
 
+export type ModelSubscriptionBooleanInput = {
+  ne?: boolean | null,
+  eq?: boolean | null,
+};
+
+export type ModelSubscriptionTicketCollectionFilterInput = {
+  id?: ModelSubscriptionIDInput | null,
+  title?: ModelSubscriptionStringInput | null,
+  description?: ModelSubscriptionStringInput | null,
+  visibility?: ModelSubscriptionStringInput | null,
+  sort?: ModelSubscriptionStringInput | null,
+  ticketCount?: ModelSubscriptionIntInput | null,
+  createdAt?: ModelSubscriptionStringInput | null,
+  updatedAt?: ModelSubscriptionStringInput | null,
+  and?: Array< ModelSubscriptionTicketCollectionFilterInput | null > | null,
+  or?: Array< ModelSubscriptionTicketCollectionFilterInput | null > | null,
+  owner?: ModelStringInput | null,
+};
+
 export type ModelSubscriptionIntInput = {
   ne?: number | null,
   eq?: number | null,
@@ -341,87 +449,120 @@ export type ModelSubscriptionIntInput = {
   notIn?: Array< number | null > | null,
 };
 
-export type ModelSubscriptionTicketCollectionFilterInput = {
+export type ModelSubscriptionTicketFilterInput = {
   id?: ModelSubscriptionIDInput | null,
-  sort?: ModelSubscriptionStringInput | null,
-  and?: Array< ModelSubscriptionTicketCollectionFilterInput | null > | null,
-  or?: Array< ModelSubscriptionTicketCollectionFilterInput | null > | null,
+  name?: ModelSubscriptionStringInput | null,
+  type?: ModelSubscriptionStringInput | null,
+  venue?: ModelSubscriptionStringInput | null,
+  theater?: ModelSubscriptionStringInput | null,
+  seat?: ModelSubscriptionStringInput | null,
+  city?: ModelSubscriptionStringInput | null,
+  eventDate?: ModelSubscriptionStringInput | null,
+  eventTime?: ModelSubscriptionStringInput | null,
+  timeCreated?: ModelSubscriptionIntInput | null,
+  ticketsID?: ModelSubscriptionIDInput | null,
+  visibility?: ModelSubscriptionStringInput | null,
+  createdAt?: ModelSubscriptionStringInput | null,
+  updatedAt?: ModelSubscriptionStringInput | null,
+  and?: Array< ModelSubscriptionTicketFilterInput | null > | null,
+  or?: Array< ModelSubscriptionTicketFilterInput | null > | null,
+  owner?: ModelStringInput | null,
 };
 
-export type ModelSubscriptionUserFilterInput = {
-  id?: ModelSubscriptionIDInput | null,
-  username?: ModelSubscriptionStringInput | null,
-  and?: Array< ModelSubscriptionUserFilterInput | null > | null,
-  or?: Array< ModelSubscriptionUserFilterInput | null > | null,
+export type CreateUserMutationVariables = {
+  input: CreateUserInput,
+  condition?: ModelUserConditionInput | null,
 };
 
-export type CreateTicketMutationVariables = {
-  input: CreateTicketInput,
-  condition?: ModelTicketConditionInput | null,
-};
-
-export type CreateTicketMutation = {
-  createTicket?:  {
-    __typename: "Ticket",
+export type CreateUserMutation = {
+  createUser?:  {
+    __typename: "User",
     id: string,
-    name: string,
-    type: EventType,
-    venue?: string | null,
-    theater?: string | null,
-    seat?: string | null,
-    city?: string | null,
-    eventDate?: string | null,
-    eventTime?: string | null,
-    timeCreated: number,
-    ticketsID: string,
+    owner: string,
+    username: string,
+    displayName?: string | null,
+    bio?: string | null,
+    avatarKey?: string | null,
+    isProfilePublic: boolean,
+    ticketsCollectionId?: string | null,
+    Tickets?:  {
+      __typename: "TicketCollection",
+      id: string,
+      owner: string,
+      title?: string | null,
+      description?: string | null,
+      visibility: Visibility,
+      sort?: SortType | null,
+      ticketCount: number,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
 };
 
-export type UpdateTicketMutationVariables = {
-  input: UpdateTicketInput,
-  condition?: ModelTicketConditionInput | null,
+export type UpdateUserMutationVariables = {
+  input: UpdateUserInput,
+  condition?: ModelUserConditionInput | null,
 };
 
-export type UpdateTicketMutation = {
-  updateTicket?:  {
-    __typename: "Ticket",
+export type UpdateUserMutation = {
+  updateUser?:  {
+    __typename: "User",
     id: string,
-    name: string,
-    type: EventType,
-    venue?: string | null,
-    theater?: string | null,
-    seat?: string | null,
-    city?: string | null,
-    eventDate?: string | null,
-    eventTime?: string | null,
-    timeCreated: number,
-    ticketsID: string,
+    owner: string,
+    username: string,
+    displayName?: string | null,
+    bio?: string | null,
+    avatarKey?: string | null,
+    isProfilePublic: boolean,
+    ticketsCollectionId?: string | null,
+    Tickets?:  {
+      __typename: "TicketCollection",
+      id: string,
+      owner: string,
+      title?: string | null,
+      description?: string | null,
+      visibility: Visibility,
+      sort?: SortType | null,
+      ticketCount: number,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
 };
 
-export type DeleteTicketMutationVariables = {
-  input: DeleteTicketInput,
-  condition?: ModelTicketConditionInput | null,
+export type DeleteUserMutationVariables = {
+  input: DeleteUserInput,
+  condition?: ModelUserConditionInput | null,
 };
 
-export type DeleteTicketMutation = {
-  deleteTicket?:  {
-    __typename: "Ticket",
+export type DeleteUserMutation = {
+  deleteUser?:  {
+    __typename: "User",
     id: string,
-    name: string,
-    type: EventType,
-    venue?: string | null,
-    theater?: string | null,
-    seat?: string | null,
-    city?: string | null,
-    eventDate?: string | null,
-    eventTime?: string | null,
-    timeCreated: number,
-    ticketsID: string,
+    owner: string,
+    username: string,
+    displayName?: string | null,
+    bio?: string | null,
+    avatarKey?: string | null,
+    isProfilePublic: boolean,
+    ticketsCollectionId?: string | null,
+    Tickets?:  {
+      __typename: "TicketCollection",
+      id: string,
+      owner: string,
+      title?: string | null,
+      description?: string | null,
+      visibility: Visibility,
+      sort?: SortType | null,
+      ticketCount: number,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -436,7 +577,12 @@ export type CreateTicketCollectionMutation = {
   createTicketCollection?:  {
     __typename: "TicketCollection",
     id: string,
+    owner: string,
+    title?: string | null,
+    description?: string | null,
+    visibility: Visibility,
     sort?: SortType | null,
+    ticketCount: number,
     Tickets?:  {
       __typename: "ModelTicketConnection",
       nextToken?: string | null,
@@ -455,7 +601,12 @@ export type UpdateTicketCollectionMutation = {
   updateTicketCollection?:  {
     __typename: "TicketCollection",
     id: string,
+    owner: string,
+    title?: string | null,
+    description?: string | null,
+    visibility: Visibility,
     sort?: SortType | null,
+    ticketCount: number,
     Tickets?:  {
       __typename: "ModelTicketConnection",
       nextToken?: string | null,
@@ -474,7 +625,12 @@ export type DeleteTicketCollectionMutation = {
   deleteTicketCollection?:  {
     __typename: "TicketCollection",
     id: string,
+    owner: string,
+    title?: string | null,
+    description?: string | null,
+    visibility: Visibility,
     sort?: SortType | null,
+    ticketCount: number,
     Tickets?:  {
       __typename: "ModelTicketConnection",
       nextToken?: string | null,
@@ -484,83 +640,16 @@ export type DeleteTicketCollectionMutation = {
   } | null,
 };
 
-export type CreateUserMutationVariables = {
-  input: CreateUserInput,
-  condition?: ModelUserConditionInput | null,
+export type CreateTicketMutationVariables = {
+  input: CreateTicketInput,
+  condition?: ModelTicketConditionInput | null,
 };
 
-export type CreateUserMutation = {
-  createUser?:  {
-    __typename: "User",
-    id: string,
-    username: string,
-    Tickets?:  {
-      __typename: "TicketCollection",
-      id: string,
-      sort?: SortType | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
-    createdAt: string,
-    updatedAt: string,
-    userTicketsId?: string | null,
-  } | null,
-};
-
-export type UpdateUserMutationVariables = {
-  input: UpdateUserInput,
-  condition?: ModelUserConditionInput | null,
-};
-
-export type UpdateUserMutation = {
-  updateUser?:  {
-    __typename: "User",
-    id: string,
-    username: string,
-    Tickets?:  {
-      __typename: "TicketCollection",
-      id: string,
-      sort?: SortType | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
-    createdAt: string,
-    updatedAt: string,
-    userTicketsId?: string | null,
-  } | null,
-};
-
-export type DeleteUserMutationVariables = {
-  input: DeleteUserInput,
-  condition?: ModelUserConditionInput | null,
-};
-
-export type DeleteUserMutation = {
-  deleteUser?:  {
-    __typename: "User",
-    id: string,
-    username: string,
-    Tickets?:  {
-      __typename: "TicketCollection",
-      id: string,
-      sort?: SortType | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
-    createdAt: string,
-    updatedAt: string,
-    userTicketsId?: string | null,
-  } | null,
-};
-
-export type GetTicketQueryVariables = {
-  id: string,
-};
-
-export type GetTicketQuery = {
-  getTicket?:  {
+export type CreateTicketMutation = {
+  createTicket?:  {
     __typename: "Ticket",
     id: string,
+    owner: string,
     name: string,
     type: EventType,
     venue?: string | null,
@@ -571,33 +660,115 @@ export type GetTicketQuery = {
     eventTime?: string | null,
     timeCreated: number,
     ticketsID: string,
+    visibility: Visibility,
     createdAt: string,
     updatedAt: string,
   } | null,
 };
 
-export type ListTicketsQueryVariables = {
-  filter?: ModelTicketFilterInput | null,
+export type UpdateTicketMutationVariables = {
+  input: UpdateTicketInput,
+  condition?: ModelTicketConditionInput | null,
+};
+
+export type UpdateTicketMutation = {
+  updateTicket?:  {
+    __typename: "Ticket",
+    id: string,
+    owner: string,
+    name: string,
+    type: EventType,
+    venue?: string | null,
+    theater?: string | null,
+    seat?: string | null,
+    city?: string | null,
+    eventDate?: string | null,
+    eventTime?: string | null,
+    timeCreated: number,
+    ticketsID: string,
+    visibility: Visibility,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeleteTicketMutationVariables = {
+  input: DeleteTicketInput,
+  condition?: ModelTicketConditionInput | null,
+};
+
+export type DeleteTicketMutation = {
+  deleteTicket?:  {
+    __typename: "Ticket",
+    id: string,
+    owner: string,
+    name: string,
+    type: EventType,
+    venue?: string | null,
+    theater?: string | null,
+    seat?: string | null,
+    city?: string | null,
+    eventDate?: string | null,
+    eventTime?: string | null,
+    timeCreated: number,
+    ticketsID: string,
+    visibility: Visibility,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type GetUserQueryVariables = {
+  id: string,
+};
+
+export type GetUserQuery = {
+  getUser?:  {
+    __typename: "User",
+    id: string,
+    owner: string,
+    username: string,
+    displayName?: string | null,
+    bio?: string | null,
+    avatarKey?: string | null,
+    isProfilePublic: boolean,
+    ticketsCollectionId?: string | null,
+    Tickets?:  {
+      __typename: "TicketCollection",
+      id: string,
+      owner: string,
+      title?: string | null,
+      description?: string | null,
+      visibility: Visibility,
+      sort?: SortType | null,
+      ticketCount: number,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type ListUsersQueryVariables = {
+  filter?: ModelUserFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
 };
 
-export type ListTicketsQuery = {
-  listTickets?:  {
-    __typename: "ModelTicketConnection",
+export type ListUsersQuery = {
+  listUsers?:  {
+    __typename: "ModelUserConnection",
     items:  Array< {
-      __typename: "Ticket",
+      __typename: "User",
       id: string,
-      name: string,
-      type: EventType,
-      venue?: string | null,
-      theater?: string | null,
-      seat?: string | null,
-      city?: string | null,
-      eventDate?: string | null,
-      eventTime?: string | null,
-      timeCreated: number,
-      ticketsID: string,
+      owner: string,
+      username: string,
+      displayName?: string | null,
+      bio?: string | null,
+      avatarKey?: string | null,
+      isProfilePublic: boolean,
+      ticketsCollectionId?: string | null,
       createdAt: string,
       updatedAt: string,
     } | null >,
@@ -605,30 +776,27 @@ export type ListTicketsQuery = {
   } | null,
 };
 
-export type TicketsByTicketsIDQueryVariables = {
-  ticketsID: string,
+export type UserByOwnerQueryVariables = {
+  owner: string,
   sortDirection?: ModelSortDirection | null,
-  filter?: ModelTicketFilterInput | null,
+  filter?: ModelUserFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
 };
 
-export type TicketsByTicketsIDQuery = {
-  ticketsByTicketsID?:  {
-    __typename: "ModelTicketConnection",
+export type UserByOwnerQuery = {
+  userByOwner?:  {
+    __typename: "ModelUserConnection",
     items:  Array< {
-      __typename: "Ticket",
+      __typename: "User",
       id: string,
-      name: string,
-      type: EventType,
-      venue?: string | null,
-      theater?: string | null,
-      seat?: string | null,
-      city?: string | null,
-      eventDate?: string | null,
-      eventTime?: string | null,
-      timeCreated: number,
-      ticketsID: string,
+      owner: string,
+      username: string,
+      displayName?: string | null,
+      bio?: string | null,
+      avatarKey?: string | null,
+      isProfilePublic: boolean,
+      ticketsCollectionId?: string | null,
       createdAt: string,
       updatedAt: string,
     } | null >,
@@ -644,7 +812,12 @@ export type GetTicketCollectionQuery = {
   getTicketCollection?:  {
     __typename: "TicketCollection",
     id: string,
+    owner: string,
+    title?: string | null,
+    description?: string | null,
+    visibility: Visibility,
     sort?: SortType | null,
+    ticketCount: number,
     Tickets?:  {
       __typename: "ModelTicketConnection",
       nextToken?: string | null,
@@ -666,7 +839,12 @@ export type ListTicketCollectionsQuery = {
     items:  Array< {
       __typename: "TicketCollection",
       id: string,
+      owner: string,
+      title?: string | null,
+      description?: string | null,
+      visibility: Visibility,
       sort?: SortType | null,
+      ticketCount: number,
       createdAt: string,
       updatedAt: string,
     } | null >,
@@ -674,113 +852,249 @@ export type ListTicketCollectionsQuery = {
   } | null,
 };
 
-export type GetUserQueryVariables = {
+export type CollectionsByOwnerQueryVariables = {
+  owner: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelTicketCollectionFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type CollectionsByOwnerQuery = {
+  collectionsByOwner?:  {
+    __typename: "ModelTicketCollectionConnection",
+    items:  Array< {
+      __typename: "TicketCollection",
+      id: string,
+      owner: string,
+      title?: string | null,
+      description?: string | null,
+      visibility: Visibility,
+      sort?: SortType | null,
+      ticketCount: number,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type GetTicketQueryVariables = {
   id: string,
 };
 
-export type GetUserQuery = {
-  getUser?:  {
+export type GetTicketQuery = {
+  getTicket?:  {
+    __typename: "Ticket",
+    id: string,
+    owner: string,
+    name: string,
+    type: EventType,
+    venue?: string | null,
+    theater?: string | null,
+    seat?: string | null,
+    city?: string | null,
+    eventDate?: string | null,
+    eventTime?: string | null,
+    timeCreated: number,
+    ticketsID: string,
+    visibility: Visibility,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type ListTicketsQueryVariables = {
+  filter?: ModelTicketFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListTicketsQuery = {
+  listTickets?:  {
+    __typename: "ModelTicketConnection",
+    items:  Array< {
+      __typename: "Ticket",
+      id: string,
+      owner: string,
+      name: string,
+      type: EventType,
+      venue?: string | null,
+      theater?: string | null,
+      seat?: string | null,
+      city?: string | null,
+      eventDate?: string | null,
+      eventTime?: string | null,
+      timeCreated: number,
+      ticketsID: string,
+      visibility: Visibility,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type TicketsByOwnerQueryVariables = {
+  owner: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelTicketFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type TicketsByOwnerQuery = {
+  ticketsByOwner?:  {
+    __typename: "ModelTicketConnection",
+    items:  Array< {
+      __typename: "Ticket",
+      id: string,
+      owner: string,
+      name: string,
+      type: EventType,
+      venue?: string | null,
+      theater?: string | null,
+      seat?: string | null,
+      city?: string | null,
+      eventDate?: string | null,
+      eventTime?: string | null,
+      timeCreated: number,
+      ticketsID: string,
+      visibility: Visibility,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type TicketsByTicketsIDQueryVariables = {
+  ticketsID: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelTicketFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type TicketsByTicketsIDQuery = {
+  ticketsByTicketsID?:  {
+    __typename: "ModelTicketConnection",
+    items:  Array< {
+      __typename: "Ticket",
+      id: string,
+      owner: string,
+      name: string,
+      type: EventType,
+      venue?: string | null,
+      theater?: string | null,
+      seat?: string | null,
+      city?: string | null,
+      eventDate?: string | null,
+      eventTime?: string | null,
+      timeCreated: number,
+      ticketsID: string,
+      visibility: Visibility,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type OnCreateUserSubscriptionVariables = {
+  filter?: ModelSubscriptionUserFilterInput | null,
+  owner?: string | null,
+};
+
+export type OnCreateUserSubscription = {
+  onCreateUser?:  {
     __typename: "User",
     id: string,
+    owner: string,
     username: string,
+    displayName?: string | null,
+    bio?: string | null,
+    avatarKey?: string | null,
+    isProfilePublic: boolean,
+    ticketsCollectionId?: string | null,
     Tickets?:  {
       __typename: "TicketCollection",
       id: string,
+      owner: string,
+      title?: string | null,
+      description?: string | null,
+      visibility: Visibility,
       sort?: SortType | null,
+      ticketCount: number,
       createdAt: string,
       updatedAt: string,
     } | null,
     createdAt: string,
     updatedAt: string,
-    userTicketsId?: string | null,
   } | null,
 };
 
-export type ListUsersQueryVariables = {
-  filter?: ModelUserFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
+export type OnUpdateUserSubscriptionVariables = {
+  filter?: ModelSubscriptionUserFilterInput | null,
+  owner?: string | null,
 };
 
-export type ListUsersQuery = {
-  listUsers?:  {
-    __typename: "ModelUserConnection",
-    items:  Array< {
-      __typename: "User",
+export type OnUpdateUserSubscription = {
+  onUpdateUser?:  {
+    __typename: "User",
+    id: string,
+    owner: string,
+    username: string,
+    displayName?: string | null,
+    bio?: string | null,
+    avatarKey?: string | null,
+    isProfilePublic: boolean,
+    ticketsCollectionId?: string | null,
+    Tickets?:  {
+      __typename: "TicketCollection",
       id: string,
-      username: string,
+      owner: string,
+      title?: string | null,
+      description?: string | null,
+      visibility: Visibility,
+      sort?: SortType | null,
+      ticketCount: number,
       createdAt: string,
       updatedAt: string,
-      userTicketsId?: string | null,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
-};
-
-export type OnCreateTicketSubscriptionVariables = {
-  filter?: ModelSubscriptionTicketFilterInput | null,
-};
-
-export type OnCreateTicketSubscription = {
-  onCreateTicket?:  {
-    __typename: "Ticket",
-    id: string,
-    name: string,
-    type: EventType,
-    venue?: string | null,
-    theater?: string | null,
-    seat?: string | null,
-    city?: string | null,
-    eventDate?: string | null,
-    eventTime?: string | null,
-    timeCreated: number,
-    ticketsID: string,
+    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
 };
 
-export type OnUpdateTicketSubscriptionVariables = {
-  filter?: ModelSubscriptionTicketFilterInput | null,
+export type OnDeleteUserSubscriptionVariables = {
+  filter?: ModelSubscriptionUserFilterInput | null,
+  owner?: string | null,
 };
 
-export type OnUpdateTicketSubscription = {
-  onUpdateTicket?:  {
-    __typename: "Ticket",
+export type OnDeleteUserSubscription = {
+  onDeleteUser?:  {
+    __typename: "User",
     id: string,
-    name: string,
-    type: EventType,
-    venue?: string | null,
-    theater?: string | null,
-    seat?: string | null,
-    city?: string | null,
-    eventDate?: string | null,
-    eventTime?: string | null,
-    timeCreated: number,
-    ticketsID: string,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type OnDeleteTicketSubscriptionVariables = {
-  filter?: ModelSubscriptionTicketFilterInput | null,
-};
-
-export type OnDeleteTicketSubscription = {
-  onDeleteTicket?:  {
-    __typename: "Ticket",
-    id: string,
-    name: string,
-    type: EventType,
-    venue?: string | null,
-    theater?: string | null,
-    seat?: string | null,
-    city?: string | null,
-    eventDate?: string | null,
-    eventTime?: string | null,
-    timeCreated: number,
-    ticketsID: string,
+    owner: string,
+    username: string,
+    displayName?: string | null,
+    bio?: string | null,
+    avatarKey?: string | null,
+    isProfilePublic: boolean,
+    ticketsCollectionId?: string | null,
+    Tickets?:  {
+      __typename: "TicketCollection",
+      id: string,
+      owner: string,
+      title?: string | null,
+      description?: string | null,
+      visibility: Visibility,
+      sort?: SortType | null,
+      ticketCount: number,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -788,13 +1102,19 @@ export type OnDeleteTicketSubscription = {
 
 export type OnCreateTicketCollectionSubscriptionVariables = {
   filter?: ModelSubscriptionTicketCollectionFilterInput | null,
+  owner?: string | null,
 };
 
 export type OnCreateTicketCollectionSubscription = {
   onCreateTicketCollection?:  {
     __typename: "TicketCollection",
     id: string,
+    owner: string,
+    title?: string | null,
+    description?: string | null,
+    visibility: Visibility,
     sort?: SortType | null,
+    ticketCount: number,
     Tickets?:  {
       __typename: "ModelTicketConnection",
       nextToken?: string | null,
@@ -806,13 +1126,19 @@ export type OnCreateTicketCollectionSubscription = {
 
 export type OnUpdateTicketCollectionSubscriptionVariables = {
   filter?: ModelSubscriptionTicketCollectionFilterInput | null,
+  owner?: string | null,
 };
 
 export type OnUpdateTicketCollectionSubscription = {
   onUpdateTicketCollection?:  {
     __typename: "TicketCollection",
     id: string,
+    owner: string,
+    title?: string | null,
+    description?: string | null,
+    visibility: Visibility,
     sort?: SortType | null,
+    ticketCount: number,
     Tickets?:  {
       __typename: "ModelTicketConnection",
       nextToken?: string | null,
@@ -824,13 +1150,19 @@ export type OnUpdateTicketCollectionSubscription = {
 
 export type OnDeleteTicketCollectionSubscriptionVariables = {
   filter?: ModelSubscriptionTicketCollectionFilterInput | null,
+  owner?: string | null,
 };
 
 export type OnDeleteTicketCollectionSubscription = {
   onDeleteTicketCollection?:  {
     __typename: "TicketCollection",
     id: string,
+    owner: string,
+    title?: string | null,
+    description?: string | null,
+    visibility: Visibility,
     sort?: SortType | null,
+    ticketCount: number,
     Tickets?:  {
       __typename: "ModelTicketConnection",
       nextToken?: string | null,
@@ -840,68 +1172,80 @@ export type OnDeleteTicketCollectionSubscription = {
   } | null,
 };
 
-export type OnCreateUserSubscriptionVariables = {
-  filter?: ModelSubscriptionUserFilterInput | null,
+export type OnCreateTicketSubscriptionVariables = {
+  filter?: ModelSubscriptionTicketFilterInput | null,
+  owner?: string | null,
 };
 
-export type OnCreateUserSubscription = {
-  onCreateUser?:  {
-    __typename: "User",
+export type OnCreateTicketSubscription = {
+  onCreateTicket?:  {
+    __typename: "Ticket",
     id: string,
-    username: string,
-    Tickets?:  {
-      __typename: "TicketCollection",
-      id: string,
-      sort?: SortType | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
+    owner: string,
+    name: string,
+    type: EventType,
+    venue?: string | null,
+    theater?: string | null,
+    seat?: string | null,
+    city?: string | null,
+    eventDate?: string | null,
+    eventTime?: string | null,
+    timeCreated: number,
+    ticketsID: string,
+    visibility: Visibility,
     createdAt: string,
     updatedAt: string,
-    userTicketsId?: string | null,
   } | null,
 };
 
-export type OnUpdateUserSubscriptionVariables = {
-  filter?: ModelSubscriptionUserFilterInput | null,
+export type OnUpdateTicketSubscriptionVariables = {
+  filter?: ModelSubscriptionTicketFilterInput | null,
+  owner?: string | null,
 };
 
-export type OnUpdateUserSubscription = {
-  onUpdateUser?:  {
-    __typename: "User",
+export type OnUpdateTicketSubscription = {
+  onUpdateTicket?:  {
+    __typename: "Ticket",
     id: string,
-    username: string,
-    Tickets?:  {
-      __typename: "TicketCollection",
-      id: string,
-      sort?: SortType | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
+    owner: string,
+    name: string,
+    type: EventType,
+    venue?: string | null,
+    theater?: string | null,
+    seat?: string | null,
+    city?: string | null,
+    eventDate?: string | null,
+    eventTime?: string | null,
+    timeCreated: number,
+    ticketsID: string,
+    visibility: Visibility,
     createdAt: string,
     updatedAt: string,
-    userTicketsId?: string | null,
   } | null,
 };
 
-export type OnDeleteUserSubscriptionVariables = {
-  filter?: ModelSubscriptionUserFilterInput | null,
+export type OnDeleteTicketSubscriptionVariables = {
+  filter?: ModelSubscriptionTicketFilterInput | null,
+  owner?: string | null,
 };
 
-export type OnDeleteUserSubscription = {
-  onDeleteUser?:  {
-    __typename: "User",
+export type OnDeleteTicketSubscription = {
+  onDeleteTicket?:  {
+    __typename: "Ticket",
     id: string,
-    username: string,
-    Tickets?:  {
-      __typename: "TicketCollection",
-      id: string,
-      sort?: SortType | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
+    owner: string,
+    name: string,
+    type: EventType,
+    venue?: string | null,
+    theater?: string | null,
+    seat?: string | null,
+    city?: string | null,
+    eventDate?: string | null,
+    eventTime?: string | null,
+    timeCreated: number,
+    ticketsID: string,
+    visibility: Visibility,
     createdAt: string,
     updatedAt: string,
-    userTicketsId?: string | null,
   } | null,
 };
