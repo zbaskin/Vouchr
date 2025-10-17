@@ -6,11 +6,11 @@ import { getCurrentUser, fetchAuthSession } from 'aws-amplify/auth';
 import {
   createTicket as createTicketMutation,
   createTicketCollection as createTicketCollectionMutation,
-  createUser as createUserMutation,
+  // createUser as createUserMutation,
   deleteTicket as deleteTicketMutation,
   updateTicketCollection as updateTicketCollectionMutation,
   updateTicket as updateTicketMutation,
-  updateUser as updateUserMutation,
+  // updateUser as updateUserMutation,
 } from './graphql/mutations';
 import { SortType, UpdateTicketInput, Ticket, Visibility, CreateTicketInput } from './API';
 import { ticketsByTicketsID } from './graphql/queries';
@@ -57,9 +57,9 @@ const BY_TICKET_COLLECTION = /;* GraphQL *;/ `
   }
 `;
 */
-
+/*
 // Replaces stale getUser that asked for userTicketsId (which no longer exists).
-const GET_USER = /* GraphQL */ `
+const GET_USER = /\* GraphQL *\/ `
   query GetUser($id: ID!) {
     getUser(id: $id) {
       id
@@ -81,7 +81,7 @@ const GET_USER = /* GraphQL */ `
     }
   }
 `;
-
+*/
 // Minimal shape for bootstrap to avoid non-null fields
 const GET_USER_LITE = /* GraphQL */ `
   query GetUserLite($id: ID!) {
@@ -102,6 +102,35 @@ const GET_TICKET_COLLECTION = /* GraphQL */ `
       visibility
       sort
       ticketCount
+    }
+  }
+`;
+
+// Only return scalar fields; do NOT select `Tickets` here
+const CREATE_USER_LITE = /* GraphQL */ `
+  mutation CreateUserLite($input: CreateUserInput!, $condition: ModelUserConditionInput) {
+    createUser(input: $input, condition: $condition) {
+      id
+      owner
+      username
+      isProfilePublic
+      ticketsCollectionId
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+const UPDATE_USER_LITE = /* GraphQL */ `
+  mutation UpdateUserLite($input: UpdateUserInput!, $condition: ModelUserConditionInput) {
+    updateUser(input: $input, condition: $condition) {
+      id
+      owner
+      username
+      isProfilePublic
+      ticketsCollectionId
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -147,7 +176,7 @@ export async function fetchUser(userId: string) {
   try {
     const res = await client.graphql({
       authMode: 'userPool',
-      query: GET_USER,
+      query: GET_USER_LITE,
       variables: { id: userId },
     });
     if (!('data' in res)) {
@@ -241,6 +270,7 @@ export async function addTicketCollection(): Promise<string | null> {
 }
 
 /** Create a User row and link to an existing/new collection */
+/*
 export async function addUser(username: string, existingCollectionId?: string) {
   try {
     const owner = await currentSub();
@@ -268,6 +298,7 @@ export async function addUser(username: string, existingCollectionId?: string) {
     return null;
   }
 }
+*/
 
 export async function editTicket(input: UpdateTicketInput): Promise<Ticket> {
   const res = await client.graphql({
@@ -281,7 +312,7 @@ export async function editTicket(input: UpdateTicketInput): Promise<Ticket> {
 export async function linkUserToCollection(userId: string, collectionId: string) {
   const res = await client.graphql({
     authMode: 'userPool',
-    query: updateUserMutation,
+    query: UPDATE_USER_LITE,
     variables: { input: { id: userId, ticketsCollectionId: collectionId } },
   });
   if (!('data' in res)) throw new Error('Unexpected subscription result');
@@ -303,8 +334,13 @@ export async function ensureUser(username: string) {
   try {
     const res = await client.graphql({
       authMode: 'userPool',
-      query: createUserMutation,
-      variables: { input: { id: owner, owner, username, isProfilePublic: false } },
+      query: CREATE_USER_LITE,
+      variables: { input: { 
+        id: owner, 
+        owner, 
+        username, 
+        isProfilePublic: false 
+      } },
     });
     if (!('data' in res)) throw new Error('Unexpected subscription result');
   } catch (e: any) {
