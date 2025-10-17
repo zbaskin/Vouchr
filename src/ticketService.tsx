@@ -13,7 +13,7 @@ import {
   // updateUser as updateUserMutation,
 } from './graphql/mutations';
 import { SortType, UpdateTicketInput, Ticket, Visibility, CreateTicketInput } from './API';
-import { ticketsByTicketsID } from './graphql/queries';
+import { getTicketCollection, ticketsByTicketsID } from './graphql/queries';
 
 const client = generateClient();
 
@@ -207,7 +207,7 @@ export async function addTicket(t: CreateTicketInput) {
   try {
     const owner = await currentSub();
     const now = Math.floor(Date.now() / 1000);
-    await client.graphql({
+    const res = await client.graphql({
       authMode: 'userPool',
       query: createTicketMutation,
       variables: {
@@ -227,6 +227,8 @@ export async function addTicket(t: CreateTicketInput) {
         },
       },
     });
+    await adjustTicketCount(t.ticketsID!, +1);
+    return res.data.createTicket!;
   } catch (err) {
     console.error('Error adding ticket:', err);
   }
@@ -234,11 +236,13 @@ export async function addTicket(t: CreateTicketInput) {
 
 export async function removeTicket(ticketID: string) {
   try {
-    await client.graphql({
+    const res = await client.graphql({
       authMode: 'userPool',
       query: deleteTicketMutation,
       variables: { input: { id: ticketID } },
     });
+    const t = res.data.deleteTicket.ticketsID;
+    await adjustTicketCount(t, -1);
   } catch (err) {
     console.error('Error removing ticket:', err);
   }
@@ -367,4 +371,47 @@ export async function createCollection(): Promise<string> {
   });
   if (!('data' in res)) throw new Error('Unexpected subscription result');
   return res.data.createTicketCollection!.id!;
+}
+
+export async function adjustTicketCount(
+  collectionId: string,
+  delta: number,
+  maxRetries = 3
+): Promise< number | null > {
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    const read = await client.graphql({
+      authMode: 'userPool',
+      query: getTicketCollection,
+      variables: { id: collectionId },
+    });
+    if (!('data' in read)) throw new Error('Unexpected subscription result');
+
+    const curr = read.data.getTicketCollection;
+    if (!curr) return null;
+
+    const next = Math.max(0, (curr.ticketCount ?? 0) + delta);
+
+    try {
+      const write = await client.graphql({
+        authMode: 'userPool',
+        query: updateTicketCollectionMutation,
+        variables: {
+          input: {
+            id: collectionId,
+            ticketCount: next,
+          },
+        },
+      });
+      if (!('data' in write)) throw new Error('Unexpected subscription result');
+      return write.data.updateTicketCollection?.ticketCount ?? next;
+    } catch (e: any) {
+      const msg = String(e?.errors?.[0]?.message ?? e?.message ?? e);
+      if (msg.includes('Conflict') || msg.includes('ConditionalCheckFailed')) {
+        await new Promise(r => setTimeout(r, 50 + attempt * 100));
+        continue;
+      }
+      throw e;
+    }
+  }
+  return null;
 }
