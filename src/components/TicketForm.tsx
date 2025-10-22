@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import DatePicker from "react-datepicker";
-import { type CreateTicketInput, EventType } from "../API";
+import { type CreateTicketInput, EventType, Visibility } from "../API";
 import "react-datepicker/dist/react-datepicker.css";
 import "./TicketForm.css";
 import { useOutletContext } from "react-router-dom";
 import type { AppOutletContext } from "../AppShell";
 
-const initialState: CreateTicketInput = { name: '', type: EventType.MOVIE, ticketsID: '', timeCreated: Date.now() };
+const initialState: CreateTicketInput = { owner: '', name: '', type: EventType.MOVIE, ticketsID: '', timeCreated: Date.now(), visibility: Visibility.PRIVATE };
 
 const TicketForm: React.FC = () => { 
     const { ticketCollection, handleAddTicket } = useOutletContext<AppOutletContext>();
