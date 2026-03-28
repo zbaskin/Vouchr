@@ -1,4 +1,3 @@
-import "./Navbar.css";
 import { useEffect, useState, useCallback } from "react";
 import {
   createSearchParams,
@@ -74,23 +73,28 @@ export default function Navbar({
   }, [open, close]);
 
   return (
-    <div className="navbarContainer">
-      <div className="logo">
-        <NavLink to={{ pathname: "/app/collection" }} end className="logoLink">
-          <img className="logoImage" src={logoUrlGold} alt="Vouchr logo" />
-          {!isMobile && <p className="logoText">Vouchr</p>}
+    // navbarContainer: full-bleed, centered content, bg-primary, min-h-16
+    <div className="bg-primary min-h-[64px] flex items-center justify-between w-screen ml-[calc(50%-50vw)] mr-[calc(50%-50vw)] px-5 lg:px-[calc((100vw-1000px)/2)]">
+      {/* logo */}
+      <div className="flex items-center gap-2.5 select-none">
+        <NavLink to={{ pathname: "/app/collection" }} end className="inline-flex items-center gap-3 no-underline">
+          <img className="h-12 w-auto max-[480px]:h-10" src={logoUrlGold} alt="Vouchr logo" />
+          {!isMobile && (
+            <p className="font-['Arista'] text-secondary-content text-[2rem] m-0">Vouchr</p>
+          )}
         </NavLink>
       </div>
 
       {/* Desktop */}
       {!isMobile ? (
-        <ul className="navbarLinks" role="menubar">
-          <li role="none" className="link">
+        <ul className="list-none m-0 p-0 inline-flex items-center gap-1.5" role="menubar">
+          <li role="none" className="inline-flex items-center">
             <NavLink
               to={{ pathname: "/app/collection", search: qs }}
               end
               className={({ isActive }) =>
-                isActive ? "navLink active" : "navLink"
+                "inline-flex items-center gap-2 px-3 py-2 no-underline text-[0.95rem] font-semibold text-secondary-content hover:underline focus:underline" +
+                (isActive ? " underline" : "")
               }
             >
               Collection
@@ -98,11 +102,12 @@ export default function Navbar({
           </li>
 
           {!hideAddTicket && (
-            <li role="none" className="link">
+            <li role="none" className="inline-flex items-center">
               <NavLink
                 to={{ pathname: "/app/new" }}
                 className={({ isActive }) =>
-                  isActive ? "navLink active" : "navLink"
+                  "inline-flex items-center gap-2 px-3 py-2 no-underline text-[0.95rem] font-semibold text-secondary-content hover:underline focus:underline" +
+                  (isActive ? " underline" : "")
                 }
               >
                 Add Ticket
@@ -111,15 +116,20 @@ export default function Navbar({
           )}
 
           {!hideSort && (
-            <li role="none" className="link sortGroup">
-              <label className="navLink sortLabel" htmlFor="sortSel">
+            <li role="none" className="inline-flex items-center relative">
+              {/* sortLabel: navLink style + ::after arrow indicator */}
+              <label
+                className="inline-flex items-center gap-2 px-3 py-2 text-[0.95rem] font-semibold text-secondary-content cursor-pointer after:content-['_▾'] after:text-[0.85em] after:opacity-90"
+                htmlFor="sortSel"
+              >
                 Sort
               </label>
+              {/* sortSelect: invisible overlay over the label */}
               <select
                 id="sortSel"
                 value={sortType}
                 onChange={(e) => onChangeSort(e.target.value as SortType)}
-                className="sortSelect"
+                className="absolute inset-0 w-full h-full opacity-0 appearance-none border-0 bg-transparent cursor-pointer z-[1]"
               >
                 <option value={SortType.TIME_CREATED}>Newest</option>
                 <option value={SortType.EVENT_DATE}>Event Date</option>
@@ -128,20 +138,21 @@ export default function Navbar({
             </li>
           )}
 
-          <li role="none" className="link">
+          <li role="none" className="inline-flex items-center">
             <NavLink
               to={{ pathname: "/app/settings" }}
               className={({ isActive }) =>
-                isActive ? "navLink active" : "navLink"
+                "inline-flex items-center gap-2 px-3 py-2 no-underline text-[0.95rem] font-semibold text-secondary-content hover:underline focus:underline" +
+                (isActive ? " underline" : "")
               }
             >
               Settings
             </NavLink>
           </li>
-          <li role="none" className="link">
+          <li role="none" className="inline-flex items-center">
             <button
               type="button"
-              className="navLink asButton signOutButton"
+              className="inline-flex items-center gap-2 px-3 py-2 text-[0.95rem] font-semibold text-secondary-content bg-transparent border-0 cursor-pointer hover:underline focus:underline"
               onClick={onSignOut}
               disabled={!onSignOut}
             >
@@ -154,22 +165,22 @@ export default function Navbar({
         <>
           <button
             type="button"
-            className="iconButton"
+            className="border-0 bg-transparent p-1.5 cursor-pointer"
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
             aria-controls="mobile-menu"
             onClick={toggle}
           >
             {open ? (
-              <CloseIcon className="menuIcon red" />
+              <CloseIcon className="h-7 w-7 text-secondary-content" />
             ) : (
-              <MenuIcon className="menuIcon gold" />
+              <MenuIcon className="h-7 w-7 text-secondary-content" />
             )}
           </button>
 
           {open && (
             <div
-              className="mobileMenuBackdrop"
+              className="fixed inset-0 bg-black/[.42] z-50 grid grid-cols-[1fr_auto]"
               onClick={close}
               role="presentation"
             >
@@ -178,26 +189,26 @@ export default function Navbar({
                 role="dialog"
                 aria-modal="true"
                 aria-label="Navigation"
-                className="mobileMenuPanel"
+                className="h-dvh w-[min(88vw,360px)] bg-background text-primary p-3.5 shadow-[-8px_0_24px_rgba(0,0,0,0.35)] overflow-y-auto"
                 onClick={(e) => e.stopPropagation()}
               >
-                <div className="mobileHeader">
-                  <img className="mobileLogo" src={logoUrlRed} alt="" />
+                <div className="flex items-center justify-between gap-2 px-1 py-1 pb-2.5 border-b border-border">
+                  <img className="h-7 w-auto" src={logoUrlRed} alt="" />
                   <button
-                    className="iconButton"
+                    className="border-0 bg-transparent p-1.5 cursor-pointer"
                     aria-label="Close menu"
                     onClick={close}
                   >
-                    <CloseIcon className="menuIcon" />
+                    <CloseIcon className="h-7 w-7" />
                   </button>
                 </div>
 
-                <ul className="mobileList">
+                <ul className="list-none py-3 px-0 m-0 grid gap-1.5">
                   <li>
                     <NavLink
                       to={{ pathname: "/app/collection", search: qs }}
                       end
-                      className="mobileLink"
+                      className="inline-flex items-center gap-2.5 w-full px-2 py-2.5 no-underline text-[inherit] font-semibold rounded-lg hover:bg-white/[.08] focus:bg-white/[.08]"
                       onClick={close}
                     >
                       Collection
@@ -208,22 +219,22 @@ export default function Navbar({
                     <li>
                       <NavLink
                         to={{ pathname: "/app/new" }}
-                        className="mobileLink"
+                        className="inline-flex items-center gap-2.5 w-full px-2 py-2.5 no-underline text-[inherit] font-semibold rounded-lg hover:bg-white/[.08] focus:bg-white/[.08]"
                         onClick={close}
                       >
-                        <PlusIcon className="mobileIcon" /> Add Ticket
+                        <PlusIcon className="h-[18px] w-[18px]" /> Add Ticket
                       </NavLink>
                     </li>
                   )}
 
                   {!hideSort && (
-                    <li className="mobileSelectRow">
-                      <label htmlFor="m-sortSel" className="mobileSelectLabel">
+                    <li className="grid grid-cols-1 gap-1.5 py-1.5 px-0.5">
+                      <label htmlFor="m-sortSel" className="text-[0.85rem] opacity-90">
                         Sort by
                       </label>
                       <select
                         id="m-sortSel"
-                        className="mobileSelect"
+                        className="w-full h-11 rounded-[10px] px-3 border border-border bg-[var(--surface,#111)] text-[inherit]"
                         value={sortType}
                         onChange={(e) =>
                           onChangeSort(e.target.value as SortType)
@@ -239,24 +250,24 @@ export default function Navbar({
                   <li>
                     <NavLink
                       to={{ pathname: "/app/settings" }}
-                      className="mobileLink"
+                      className="inline-flex items-center gap-2.5 w-full px-2 py-2.5 no-underline text-[inherit] font-semibold rounded-lg hover:bg-white/[.08] focus:bg-white/[.08]"
                       onClick={close}
                     >
-                      <SettingsIcon className="mobileIcon" /> Settings
+                      <SettingsIcon className="h-[18px] w-[18px]" /> Settings
                     </NavLink>
                   </li>
                 </ul>
 
-                <div className="mobileFooter">
+                <div className="mt-2 pt-2 border-t border-border">
                   <button
                     type="button"
-                    className="mobileLink asButton"
+                    className="inline-flex items-center gap-2.5 w-full px-2 py-2.5 no-underline text-[inherit] font-semibold rounded-lg bg-transparent border-0 cursor-pointer hover:bg-white/[.08] focus:bg-white/[.08]"
                     onClick={() => {
                       close();
                       onSignOut?.();
                     }}
                   >
-                    <LogOutIcon className="mobileIcon" /> Sign out
+                    <LogOutIcon className="h-[18px] w-[18px]" /> Sign out
                   </button>
                 </div>
               </div>

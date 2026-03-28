@@ -1,5 +1,4 @@
 // AppShell.tsx
-import "./AppShell.css";
 import { useEffect, useRef, useState } from "react";
 import { Outlet, useLocation, useSearchParams } from "react-router-dom";
 import { signOut as amplifySignOut } from "aws-amplify/auth";
@@ -228,7 +227,7 @@ const AppShell: React.FC<AppShellProps> = ({ user }) => {
   };
 
   if (!authReady) {
-    return <main className="appBody" />;
+    return <main className="bg-background min-h-screen" />;
   }
 
   return (
@@ -245,7 +244,7 @@ const AppShell: React.FC<AppShellProps> = ({ user }) => {
         }}
         onSignOut={handleSignOut}
       />
-      <main className="appBody">
+      <main className="bg-background min-h-screen">
         <Outlet
           context={
             {

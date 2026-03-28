@@ -51,7 +51,7 @@ export default function Settings() {
   return (
     <div className="mx-auto w-full max-w-3xl px-4 py-6">
       <h1 className="text-2xl font-semibold">Settings</h1>
-      <p className="mt-1 text-sm text-gray-500">Quick preferences for your collection.</p>
+      <p className="mt-1 text-sm text-copy-light">Quick preferences for your collection.</p>
 
       {!ticketCollection ? (
         <div className="mt-6 rounded border p-4 text-sm">
@@ -63,11 +63,11 @@ export default function Settings() {
           <section className="rounded border">
             <header className="border-b px-4 py-3">
               <h2 className="text-base font-medium">Sort preference</h2>
-              <p className="text-xs text-gray-500">Choose how your tickets are ordered.</p>
+              <p className="text-xs text-copy-light">Choose how your tickets are ordered.</p>
             </header>
             <div className="p-4 space-y-3">
               {loading ? (
-                <div className="h-4 w-40 animate-pulse rounded bg-gray-200" />
+                <div className="h-4 w-40 animate-pulse rounded bg-border" />
               ) : (
                 <>
                   <Radio
@@ -98,7 +98,7 @@ export default function Settings() {
                     <button
                       onClick={handleSaveSort}
                       disabled={saving}
-                      className="inline-flex items-center rounded-md bg-black px-4 py-2 text-sm font-medium text-black disabled:opacity-50"
+                      className="inline-flex items-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-secondary-content disabled:opacity-50"
                     >
                       {saving ? "Saving…" : "Save preference"}
                     </button>
@@ -128,7 +128,7 @@ function Radio(props: {
       <input id={props.id} type="radio" name={props.name} checked={props.checked} onChange={props.onChange} className="mt-1" />
       <div>
         <div className="text-sm font-medium">{props.label}</div>
-        {props.hint ? <div className="text-xs text-gray-500">{props.hint}</div> : null}
+        {props.hint ? <div className="text-xs text-copy-light">{props.hint}</div> : null}
       </div>
     </label>
   );
