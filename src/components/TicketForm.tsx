@@ -6,7 +6,7 @@ import { useOutletContext } from "react-router-dom";
 import type { AppOutletContext } from "../AppShell";
 import { nowInSeconds } from "../utils/timestamp";
 
-const initialState: CreateTicketInput = { owner: '', name: '', type: EventType.MOVIE, ticketsID: '', timeCreated: nowInSeconds(), visibility: Visibility.PRIVATE };
+export const initialState: CreateTicketInput = { owner: '', name: '', type: EventType.MOVIE, ticketsID: '', timeCreated: 0, visibility: Visibility.PRIVATE };
 
 const TicketForm: React.FC = () => {
     const { ticketCollection, handleAddTicket } = useOutletContext<AppOutletContext>();

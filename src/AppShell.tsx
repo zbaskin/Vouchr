@@ -45,7 +45,7 @@ type AppShellProps = {
   user?: AuthUser;
 };
 
-const normalizeSort = (v?: string | null): SortType | null => {
+export const normalizeSort = (v?: string | null): SortType | null => {
   switch ((v ?? "").toUpperCase()) {
     case "ALPHABETICAL": return SortType.ALPHABETICAL;
     case "EVENT_DATE":   return SortType.EVENT_DATE;

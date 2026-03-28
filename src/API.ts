@@ -128,8 +128,8 @@ export enum Visibility {
 
 export enum SortType {
   ALPHABETICAL = "ALPHABETICAL",
-  EVENT_TYPE = "EVENT_TYPE",
   EVENT_DATE = "EVENT_DATE",
+  EVENT_TYPE = "EVENT_TYPE",
   TIME_CREATED = "TIME_CREATED",
 }
 
