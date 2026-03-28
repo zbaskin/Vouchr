@@ -20,13 +20,13 @@ enum Visibility {
 type User
   @model
   @auth(rules: [
-    # Only the owner (the logged-in user) can mutate their own row
-    { allow: owner, ownerField: "owner", operations: [create, update, delete, read] },
+    # Only the owner (the logged-in user) can mutate and read their own row.
+    { allow: owner, ownerField: "owner", operations: [create, update, delete, read] }
 
-    # Optional: any signed-in user can read non-sensitive profile info
-    { allow: private, operations: [read] }
-
-    # (Do NOT add public read here unless you truly want public profiles)
+    # NOTE: The broad { allow: private, operations: [read] } rule was intentionally
+    # removed. It would let any authenticated user read any other user's profile,
+    # bypassing ownership. If public profiles are needed later, add a visibility
+    # check via a Lambda resolver or a per-record flag.
   ]) {
   id: ID!
   owner: String! @index(name: "byOwner", queryField: "userByOwner")  # Cognito sub
@@ -48,15 +48,18 @@ type User
 type TicketCollection
   @model
   @auth(rules: [
-    # Only owner can write
+    # Only the owner can create, read, update, and delete their own collection.
     { allow: owner, ownerField: "owner", operations: [create, update, delete, read] },
 
-    # Optional: let *signed-in* users read if collection is PUBLIC
-    # (This is coarse-grained. If you later want FOLLOWERS-only, we’ll move to a Lambda gate.)
-    { allow: private, operations: [read] },
-
-    # Optional: allow unauthenticated read for PUBLIC collections only (if you enabled IAM)
+    # Allow unauthenticated read for PUBLIC collections only (requires IAM to be enabled).
+    # This is intentional: it enables sharing public collection links without login.
     { allow: public, provider: iam, operations: [read] }
+
+    # REMOVED: { allow: private, operations: [read] }
+    # That rule let ANY authenticated Cognito user read ANY collection regardless
+    # of ownership. The visibility field was never enforced at the API layer as a
+    # result. Owner-only access is the correct default; coarse-grained sharing
+    # must be handled via a Lambda resolver with an explicit visibility check.
   ]) {
   id: ID!
   owner: String! @index(name: "collectionsByOwner", queryField: "collectionsByOwner")
@@ -75,14 +78,15 @@ type TicketCollection
 type Ticket
   @model
   @auth(rules: [
-    # Only owner can write (create/update/delete)
+    # Only the owner can create, read, update, and delete their own tickets.
     { allow: owner, ownerField: "owner", operations: [create, update, delete, read] },
 
-    # Optional: signed-in users can read if its parent collection is PUBLIC
-    { allow: private, operations: [read] },
-
-    # Optional: unauthenticated read (IAM) for PUBLIC collection content
+    # Allow unauthenticated read for PUBLIC collection content (requires IAM to be enabled).
     { allow: public, provider: iam, operations: [read] }
+
+    # REMOVED: { allow: private, operations: [read] }
+    # That rule let any authenticated user read any ticket, bypassing the visibility
+    # field. Owner-only access is the correct default.
   ]) {
   id: ID!
   owner: String! @index(name: "ticketsByOwner", queryField: "ticketsByOwner")
@@ -100,6 +104,6 @@ type Ticket
   # Foreign key to collection
   ticketsID: ID! @index(name: "byTicketCollection")
 
-  # Mirror the parent’s visibility at write-time (denormalized for fast reads)
+  # Mirror the parent's visibility at write-time (denormalized for fast reads)
   visibility: Visibility!
 }

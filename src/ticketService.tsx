@@ -14,6 +14,7 @@ import {
 } from './graphql/mutations';
 import { SortType, UpdateTicketInput, Ticket, Visibility, CreateTicketInput } from './API';
 import { getTicketCollection, ticketsByTicketsID } from './graphql/queries';
+import { computeNextCount } from './utils/ticketCount';
 
 const client = generateClient();
 
@@ -389,7 +390,7 @@ export async function adjustTicketCount(
     const curr = read.data.getTicketCollection;
     if (!curr) return null;
 
-    const next = Math.max(0, (curr.ticketCount ?? 0) + delta);
+    const next = computeNextCount(curr.ticketCount, delta);
 
     try {
       const write = await client.graphql({

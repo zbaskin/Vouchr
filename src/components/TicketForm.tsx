@@ -5,8 +5,9 @@ import "react-datepicker/dist/react-datepicker.css";
 import "./TicketForm.css";
 import { useOutletContext } from "react-router-dom";
 import type { AppOutletContext } from "../AppShell";
+import { nowInSeconds } from "../utils/timestamp";
 
-const initialState: CreateTicketInput = { owner: '', name: '', type: EventType.MOVIE, ticketsID: '', timeCreated: Date.now(), visibility: Visibility.PRIVATE };
+const initialState: CreateTicketInput = { owner: '', name: '', type: EventType.MOVIE, ticketsID: '', timeCreated: nowInSeconds(), visibility: Visibility.PRIVATE };
 
 const TicketForm: React.FC = () => { 
     const { ticketCollection, handleAddTicket } = useOutletContext<AppOutletContext>();
@@ -31,10 +32,10 @@ const TicketForm: React.FC = () => {
     const handleSubmit = () => {
         if (!formState.name) return;
         const [eventDate, eventTime] = parseDateTime();
-        const newTicket = { 
-            ...formState, 
-            ticketsID: ticketCollection as string ?? '', 
-            timeCreated: Date.now(),
+        const newTicket = {
+            ...formState,
+            ticketsID: ticketCollection as string ?? '',
+            timeCreated: nowInSeconds(),
             eventDate,
             eventTime
         };
