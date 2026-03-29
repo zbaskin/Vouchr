@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TicketObject from "./Ticket";
 import { useOutletContext } from "react-router-dom";
 import type { AppOutletContext } from "../AppShell";
@@ -8,6 +8,15 @@ const TicketCollection: React.FC = () => {
 
     const [page, setPage] = useState(1);
     const TICKETS_PER_PAGE = isMobile ? 8 : 15;
+
+    // Reset to page 1 whenever the ticket list grows or shrinks so that:
+    // - A newly added ticket is visible immediately (would otherwise be hidden
+    //   on a later page the user never navigated away from).
+    // - Deleting tickets never leaves the user on a now-nonexistent page
+    //   that renders an empty slice despite tickets existing on page 1.
+    useEffect(() => {
+        setPage(1);
+    }, [tickets.length]);
 
     const totalPages = Math.ceil(tickets.length / TICKETS_PER_PAGE);
 
@@ -29,8 +38,8 @@ const TicketCollection: React.FC = () => {
                             id={ticket.id || ""}
                             name={ticket.name}
                             venue={ticket.venue as string}
-                            eventDate={ticket.eventDate as string}
-                            eventTime={ticket.eventTime as string}
+                            eventDate={ticket.eventDate}
+                            eventTime={ticket.eventTime}
                             theater={ticket.theater as string}
                             seat={ticket.seat as string}
                             onRemove={handleRemoveTicket}

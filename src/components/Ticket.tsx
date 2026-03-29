@@ -6,20 +6,22 @@ type TicketProps = {
   id: string;
   name: string;
   venue: string;
-  eventDate: string;  // "YYYY-MM-DD"
-  eventTime: string;  // "HH:mm:ss" or "HH:mm"
+  eventDate?: string | null;  // "YYYY-MM-DD" — nullable in GraphQL schema
+  eventTime?: string | null;  // "HH:mm:ss" or "HH:mm" — nullable in GraphQL schema
   theater: string;
   seat: string;
   onRemove: (id: string) => void;
   onEdit?: (v: TicketEditValues) => Promise<void> | void;
 };
 
-const handleTicketDate = (date: string) => {
+export const handleTicketDate = (date: string | null | undefined): string => {
+  if (!date) return "";
   const [year, month, day] = date.split("-");
   return `${month}/${day}/${year}`;
 };
 
-const handleTicketTime = (time: string) => {
+export const handleTicketTime = (time: string | null | undefined): string => {
+  if (!time) return "";
   const t = time.substring(0, 5);
   const hour = parseInt(t.split(":")[0], 10);
   const minute = t.split(":")[1];
@@ -111,8 +113,8 @@ const Ticket: React.FC<TicketProps> = ({
     id,
     name,
     venue,
-    eventDate,
-    eventTime,
+    eventDate: eventDate ?? "",
+    eventTime: eventTime ?? "",
     theater,
     seat,
   };
