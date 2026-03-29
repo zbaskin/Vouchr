@@ -11,7 +11,6 @@
 
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import React from "react";
 
 // Mock react-router-dom so we can inject our own outlet context
 vi.mock("react-router-dom", async (importOriginal) => {

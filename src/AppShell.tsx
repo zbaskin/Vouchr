@@ -23,10 +23,8 @@ import {
   type Ticket,
   SortType,
 } from "./API";
-import { withAuthenticator, useAuthenticator } from "@aws-amplify/ui-react";
+import { useAuthenticator } from "@aws-amplify/ui-react";
 import "@aws-amplify/ui-react/styles.css";
-import { type AuthUser } from "aws-amplify/auth";
-import { type UseAuthenticator } from "@aws-amplify/ui-react-core";
 
 export type AppOutletContext = {
   tickets: (Ticket | CreateTicketInput)[];
@@ -38,11 +36,6 @@ export type AppOutletContext = {
   handleEditTicket: (t: {
     id: string; name: string; venue: string; eventDate: string; eventTime: string; theater: string; seat: string;
   }) => Promise<void>;
-};
-
-type AppShellProps = {
-  signOut?: UseAuthenticator["signOut"];
-  user?: AuthUser;
 };
 
 export const normalizeSort = (v?: string | null): SortType | null => {
@@ -98,7 +91,7 @@ function useMediaQuery(query: string) {
   return matches;
 }
 
-const AppShell: React.FC<AppShellProps> = ({ user }) => {
+const AppShell: React.FC = () => {
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -110,7 +103,7 @@ const AppShell: React.FC<AppShellProps> = ({ user }) => {
   const [ticketCollectionId, setTicketCollectionId] = useState<string | undefined>();
   const bootRef = useRef(false);
 
-  const { authStatus } = useAuthenticator();
+  const { authStatus, user } = useAuthenticator((ctx) => [ctx.authStatus, ctx.user]);
   const authReady = authStatus === "authenticated" && !!user;
 
   const isMobile = useMediaQuery("(max-width: 499px)");
@@ -268,4 +261,4 @@ const AppShell: React.FC<AppShellProps> = ({ user }) => {
   );
 };
 
-export default withAuthenticator(AppShell);
+export default AppShell;
