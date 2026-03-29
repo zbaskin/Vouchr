@@ -138,6 +138,10 @@ const UPDATE_USER_LITE = /* GraphQL */ `
 
 /* ----------------------------- READS ----------------------------- */
 
+export function filterTicketItems(items: Array<unknown> | null | undefined): unknown[] {
+  return (items ?? []).filter(Boolean);
+}
+
 export async function fetchTickets(ticketCollectionId: string) {
   try {
     const mode = await readMode(false);
@@ -149,7 +153,7 @@ export async function fetchTickets(ticketCollectionId: string) {
     if (!('data' in res)) {
       throw new Error('Unexpected subscription result for a query');
     }
-    return res.data.ticketsByTicketsID?.items as Ticket[];
+    return filterTicketItems(res.data.ticketsByTicketsID?.items) as Ticket[];
   } catch (err) {
     console.error('Error fetching tickets:', err);
     return [];
