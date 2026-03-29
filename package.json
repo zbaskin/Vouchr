@@ -11,7 +11,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "seed": "node scripts/seed-tickets.mjs"
+    "seed": "node scripts/seed-tickets.mjs",
+    "clear": "node scripts/clear-tickets.mjs"
   },
   "dependencies": {
     "@aws-amplify/core": "^6.9.2",
