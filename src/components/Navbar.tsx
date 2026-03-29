@@ -180,9 +180,10 @@ export default function Navbar({
 
           {open && (
             <div
-              className="fixed inset-0 bg-black/[.42] z-50 grid grid-cols-[1fr_auto]"
+              className="fixed inset-0 bg-black/[.42] z-50 flex justify-end"
               onClick={close}
               role="presentation"
+              data-testid="mobile-menu-overlay"
             >
               <div
                 id="mobile-menu"
@@ -261,7 +262,7 @@ export default function Navbar({
                 <div className="mt-2 pt-2 border-t border-border">
                   <button
                     type="button"
-                    className="inline-flex items-center gap-2.5 w-full px-2 py-2.5 no-underline text-[inherit] font-semibold rounded-lg bg-transparent border-0 cursor-pointer hover:bg-white/[.08] focus:bg-white/[.08]"
+                    className="inline-flex items-center gap-2.5 w-full px-2 py-2.5 no-underline text-[inherit] font-semibold! rounded-lg bg-transparent border-0 cursor-pointer hover:bg-white/[.08] focus:bg-white/[.08]"
                     onClick={() => {
                       close();
                       onSignOut?.();
