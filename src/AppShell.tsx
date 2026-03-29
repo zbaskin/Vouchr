@@ -190,21 +190,26 @@ const AppShell: React.FC = () => {
 
   const handleEditTicket: AppOutletContext["handleEditTicket"] = async (u) => {
     if (!u?.id) return;
-    await editTicket({
-      id: u.id,
-      name: u.name,
-      venue: u.venue,
-      eventDate: u.eventDate,
-      eventTime: u.eventTime.length === 5 ? `${u.eventTime}:00` : u.eventTime,
-      theater: u.theater,
-      seat: u.seat,
-    });
+    try {
+      await editTicket({
+        id: u.id,
+        name: u.name,
+        venue: u.venue,
+        eventDate: u.eventDate,
+        eventTime: u.eventTime.length === 5 ? `${u.eventTime}:00` : u.eventTime,
+        theater: u.theater,
+        seat: u.seat,
+      });
 
-    if (ticketCollectionId) {
-      const raw = await fetchTickets(ticketCollectionId);
-      setTickets(sortTickets(raw, sortType));
-    } else {
-      setTickets(prev => (prev as Ticket[]).map(t => (t.id === u.id ? ({ ...t, ...u }) as Ticket : t)));
+      if (ticketCollectionId) {
+        const raw = await fetchTickets(ticketCollectionId);
+        setTickets(sortTickets(raw, sortType));
+      } else {
+        setTickets(prev => (prev as Ticket[]).map(t => (t.id === u.id ? ({ ...t, ...u }) as Ticket : t)));
+      }
+    } catch (err) {
+      console.error('Error editing ticket:', err);
+      throw err;
     }
   };
 
@@ -212,8 +217,13 @@ const AppShell: React.FC = () => {
     if (!ticketID) return;
     const ok = window.confirm("Delete this ticket? This cannot be undone.");
     if (!ok) return;
-    await removeTicket(ticketID);
-    setTickets(prev => (prev as Ticket[]).filter(t => t.id !== ticketID));
+    try {
+      await removeTicket(ticketID);
+      setTickets(prev => (prev as Ticket[]).filter(t => t.id !== ticketID));
+    } catch (err) {
+      console.error('Error removing ticket:', err);
+      window.alert("Failed to delete the ticket. Please try again.");
+    }
   };
 
   const handleSignOut = async () => {

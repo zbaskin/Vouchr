@@ -236,17 +236,13 @@ export async function addTicket(t: CreateTicketInput) {
 }
 
 export async function removeTicket(ticketID: string) {
-  try {
-    const res = await client.graphql({
-      authMode: 'userPool',
-      query: deleteTicketMutation,
-      variables: { input: { id: ticketID } },
-    });
-    const t = res.data.deleteTicket.ticketsID;
-    await adjustTicketCount(t, -1);
-  } catch (err) {
-    console.error('Error removing ticket:', err);
-  }
+  const res = await client.graphql({
+    authMode: 'userPool',
+    query: deleteTicketMutation,
+    variables: { input: { id: ticketID } },
+  });
+  const t = res.data.deleteTicket.ticketsID;
+  await adjustTicketCount(t, -1);
 }
 
 /** Create a TicketCollection for the current user.
