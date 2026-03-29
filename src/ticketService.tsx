@@ -209,34 +209,30 @@ export async function updateSortType(ticketCollectionId: string, sortType: SortT
 }
 
 export async function addTicket(t: CreateTicketInput) {
-  try {
-    const owner = await currentSub();
-    const now = Math.floor(Date.now() / 1000);
-    const res = await client.graphql({
-      authMode: 'userPool',
-      query: createTicketMutation,
-      variables: {
-        input: {
-          owner,                            // REQUIRED by @auth
-          ticketsID: t.ticketsID,           // REQUIRED FK
-          name: t.name,                     // REQUIRED
-          type: t.type,                     // REQUIRED
-          venue: t.venue ?? null,
-          theater: t.theater ?? null,
-          seat: t.seat ?? null,
-          city: t.city ?? null,
-          eventDate: t.eventDate ?? null,
-          eventTime: t.eventTime ?? null,
-          timeCreated: t.timeCreated ?? now,     // REQUIRED (non-null in schema)
-          visibility: t.visibility ?? Visibility.PRIVATE, // enum
-        },
+  const owner = await currentSub();
+  const now = Math.floor(Date.now() / 1000);
+  const res = await client.graphql({
+    authMode: 'userPool',
+    query: createTicketMutation,
+    variables: {
+      input: {
+        owner,                            // REQUIRED by @auth
+        ticketsID: t.ticketsID,           // REQUIRED FK
+        name: t.name,                     // REQUIRED
+        type: t.type,                     // REQUIRED
+        venue: t.venue ?? null,
+        theater: t.theater ?? null,
+        seat: t.seat ?? null,
+        city: t.city ?? null,
+        eventDate: t.eventDate ?? null,
+        eventTime: t.eventTime ?? null,
+        timeCreated: t.timeCreated ?? now,     // REQUIRED (non-null in schema)
+        visibility: t.visibility ?? Visibility.PRIVATE, // enum
       },
-    });
-    await adjustTicketCount(t.ticketsID!, +1);
-    return res.data.createTicket!;
-  } catch (err) {
-    console.error('Error adding ticket:', err);
-  }
+    },
+  });
+  await adjustTicketCount(t.ticketsID!, +1);
+  return res.data.createTicket!;
 }
 
 export async function removeTicket(ticketID: string) {

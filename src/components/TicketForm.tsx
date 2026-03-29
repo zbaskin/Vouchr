@@ -11,6 +11,8 @@ export const initialState: CreateTicketInput = { owner: '', name: '', type: Even
 const TicketForm: React.FC = () => {
     const { ticketCollection, handleAddTicket } = useOutletContext<AppOutletContext>();
     const [formState, setFormState] = useState<CreateTicketInput>(initialState);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submitError, setSubmitError] = useState<string | null>(null);
 
     const [eventDateTime, setEventDateTime] = useState(new Date());
 
@@ -28,8 +30,8 @@ const TicketForm: React.FC = () => {
         return [dateString, timeString];
     };
 
-    const handleSubmit = () => {
-        if (!formState.name) return;
+    const handleSubmit = async () => {
+        if (!formState.name || isSubmitting) return;
         const [eventDate, eventTime] = parseDateTime();
         const newTicket = {
             ...formState,
@@ -38,8 +40,17 @@ const TicketForm: React.FC = () => {
             eventDate,
             eventTime
         };
-        setFormState(initialState); // Reset form
-        handleAddTicket(newTicket);
+        setIsSubmitting(true);
+        setSubmitError(null);
+        try {
+            await handleAddTicket(newTicket);
+            setFormState(initialState);
+            setEventDateTime(new Date());
+        } catch {
+            setSubmitError("Failed to save ticket. Please try again.");
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -60,7 +71,7 @@ const TicketForm: React.FC = () => {
                                 className="w-full box-border px-3 py-2.5 border-[1.5px] border-border rounded-[10px] bg-white font-[inherit] text-copy outline-none transition-[border-color,box-shadow] duration-150 ease focus:border-primary focus:shadow-[0_0_0_3px_rgba(128,22,22,.15)]"
                                 placeholder="e.g., Dune: Part Two"
                                 value={formState.name}
-                                onChange={(e) => setFormState({ ...formState, name: e.target.value })}
+                                onChange={(e) => { setSubmitError(null); setFormState({ ...formState, name: e.target.value }); }}
                                 required
                             />
                         </div>
@@ -136,14 +147,20 @@ const TicketForm: React.FC = () => {
                     </div>
                 </div>
 
+                {submitError && (
+                    <div role="alert" className="mx-5 mt-2 rounded-lg border border-red-300 bg-red-50 px-4 py-2.5 text-sm text-red-700">
+                        {submitError}
+                    </div>
+                )}
+
                 <footer className="flex gap-2.5 px-5 pb-5 pt-2.5 flex-wrap">
                     <button
                         type="button"
                         className="appearance-none border-0 rounded-xl px-3.5 py-2.5 font-[inherit] cursor-pointer transition-[transform,box-shadow,background-color] duration-[40ms,150ms,200ms] ease bg-primary text-secondary-content shadow-[0_6px_16px_rgba(128,22,22,.25)] hover:-translate-y-px disabled:opacity-50"
                         onClick={handleSubmit}
-                        disabled={!formState.name?.trim()}
+                        disabled={!formState.name?.trim() || isSubmitting}
                     >
-                        Add Ticket
+                        {isSubmitting ? "Saving…" : "Add Ticket"}
                     </button>
 
                     <button

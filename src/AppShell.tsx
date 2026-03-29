@@ -185,9 +185,14 @@ const AppShell: React.FC<AppShellProps> = ({ user }) => {
   const handleAddTicket = async (newTicket: CreateTicketInput) => {
     if (!newTicket.name || !ticketCollectionId) return;
     newTicket = { ...newTicket, ticketsID: ticketCollectionId };
-    await addTicket(newTicket);
-    const raw = await fetchTickets(ticketCollectionId);
-    setTickets(sortTickets(raw, sortType));
+    try {
+      await addTicket(newTicket);
+      const raw = await fetchTickets(ticketCollectionId);
+      setTickets(sortTickets(raw, sortType));
+    } catch (err) {
+      console.error('Error adding ticket:', err);
+      throw err;
+    }
   };
 
   const handleEditTicket: AppOutletContext["handleEditTicket"] = async (u) => {
