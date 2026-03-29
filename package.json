@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "seed": "node scripts/seed-tickets.mjs"
   },
   "dependencies": {
     "@aws-amplify/core": "^6.9.2",
