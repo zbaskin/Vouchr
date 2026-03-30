@@ -231,8 +231,13 @@ export async function addTicket(t: CreateTicketInput) {
       },
     },
   });
-  await adjustTicketCount(t.ticketsID!, +1);
-  return res.data.createTicket!;
+  const created = res.data.createTicket!;
+  try {
+    await adjustTicketCount(t.ticketsID!, +1);
+  } catch (err) {
+    console.error('Warning: ticket created but ticketCount sync failed (non-fatal):', err);
+  }
+  return created;
 }
 
 export async function removeTicket(ticketID: string) {
@@ -241,8 +246,13 @@ export async function removeTicket(ticketID: string) {
     query: deleteTicketMutation,
     variables: { input: { id: ticketID } },
   });
-  const t = res.data.deleteTicket.ticketsID;
-  await adjustTicketCount(t, -1);
+  const t = res.data?.deleteTicket?.ticketsID;
+  if (!t) return;
+  try {
+    await adjustTicketCount(t, -1);
+  } catch (err) {
+    console.error('Warning: ticket deleted but ticketCount sync failed (non-fatal):', err);
+  }
 }
 
 /** Create a TicketCollection for the current user.
