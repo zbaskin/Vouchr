@@ -29,7 +29,10 @@ export default function TicketEdit({ open, initial, onCancel, onSave }: Props) {
   const onSubmit: React.FormEventHandler = async (e) => {
     e.preventDefault();
     if (!v.name.trim()) return;
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(v.eventDate)) return;
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(v.eventDate)) {
+      setSaveError("Please enter a valid event date.");
+      return;
+    }
     setIsSubmitting(true);
     setSaveError(null);
     try {
