@@ -120,6 +120,7 @@ const AppShell: React.FC = () => {
 
   // ✅ keep the real collection id from the DB, not the user's sub
   const [ticketCollectionId, setTicketCollectionId] = useState<string | undefined>();
+  const [sortReady, setSortReady] = useState(false);
   const bootRef = useRef(false);
 
   const { authStatus, user } = useAuthenticator((ctx) => [ctx.authStatus, ctx.user]);
@@ -152,7 +153,6 @@ const AppShell: React.FC = () => {
   }, [authReady, user?.userId, user?.username]);
 
   // ✅ init sort from URL or server, once the collection id is known
-  const initializedSortRef = useRef(false);
   useEffect(() => {
     if (!authReady || !ticketCollectionId) return;
     (async () => {
@@ -161,7 +161,7 @@ const AppShell: React.FC = () => {
       if (urlSort) {
         setSortType(urlSort);
         updateSortType(ticketCollectionId, urlSort).catch(() => {});
-        initializedSortRef.current = true;
+        setSortReady(true);
         return;
       }
 
@@ -172,7 +172,7 @@ const AppShell: React.FC = () => {
       const sp = new URLSearchParams(location.search);
       sp.set("sort", String(effective));
       setSearchParams(sp, { replace: true });
-      initializedSortRef.current = true;
+      setSortReady(true);
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authReady, ticketCollectionId]);
@@ -181,7 +181,7 @@ const AppShell: React.FC = () => {
   useEffect(() => {
     let mounted = true;
     (async () => {
-      if (!authReady || !ticketCollectionId || !initializedSortRef.current) return;
+      if (!authReady || !ticketCollectionId || !sortReady) return;
       setIsLoading(true);
       const raw = await fetchTickets(ticketCollectionId);
       if (!mounted) return;
@@ -189,7 +189,7 @@ const AppShell: React.FC = () => {
       setIsLoading(false);
     })();
     return () => { mounted = false; };
-  }, [authReady, ticketCollectionId, sortType]);
+  }, [authReady, ticketCollectionId, sortType, sortReady]);
 
   /* ---------- actions ---------- */
 
