@@ -31,6 +31,8 @@ export type AppOutletContext = {
   isLoading: boolean;
   isMobile: boolean;
   ticketCollection?: string;
+  fetchError: string | null;
+  onRetryFetch: () => void;
   handleAddTicket: (t: CreateTicketInput) => Promise<void>;
   handleRemoveTicket: (id: string | null | undefined) => Promise<void>;
   handleEditTicket: (t: {
@@ -116,6 +118,8 @@ const AppShell: React.FC = () => {
 
   const [tickets, setTickets] = useState<Ticket[] | CreateTicketInput[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [fetchError, setFetchError] = useState<string | null>(null);
+  const [fetchRetry, setFetchRetry] = useState(0);
   const [sortType, setSortType] = useState<SortType>(SortType.TIME_CREATED);
 
   // ✅ keep the real collection id from the DB, not the user's sub
@@ -177,19 +181,28 @@ const AppShell: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authReady, ticketCollectionId]);
 
-  // ✅ fetch tickets whenever collection or sort changes (after sort initialized)
+  // ✅ fetch tickets whenever collection, sort, or fetchRetry changes (after sort initialized)
   useEffect(() => {
     let mounted = true;
     (async () => {
       if (!authReady || !ticketCollectionId || !sortReady) return;
       setIsLoading(true);
-      const raw = await fetchTickets(ticketCollectionId);
-      if (!mounted) return;
-      setTickets(sortTickets(raw, sortType));
-      setIsLoading(false);
+      setFetchError(null);
+      try {
+        const raw = await fetchTickets(ticketCollectionId);
+        if (!mounted) return;
+        setTickets(sortTickets(raw, sortType));
+      } catch (err) {
+        if (!mounted) return;
+        console.error('Error fetching tickets:', err);
+        setFetchError('Failed to load tickets. Please try again.');
+        // Preserve existing tickets — do not wipe the collection on error
+      } finally {
+        if (mounted) setIsLoading(false);
+      }
     })();
     return () => { mounted = false; };
-  }, [authReady, ticketCollectionId, sortType, sortReady]);
+  }, [authReady, ticketCollectionId, sortType, sortReady, fetchRetry]);
 
   /* ---------- actions ---------- */
 
@@ -197,38 +210,40 @@ const AppShell: React.FC = () => {
   const handleAddTicket = async (newTicket: CreateTicketInput) => {
     if (!newTicket.name || !ticketCollectionId) return;
     newTicket = { ...newTicket, ticketsID: ticketCollectionId };
+    await addTicket(newTicket); // throws on failure — propagates to TicketForm
+    // Refresh is best-effort; a failure here does not undo the successful add
     try {
-      await addTicket(newTicket);
       const raw = await fetchTickets(ticketCollectionId);
       setTickets(sortTickets(raw, sortType));
     } catch (err) {
-      console.error('Error adding ticket:', err);
-      throw err;
+      console.warn('Could not refresh tickets after add (non-fatal):', err);
+      handleRetryFetch();
     }
   };
 
   const handleEditTicket: AppOutletContext["handleEditTicket"] = async (u) => {
     if (!u?.id) return;
-    try {
-      await editTicket({
-        id: u.id,
-        name: u.name,
-        venue: u.venue,
-        eventDate: u.eventDate,
-        eventTime: u.eventTime.length === 5 ? `${u.eventTime}:00` : u.eventTime,
-        theater: u.theater,
-        seat: u.seat,
-      });
-
-      if (ticketCollectionId) {
+    await editTicket({
+      id: u.id,
+      name: u.name,
+      venue: u.venue,
+      eventDate: u.eventDate,
+      eventTime: u.eventTime.length === 5 ? `${u.eventTime}:00` : u.eventTime,
+      theater: u.theater,
+      seat: u.seat,
+    }); // throws on failure — propagates to TicketEdit
+    // Refresh is best-effort; a failure here does not undo the successful edit
+    if (ticketCollectionId) {
+      try {
         const raw = await fetchTickets(ticketCollectionId);
         setTickets(sortTickets(raw, sortType));
-      } else {
+      } catch (err) {
+        console.warn('Could not refresh tickets after edit (non-fatal):', err);
+        // Optimistically update in-place so the user sees the edit immediately
         setTickets(prev => (prev as Ticket[]).map(t => (t.id === u.id ? ({ ...t, ...u }) as Ticket : t)));
       }
-    } catch (err) {
-      console.error('Error editing ticket:', err);
-      throw err;
+    } else {
+      setTickets(prev => (prev as Ticket[]).map(t => (t.id === u.id ? ({ ...t, ...u }) as Ticket : t)));
     }
   };
 
@@ -244,6 +259,8 @@ const AppShell: React.FC = () => {
       window.alert("Failed to delete the ticket. Please try again.");
     }
   };
+
+  const handleRetryFetch = () => setFetchRetry(c => c + 1);
 
   const handleChangeSort = (next: SortType) => {
     const sp = new URLSearchParams(location.search);
@@ -280,6 +297,8 @@ const AppShell: React.FC = () => {
               tickets,
               isLoading,
               isMobile,
+              fetchError,
+              onRetryFetch: handleRetryFetch,
               handleAddTicket,
               handleEditTicket,
               handleRemoveTicket,
