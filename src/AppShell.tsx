@@ -48,19 +48,37 @@ export const normalizeSort = (v?: string | null): SortType | null => {
   }
 };
 
-const sortTickets = (items: Ticket[], sort: SortType): Ticket[] => {
+/**
+ * Construct a Date in LOCAL time from a "YYYY-MM-DD" date string and an optional
+ * "HH:MM" or "HH:MM:SS" time string.
+ *
+ * Why not `new Date(dateStr)`?
+ * Date-only ISO strings (YYYY-MM-DD) are parsed as **UTC midnight** per spec.
+ * In timezones west of UTC (e.g. EST = UTC-5), UTC midnight falls on the
+ * *previous calendar day* locally, so `new Date("2024-03-15").getDate()` returns
+ * 14 in EST. Subsequent `.setHours()` then stamps the wrong calendar day.
+ *
+ * Using `new Date(year, month-1, day, h, m)` always constructs in local time.
+ */
+export function buildEventDate(dateStr: string | null | undefined, timeStr: string | null | undefined): Date | null {
+  if (!dateStr) return null;
+  const parts = dateStr.split("-").map(Number);
+  if (parts.length < 3) return null;
+  const [y, m, d] = parts;
+  const timeParts = (timeStr ?? "").split(":").map(Number);
+  const h = Number.isFinite(timeParts[0]) ? timeParts[0] : 0;
+  const min = Number.isFinite(timeParts[1]) ? timeParts[1] : 0;
+  return new Date(y, m - 1, d, h, min, 0, 0);
+}
+
+export const sortTickets = (items: Ticket[], sort: SortType): Ticket[] => {
   const copy = [...items];
-  const safeTime = (t?: string) => (t ?? "").slice(0, 5);
   if (sort === SortType.ALPHABETICAL) {
     copy.sort((a, b) => (a.name ?? "").localeCompare(b.name ?? ""));
   } else if (sort === SortType.EVENT_DATE) {
     copy.sort((a, b) => {
-      const [ah, am] = safeTime(a.eventTime ?? "").split(":").map(Number);
-      const [bh, bm] = safeTime(b.eventTime ?? "").split(":").map(Number);
-      const ad = a.eventDate ? new Date(a.eventDate) : null;
-      const bd = b.eventDate ? new Date(b.eventDate) : null;
-      if (ad) ad.setHours(Number.isFinite(ah) ? ah : 0, Number.isFinite(am) ? am : 0, 0, 0);
-      if (bd) bd.setHours(Number.isFinite(bh) ? bh : 0, Number.isFinite(bm) ? bm : 0, 0, 0);
+      const ad = buildEventDate(a.eventDate, a.eventTime);
+      const bd = buildEventDate(b.eventDate, b.eventTime);
       return (bd?.getTime() ?? -Infinity) - (ad?.getTime() ?? -Infinity);
     });
   } else {
