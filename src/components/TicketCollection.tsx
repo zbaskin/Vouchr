@@ -16,7 +16,7 @@ const TicketCollection: React.FC = () => {
     //   that renders an empty slice despite tickets existing on page 1.
     useEffect(() => {
         setPage(1);
-    }, [tickets.length]);
+    }, [tickets.length, isMobile]);
 
     const totalPages = Math.ceil(tickets.length / TICKETS_PER_PAGE);
 
