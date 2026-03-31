@@ -36,6 +36,7 @@ export type AppOutletContext = {
   handleEditTicket: (t: {
     id: string; name: string; venue: string; eventDate: string; eventTime: string; theater: string; seat: string;
   }) => Promise<void>;
+  onChangeSort: (sort: SortType) => void;
 };
 
 export const normalizeSort = (v?: string | null): SortType | null => {
@@ -226,6 +227,14 @@ const AppShell: React.FC = () => {
     }
   };
 
+  const handleChangeSort = (next: SortType) => {
+    const sp = new URLSearchParams(location.search);
+    sp.set("sort", String(next));
+    setSearchParams(sp, { replace: true });
+    setSortType(next);
+    if (ticketCollectionId) updateSortType(ticketCollectionId, next).catch(() => {});
+  };
+
   const handleSignOut = async () => {
     try {
       await amplifySignOut({ global: false });
@@ -243,13 +252,7 @@ const AppShell: React.FC = () => {
       <Navbar
         isMobile={isMobile}
         sortType={sortType}
-        onChangeSort={(next) => {
-          const sp = new URLSearchParams(location.search);
-          sp.set("sort", String(next));
-          setSearchParams(sp, { replace: true });
-          setSortType(next);
-          if (ticketCollectionId) updateSortType(ticketCollectionId, next).catch(() => {});
-        }}
+        onChangeSort={handleChangeSort}
         onSignOut={handleSignOut}
       />
       <main className="bg-background min-h-screen">
@@ -262,7 +265,8 @@ const AppShell: React.FC = () => {
               handleAddTicket,
               handleEditTicket,
               handleRemoveTicket,
-              ticketCollection: ticketCollectionId,  // ✅ expose the real id
+              ticketCollection: ticketCollectionId,
+              onChangeSort: handleChangeSort,
             } satisfies AppOutletContext
           }
         />

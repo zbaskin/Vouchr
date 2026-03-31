@@ -1,32 +1,24 @@
 // src/components/Settings.tsx
 import { useEffect, useState } from "react";
-import { useOutletContext, useSearchParams } from "react-router-dom";
+import { useOutletContext } from "react-router-dom";
 import type { AppOutletContext } from "../AppShell";
 import { SortType } from "../API";
-import { fetchSortType, updateSortType } from "../ticketService";
+import { fetchSortType } from "../ticketService";
 
 export default function Settings() {
-  const { ticketCollection } = useOutletContext<AppOutletContext>();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const { ticketCollection, onChangeSort } = useOutletContext<AppOutletContext>();
 
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
   const [sort, setSort] = useState<SortType>(SortType.TIME_CREATED);
 
-  // Load sort preference
+  // Load sort preference from server
   useEffect(() => {
     let cancelled = false;
     (async () => {
       try {
         if (!ticketCollection) return;
-        const urlSort = (searchParams.get("sort") || "").toUpperCase();
-        const urlEnum =
-          urlSort === "ALPHABETICAL" ? SortType.ALPHABETICAL :
-          urlSort === "EVENT_DATE"   ? SortType.EVENT_DATE   :
-          urlSort === "TIME_CREATED" ? SortType.TIME_CREATED : undefined;
-
         const server = await fetchSortType(ticketCollection);
-        const effective = urlEnum ?? server ?? SortType.TIME_CREATED;
+        const effective = server ?? SortType.TIME_CREATED;
         if (!cancelled) setSort(effective);
       } finally {
         if (!cancelled) setLoading(false);
@@ -35,17 +27,8 @@ export default function Settings() {
     return () => { cancelled = true; };
   }, [ticketCollection]);
 
-  const handleSaveSort = async () => {
-    if (!ticketCollection) return;
-    setSaving(true);
-    try {
-      await updateSortType(ticketCollection, sort);
-      const sp = new URLSearchParams(searchParams);
-      sp.set("sort", sort);
-      setSearchParams(sp, { replace: true });
-    } finally {
-      setSaving(false);
-    }
+  const handleSaveSort = () => {
+    onChangeSort(sort);
   };
 
   return (
@@ -97,10 +80,9 @@ export default function Settings() {
                   <div className="pt-1">
                     <button
                       onClick={handleSaveSort}
-                      disabled={saving}
-                      className="inline-flex items-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-secondary-content disabled:opacity-50"
+                      className="inline-flex items-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-secondary-content"
                     >
-                      {saving ? "Saving…" : "Save preference"}
+                      Save preference
                     </button>
                   </div>
                 </>
