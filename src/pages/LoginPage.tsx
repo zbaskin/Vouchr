@@ -8,7 +8,7 @@ export default function LoginPage() {
 
     useEffect(() => {
         if (authStatus === 'authenticated') {
-            navigate('/app/collection', { replace: true });
+            navigate('/app/collection?sort=TIME_CREATED', { replace: true });
         }
     }, [authStatus, navigate]);
 
