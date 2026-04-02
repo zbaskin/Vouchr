@@ -168,7 +168,7 @@ const AppShell: React.FC = () => {
   useEffect(() => {
     if (!authReady || !ticketCollectionId) return;
     (async () => {
-      // URL has priority
+      // URL has priority — no async work needed
       const urlSort = normalizeSort(searchParams.get("sort"));
       if (urlSort) {
         setSortType(urlSort);
@@ -177,9 +177,15 @@ const AppShell: React.FC = () => {
         return;
       }
 
-      // Use server preference; fallback to TIME_CREATED
-      const serverSort = await fetchSortType(ticketCollectionId);
-      const effective = serverSort ?? SortType.TIME_CREATED;
+      // Use server preference; fallback to TIME_CREATED on any error so
+      // tickets always load even when the sort preference fetch fails.
+      let effective = SortType.TIME_CREATED;
+      try {
+        const serverSort = await fetchSortType(ticketCollectionId);
+        effective = serverSort ?? SortType.TIME_CREATED;
+      } catch (err) {
+        console.error('Could not fetch sort preference — defaulting to TIME_CREATED:', err);
+      }
       setSortType(effective);
       const sp = new URLSearchParams(location.search);
       sp.set("sort", String(effective));
