@@ -54,9 +54,10 @@ export default function Navbar({
 
   // Prevent body scroll when the mobile sheet is open
   useEffect(() => {
+    if (!open) return;
     const { style } = document.body;
     const prev = style.overflow;
-    if (open) style.overflow = "hidden";
+    style.overflow = "hidden";
     return () => {
       style.overflow = prev;
     };

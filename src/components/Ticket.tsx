@@ -23,8 +23,11 @@ export const handleTicketDate = (date: string | null | undefined): string => {
 export const handleTicketTime = (time: string | null | undefined): string => {
   if (!time) return "";
   const t = time.substring(0, 5);
-  const hour = parseInt(t.split(":")[0], 10);
-  const minute = t.split(":")[1];
+  const parts = t.split(":");
+  if (parts.length < 2) return "";
+  const hour = parseInt(parts[0], 10);
+  const minute = parts[1];
+  if (isNaN(hour)) return "";
   if (hour === 12) return `${t}pm`;
   if (hour > 12) return `${hour - 12}:${minute}pm`;
   if (hour === 0) return `${hour + 12}:${minute}am`;
@@ -135,7 +138,7 @@ const Ticket: React.FC<TicketProps> = ({
         </button>
       </div>
 
-      <div className="text-xs font-bold text-left">{venue}</div>
+      {venue && <div className="text-xs font-bold text-left">{venue}</div>}
 
       {/* titleClamp: position:relative + overflow:hidden + 2-line max-height */}
       <div
@@ -158,14 +161,20 @@ const Ticket: React.FC<TicketProps> = ({
         {handleTicketTime(eventTime)}
       </div>
 
-      <div className="flex justify-between text-sm font-bold mt-2.5">
-        <div>
-          Seat <span className="text-sm font-bold mt-2.5 bg-copy text-white p-[3px] rounded-[3px]">{seat}</span>
+      {(seat || theater) && (
+        <div className="flex justify-between text-sm font-bold mt-2.5">
+          {seat && (
+            <div>
+              Seat <span className="text-sm font-bold mt-2.5 bg-copy text-white p-[3px] rounded-[3px]">{seat}</span>
+            </div>
+          )}
+          {theater && (
+            <div>
+              Theater <span>{theater}</span>
+            </div>
+          )}
         </div>
-        <div>
-          Theater <span>{theater}</span>
-        </div>
-      </div>
+      )}
 
       <div className="text-[10px] text-copy-lighter mt-[15px]">Vouchr Tickets</div>
 
