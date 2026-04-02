@@ -257,30 +257,6 @@ export async function removeTicket(ticketID: string) {
   }
 }
 
-/** Create a TicketCollection for the current user.
- *  NOTE: do NOT set id to the user id; let DDB generate it.
- */
-export async function addTicketCollection(): Promise<string | null> {
-  try {
-    const owner = await currentSub();
-    const res = await client.graphql({
-      authMode: 'userPool',
-      query: createTicketCollectionMutation,
-      variables: {
-        input: {
-          owner,                   // REQUIRED
-          visibility: Visibility.PRIVATE,   // REQUIRED by TS (enum non-null)
-          ticketCount: 0,          // REQUIRED by TS (non-null)
-          // title/description/sort are optional
-        },
-      },
-    });
-    return res.data.createTicketCollection?.id ?? null;
-  } catch (err) {
-    console.error('Error adding ticket collection:', err);
-    return null;
-  }
-}
 
 /** Create a User row and link to an existing/new collection */
 /*

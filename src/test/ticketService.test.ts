@@ -1,5 +1,16 @@
 import { describe, it, expect } from "vitest";
 import { filterTicketItems } from "../ticketService";
+import * as ticketService from "../ticketService";
+
+describe("ticketService — dead code removal", () => {
+  it("does not export addTicketCollection (replaced by createCollection which throws on failure)", () => {
+    // addTicketCollection swallowed errors and returned null — a silent failure
+    // path that could leave the app without a collection ID. createCollection
+    // (the active replacement) throws on failure so callers handle it correctly.
+    // This test ensures the dead function was removed and can't be accidentally used.
+    expect((ticketService as any).addTicketCollection).toBeUndefined();
+  });
+});
 
 describe("filterTicketItems", () => {
   it("returns an empty array when given undefined", () => {
