@@ -234,7 +234,7 @@ const AppShell: React.FC = () => {
   };
 
   const handleEditTicket: AppOutletContext["handleEditTicket"] = async (u) => {
-    if (!u?.id) return;
+    if (!u?.id) throw new Error("Cannot save: ticket is missing an id. Please refresh and try again.");
     await editTicket({
       id: u.id,
       name: u.name,
