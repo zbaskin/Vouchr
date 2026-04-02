@@ -72,6 +72,31 @@ describe("Navbar — mobile menu behaviour", () => {
   });
 });
 
+describe("Navbar — mobile sort closes sheet", () => {
+  it("closes the menu when a sort option is selected from the dropdown", () => {
+    render(<Navbar {...defaultProps} />);
+    fireEvent.click(screen.getByLabelText("Open menu"));
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+
+    fireEvent.change(screen.getByLabelText("Sort by"), {
+      target: { value: SortType.ALPHABETICAL },
+    });
+
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  });
+
+  it("still calls onChangeSort with the selected value when closing", () => {
+    render(<Navbar {...defaultProps} />);
+    fireEvent.click(screen.getByLabelText("Open menu"));
+
+    fireEvent.change(screen.getByLabelText("Sort by"), {
+      target: { value: SortType.EVENT_DATE },
+    });
+
+    expect(defaultProps.onChangeSort).toHaveBeenCalledWith(SortType.EVENT_DATE);
+  });
+});
+
 describe("Navbar — mobile menu right-side layout", () => {
   it("the overlay uses justify-end to push the panel to the right", () => {
     render(<Navbar {...defaultProps} />);

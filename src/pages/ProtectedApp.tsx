@@ -1,10 +1,13 @@
-import { Authenticator } from '@aws-amplify/ui-react';
+import { useAuthenticator } from '@aws-amplify/ui-react';
+import { Navigate } from 'react-router-dom';
 import AppShell from '../AppShell';
 
 export default function ProtectedApp() {
-    return (
-        <Authenticator>
-            <AppShell />
-        </Authenticator>
-    );
+    const { authStatus } = useAuthenticator((ctx) => [ctx.authStatus]);
+
+    if (authStatus !== 'authenticated') {
+        return <Navigate to="/login" replace />;
+    }
+
+    return <AppShell />;
 }

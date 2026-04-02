@@ -237,9 +237,10 @@ export default function Navbar({
                         id="m-sortSel"
                         className="w-full h-11 rounded-[10px] px-3 border border-border bg-[var(--surface,#111)] text-[inherit]"
                         value={sortType}
-                        onChange={(e) =>
-                          onChangeSort(e.target.value as SortType)
-                        }
+                        onChange={(e) => {
+                          onChangeSort(e.target.value as SortType);
+                          close();
+                        }}
                       >
                         <option value={SortType.TIME_CREATED}>Newest</option>
                         <option value={SortType.EVENT_DATE}>Event Date</option>
