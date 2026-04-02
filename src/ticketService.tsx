@@ -147,15 +147,15 @@ export async function fetchTickets(ticketCollectionId: string) {
   const all: unknown[] = [];
   let nextToken: string | null = null;
   do {
-    const res = await client.graphql({
+    const res = (await client.graphql({
       authMode: mode,
       query: ticketsByTicketsID,
       variables: { ticketsID: ticketCollectionId, nextToken },
-    });
+    })) as unknown as Record<string, unknown>;
     if (!('data' in res)) {
       throw new Error('Unexpected subscription result for a query');
     }
-    const page = res.data.ticketsByTicketsID;
+    const page = (res.data as { ticketsByTicketsID: { items: unknown[]; nextToken: string | null } | null }).ticketsByTicketsID;
     all.push(...filterTicketItems(page?.items));
     nextToken = page?.nextToken ?? null;
   } while (nextToken);
