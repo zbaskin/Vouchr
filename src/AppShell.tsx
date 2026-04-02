@@ -125,6 +125,8 @@ const AppShell: React.FC = () => {
   // ✅ keep the real collection id from the DB, not the user's sub
   const [ticketCollectionId, setTicketCollectionId] = useState<string | undefined>();
   const [sortReady, setSortReady] = useState(false);
+  const [bootError, setBootError] = useState<string | null>(null);
+  const [bootRetry, setBootRetry] = useState(0);
   const bootRef = useRef(false);
 
   const { authStatus, user } = useAuthenticator((ctx) => [ctx.authStatus, ctx.user]);
@@ -138,23 +140,29 @@ const AppShell: React.FC = () => {
     bootRef.current = true;
 
     (async () => {
-      const u = await ensureUser(user.username as string);
-      if (!u) return;
-      let collId = u.ticketsCollectionId as string | undefined;
-      if (!collId) {
-        collId = await createCollection();
-        try { await linkUserToCollection(u.id, collId); }
-        catch (e: any) {
-          const msg = String(e?.message ?? e);
-          if (!msg.includes('ConditionalCheckFailed')) throw e;
-          const latest = await fetchUser(u.id);
-          collId = latest?.ticketsCollectionId ?? collId;
+      try {
+        const u = await ensureUser(user.username as string);
+        if (!u) return;
+        let collId = u.ticketsCollectionId as string | undefined;
+        if (!collId) {
+          collId = await createCollection();
+          try { await linkUserToCollection(u.id, collId); }
+          catch (e: any) {
+            const msg = String(e?.message ?? e);
+            if (!msg.includes('ConditionalCheckFailed')) throw e;
+            const latest = await fetchUser(u.id);
+            collId = latest?.ticketsCollectionId ?? collId;
+          }
         }
+        setTicketCollectionId(collId);
+      } catch (err) {
+        bootRef.current = false; // allow retry
+        console.error('Bootstrap error:', err);
+        setBootError('Something went wrong loading your account. Please try again.');
       }
-      setTicketCollectionId(collId);
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [authReady, user?.userId, user?.username]);
+  }, [authReady, user?.userId, user?.username, bootRetry]);
 
   // ✅ init sort from URL or server, once the collection id is known
   useEffect(() => {
@@ -202,13 +210,17 @@ const AppShell: React.FC = () => {
       }
     })();
     return () => { mounted = false; };
-  }, [authReady, ticketCollectionId, sortType, sortReady, fetchRetry]);
+    // sortType intentionally omitted: sort changes are applied in-memory via handleChangeSort
+    // to avoid a redundant network round-trip. The initial fetch still reads sortType via closure.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [authReady, ticketCollectionId, sortReady, fetchRetry]);
 
   /* ---------- actions ---------- */
 
   // ✅ ensure ticketsID is set to the current collection id before calling addTicket
   const handleAddTicket = async (newTicket: CreateTicketInput) => {
-    if (!newTicket.name || !ticketCollectionId) return;
+    if (!newTicket.name) return;
+    if (!ticketCollectionId) throw new Error("Your ticket collection isn't ready yet. Please try again in a moment.");
     newTicket = { ...newTicket, ticketsID: ticketCollectionId };
     await addTicket(newTicket); // throws on failure — propagates to TicketForm
     // Refresh is best-effort; a failure here does not undo the successful add
@@ -267,6 +279,8 @@ const AppShell: React.FC = () => {
     sp.set("sort", String(next));
     setSearchParams(sp, { replace: true });
     setSortType(next);
+    // Re-sort in memory — no network fetch needed when only the order changes
+    setTickets(prev => sortTickets(prev as Ticket[], next));
     if (ticketCollectionId) updateSortType(ticketCollectionId, next).catch(() => {});
   };
 
@@ -277,6 +291,22 @@ const AppShell: React.FC = () => {
       window.location.replace("/");
     }
   };
+
+  if (bootError) {
+    return (
+      <main className="bg-background min-h-screen flex items-center justify-center">
+        <div className="text-center p-6">
+          <p className="text-copy mb-4">{bootError}</p>
+          <button
+            onClick={() => { setBootError(null); setBootRetry(c => c + 1); }}
+            className="bg-primary text-secondary-content px-4 py-2 rounded cursor-pointer"
+          >
+            Retry
+          </button>
+        </div>
+      </main>
+    );
+  }
 
   if (!authReady) {
     return <main className="bg-background min-h-screen" />;

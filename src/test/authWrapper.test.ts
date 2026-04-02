@@ -14,7 +14,19 @@
  * - ProtectedApp still provides the <Authenticator> context boundary
  */
 
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
+
+// AppShell imports Amplify's CSS and auth hook at the top level.
+// Without these mocks the dynamic import hangs while Vitest tries to resolve
+// the real CSS file and Amplify emits "not configured" warnings + async hangs.
+vi.mock("@aws-amplify/ui-react", () => ({
+  useAuthenticator: vi.fn(() => ({
+    authStatus: "unauthenticated",
+    user: undefined,
+  })),
+}));
+vi.mock("@aws-amplify/ui-react/styles.css", () => ({}));
+vi.mock("aws-amplify/auth", () => ({ signOut: vi.fn() }));
 
 describe("AppShell — not double-wrapped with withAuthenticator", () => {
   it("default export is a plain component, not a withAuthenticator HOC", async () => {

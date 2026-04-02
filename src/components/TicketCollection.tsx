@@ -4,7 +4,7 @@ import { useOutletContext } from "react-router-dom";
 import type { AppOutletContext } from "../AppShell";
 
 const TicketCollection: React.FC = () => {
-    const { tickets, handleRemoveTicket, handleEditTicket, isLoading, isMobile } = useOutletContext<AppOutletContext>();
+    const { tickets, handleRemoveTicket, handleEditTicket, isLoading, isMobile, fetchError, onRetryFetch } = useOutletContext<AppOutletContext>();
 
     const [page, setPage] = useState(1);
     const TICKETS_PER_PAGE = isMobile ? 8 : 15;
@@ -28,6 +28,17 @@ const TicketCollection: React.FC = () => {
 
     return (
         <div className={"ticketCollection " + (isMobile ? "w-[410px]" : "w-[1000px]")}>
+            {fetchError && (
+                <div className="flex items-center justify-between gap-4 px-5 py-3 bg-red-100 text-red-800 rounded mb-2">
+                    <span>{fetchError}</span>
+                    <button
+                        onClick={onRetryFetch}
+                        className="bg-red-700 text-white px-3 py-1 rounded text-sm cursor-pointer"
+                    >
+                        Retry
+                    </button>
+                </div>
+            )}
             <div className="grid grid-cols-[repeat(auto-fit,minmax(175px,1fr))] justify-center gap-5 p-5 mt-2.5 text-copy bg-primary">
                 {isLoading ? (
                     <p className="text-secondary-content">Loading tickets...</p>

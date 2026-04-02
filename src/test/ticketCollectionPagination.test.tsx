@@ -57,6 +57,8 @@ function TestHarness({
     isLoading: false,
     isMobile,
     ticketCollection: "col-1",
+    fetchError: null,
+    onRetryFetch: vi.fn(),
     handleAddTicket: vi.fn(),
     handleRemoveTicket: vi.fn(),
     handleEditTicket: vi.fn(),
