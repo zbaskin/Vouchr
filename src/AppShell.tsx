@@ -251,11 +251,29 @@ const AppShell: React.FC = () => {
         setTickets(sortTickets(raw, sortType));
       } catch (err) {
         console.warn('Could not refresh tickets after edit (non-fatal):', err);
-        // Optimistically update in-place so the user sees the edit immediately
-        setTickets(prev => (prev as Ticket[]).map(t => (t.id === u.id ? ({ ...t, ...u }) as Ticket : t)));
+        // Optimistically update in-place so the user sees the edit immediately.
+        // Use explicit field projection (not { ...t, ...u }) so eventTime is
+        // normalized to HH:MM:SS, matching what editTicket() sent to the server.
+        setTickets(prev => (prev as Ticket[]).map(t => t.id === u.id ? ({
+          ...t,
+          name: u.name,
+          venue: u.venue,
+          eventDate: u.eventDate,
+          eventTime: u.eventTime.length === 5 ? `${u.eventTime}:00` : u.eventTime,
+          theater: u.theater,
+          seat: u.seat,
+        }) : t));
       }
     } else {
-      setTickets(prev => (prev as Ticket[]).map(t => (t.id === u.id ? ({ ...t, ...u }) as Ticket : t)));
+      setTickets(prev => (prev as Ticket[]).map(t => t.id === u.id ? ({
+        ...t,
+        name: u.name,
+        venue: u.venue,
+        eventDate: u.eventDate,
+        eventTime: u.eventTime.length === 5 ? `${u.eventTime}:00` : u.eventTime,
+        theater: u.theater,
+        seat: u.seat,
+      }) : t));
     }
   };
 
