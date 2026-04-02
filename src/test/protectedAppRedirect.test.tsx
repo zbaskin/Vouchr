@@ -1,23 +1,22 @@
 /**
- * Tests for Low Error #2 — two separate <Authenticator> surfaces produce
- * inconsistent auth UX.
+ * Tests for ProtectedApp auth-based routing.
  *
- * Root cause: ProtectedApp wraps AppShell in <Authenticator> (a gating component).
- * When an unauthenticated user navigates to /app, they see an inline Amplify
- * sign-in form with no Navbar or app branding — a completely different surface
- * from the intentional LoginPage at /login that has its own styled layout.
+ * Original fix (Low Error #2): replaced <Authenticator> wrapper with
+ * useAuthenticator + <Navigate to="/login"> so unauthenticated users always
+ * reach the styled LoginPage.
  *
- * Fix:
- * - Replace the <Authenticator> wrapper in ProtectedApp with a useAuthenticator
- *   hook check: redirect to /login when not authenticated, render AppShell when
- *   authenticated.
- * - main.tsx already provides <Authenticator.Provider> as context, so the hook
- *   works without any extra wrapper.
+ * Regression (Error #6): that fix treated authStatus="configuring" the same as
+ * "unauthenticated", immediately redirecting to /login. "configuring" is Amplify's
+ * initial state while it resolves an existing session — navigating away causes a
+ * redirect loop: /app → /login → /app → /login …
+ *
+ * Fix: render a blank loading placeholder for "configuring" and only redirect
+ * to /login for "unauthenticated".
  *
  * Covers:
- * - Unauthenticated users are redirected to /login (not shown an inline form)
- * - Authenticated users see AppShell as before
- * - Configuring state stays at /login while not authenticated
+ * - "unauthenticated" → redirects to /login
+ * - "configuring" → shows loading placeholder (neither login nor AppShell)
+ * - "authenticated" → renders AppShell, stays at /app
  */
 
 import { render, screen } from "@testing-library/react";
@@ -67,10 +66,20 @@ describe("ProtectedApp — auth-based routing", () => {
     expect(screen.queryByTestId("app-shell")).not.toBeInTheDocument();
   });
 
-  it("redirects to /login when authStatus is 'configuring'", () => {
+  it("shows a blank loading state when authStatus is 'configuring' (no redirect)", () => {
     mockUseAuthenticator.mockReturnValue({ authStatus: "configuring" });
     renderProtectedApp();
-    expect(screen.getByTestId("login-page")).toBeInTheDocument();
+    // Must NOT redirect to login — that would start a redirect loop
+    expect(screen.queryByTestId("login-page")).not.toBeInTheDocument();
+    // Must NOT show AppShell prematurely either
+    expect(screen.queryByTestId("app-shell")).not.toBeInTheDocument();
+  });
+
+  it("does not redirect to /login while auth is still initializing", () => {
+    mockUseAuthenticator.mockReturnValue({ authStatus: "configuring" });
+    renderProtectedApp();
+    // URL must still be /app/collection, not /login
+    expect(screen.queryByTestId("login-page")).not.toBeInTheDocument();
   });
 
   it("renders AppShell when authStatus is 'authenticated'", () => {
