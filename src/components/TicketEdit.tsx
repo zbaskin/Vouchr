@@ -19,6 +19,8 @@ type Props = {
 
 export default function TicketEdit({ open, initial, onCancel, onSave }: Props) {
   const [v, setV] = useState<TicketEditValues>(initial);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   useEffect(() => setV(initial), [initial]);
 
@@ -26,11 +28,21 @@ export default function TicketEdit({ open, initial, onCancel, onSave }: Props) {
 
   const onSubmit: React.FormEventHandler = async (e) => {
     e.preventDefault();
-    // simple client guards
     if (!v.name.trim()) return;
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(v.eventDate)) return;
-    await onSave(v);
-    onCancel();
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(v.eventDate)) {
+      setSaveError("Please enter a valid event date.");
+      return;
+    }
+    setIsSubmitting(true);
+    setSaveError(null);
+    try {
+      await onSave(v);
+      onCancel();
+    } catch {
+      setSaveError("Failed to save changes. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const input = "mt-1 w-full rounded-md border px-3 py-2";
@@ -44,12 +56,18 @@ export default function TicketEdit({ open, initial, onCancel, onSave }: Props) {
           <button onClick={onCancel} className="rounded-md border px-2 py-1 text-sm">Close</button>
         </div>
 
+        {saveError && (
+          <div role="alert" className="mb-3 rounded-lg border border-red-300 bg-red-50 px-4 py-2.5 text-sm text-red-700">
+            {saveError}
+          </div>
+        )}
+
         <form onSubmit={onSubmit} className="space-y-3">
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <label className="block">
               <span className="text-sm">Title</span>
               <input className={input} value={v.name}
-                     onChange={(e) => setV({ ...v, name: e.target.value })} required/>
+                     onChange={(e) => { setSaveError(null); setV({ ...v, name: e.target.value }); }} required/>
             </label>
             <label className="block">
               <span className="text-sm">Venue</span>
@@ -89,8 +107,8 @@ export default function TicketEdit({ open, initial, onCancel, onSave }: Props) {
             <button type="button" onClick={onCancel} className="rounded-md border px-3 py-2">
               Cancel
             </button>
-            <button type="submit" className="rounded-md !bg-[var(--primary,#0a0a0a)] px-3 py-2 text-white">
-              Save changes
+            <button type="submit" disabled={isSubmitting} className="rounded-md !bg-[var(--primary,#0a0a0a)] px-3 py-2 text-white disabled:opacity-50">
+              {isSubmitting ? "Saving…" : "Save changes"}
             </button>
           </div>
         </form>

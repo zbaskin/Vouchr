@@ -1,4 +1,4 @@
-import "./AppShell.css";
+// AppShell.tsx
 import { useEffect, useRef, useState } from "react";
 import { Outlet, useLocation, useSearchParams } from "react-router-dom";
 import { signOut as amplifySignOut } from "aws-amplify/auth";
@@ -8,11 +8,12 @@ import {
   addTicket,
   removeTicket,
   fetchUser,
-  addUser,
-  addTicketCollection,
   fetchSortType,
   updateSortType,
   editTicket,
+  linkUserToCollection,
+  ensureUser,
+  createCollection,
 } from "./ticketService";
 
 import Navbar from "./components/Navbar";
@@ -22,32 +23,25 @@ import {
   type Ticket,
   SortType,
 } from "./API";
-
-import { withAuthenticator } from "@aws-amplify/ui-react";
+import { useAuthenticator } from "@aws-amplify/ui-react";
 import "@aws-amplify/ui-react/styles.css";
-
-import { type AuthUser } from "aws-amplify/auth";
-import { type UseAuthenticator } from "@aws-amplify/ui-react-core";
 
 export type AppOutletContext = {
   tickets: (Ticket | CreateTicketInput)[];
   isLoading: boolean;
   isMobile: boolean;
   ticketCollection?: string;
+  fetchError: string | null;
+  onRetryFetch: () => void;
   handleAddTicket: (t: CreateTicketInput) => Promise<void>;
   handleRemoveTicket: (id: string | null | undefined) => Promise<void>;
   handleEditTicket: (t: {
     id: string; name: string; venue: string; eventDate: string; eventTime: string; theater: string; seat: string;
   }) => Promise<void>;
+  onChangeSort: (sort: SortType) => void;
 };
 
-type AppShellProps = {
-  signOut?: UseAuthenticator["signOut"];
-  user?: AuthUser;
-};
-
-/* ---------- helpers ---------- */
-const normalizeSort = (v?: string | null): SortType | null => {
+export const normalizeSort = (v?: string | null): SortType | null => {
   switch ((v ?? "").toUpperCase()) {
     case "ALPHABETICAL": return SortType.ALPHABETICAL;
     case "EVENT_DATE":   return SortType.EVENT_DATE;
@@ -56,19 +50,37 @@ const normalizeSort = (v?: string | null): SortType | null => {
   }
 };
 
-const sortTickets = (items: Ticket[], sort: SortType): Ticket[] => {
+/**
+ * Construct a Date in LOCAL time from a "YYYY-MM-DD" date string and an optional
+ * "HH:MM" or "HH:MM:SS" time string.
+ *
+ * Why not `new Date(dateStr)`?
+ * Date-only ISO strings (YYYY-MM-DD) are parsed as **UTC midnight** per spec.
+ * In timezones west of UTC (e.g. EST = UTC-5), UTC midnight falls on the
+ * *previous calendar day* locally, so `new Date("2024-03-15").getDate()` returns
+ * 14 in EST. Subsequent `.setHours()` then stamps the wrong calendar day.
+ *
+ * Using `new Date(year, month-1, day, h, m)` always constructs in local time.
+ */
+export function buildEventDate(dateStr: string | null | undefined, timeStr: string | null | undefined): Date | null {
+  if (!dateStr) return null;
+  const parts = dateStr.split("-").map(Number);
+  if (parts.length < 3) return null;
+  const [y, m, d] = parts;
+  const timeParts = (timeStr ?? "").split(":").map(Number);
+  const h = Number.isFinite(timeParts[0]) ? timeParts[0] : 0;
+  const min = Number.isFinite(timeParts[1]) ? timeParts[1] : 0;
+  return new Date(y, m - 1, d, h, min, 0, 0);
+}
+
+export const sortTickets = (items: Ticket[], sort: SortType): Ticket[] => {
   const copy = [...items];
-  const safeTime = (t?: string) => (t ?? "").slice(0, 5); // HH:MM
   if (sort === SortType.ALPHABETICAL) {
     copy.sort((a, b) => (a.name ?? "").localeCompare(b.name ?? ""));
   } else if (sort === SortType.EVENT_DATE) {
     copy.sort((a, b) => {
-      const [ah, am] = safeTime(a.eventTime ?? "").split(":").map(Number);
-      const [bh, bm] = safeTime(b.eventTime ?? "").split(":").map(Number);
-      const ad = a.eventDate ? new Date(a.eventDate) : null;
-      const bd = b.eventDate ? new Date(b.eventDate) : null;
-      if (ad) ad.setHours(Number.isFinite(ah) ? ah : 0, Number.isFinite(am) ? am : 0, 0, 0);
-      if (bd) bd.setHours(Number.isFinite(bh) ? bh : 0, Number.isFinite(bm) ? bm : 0, 0, 0);
+      const ad = buildEventDate(a.eventDate, a.eventTime);
+      const bd = buildEventDate(b.eventDate, b.eventTime);
       return (bd?.getTime() ?? -Infinity) - (ad?.getTime() ?? -Infinity);
     });
   } else {
@@ -86,12 +98,8 @@ function useMediaQuery(query: string) {
   useEffect(() => {
     if (typeof window === "undefined") return;
     const mql = window.matchMedia(query);
-
-    // Set once in case query string changes
     setMatches(mql.matches);
-
     const onChange = (e: MediaQueryListEvent) => setMatches(e.matches);
-    // Support older browsers
     if (mql.addEventListener) mql.addEventListener("change", onChange);
     else mql.addListener(onChange);
 
@@ -103,100 +111,175 @@ function useMediaQuery(query: string) {
 
   return matches;
 }
-/* -------------------------------- */
 
-const AppShell: React.FC<AppShellProps> = ({ user }) => {
+const AppShell: React.FC = () => {
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [tickets, setTickets] = useState<Ticket[] | CreateTicketInput[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [sortType, setSortType] = useState<SortType>(SortType.TIME_CREATED); // safe default
-  const ticketCollection = user?.userId;
+  const [fetchError, setFetchError] = useState<string | null>(null);
+  const [fetchRetry, setFetchRetry] = useState(0);
+  const [sortType, setSortType] = useState<SortType>(SortType.TIME_CREATED);
 
-  // mobile state (matchMedia avoids extra renders)
+  // ✅ keep the real collection id from the DB, not the user's sub
+  const [ticketCollectionId, setTicketCollectionId] = useState<string | undefined>();
+  const [sortReady, setSortReady] = useState(false);
+  const [bootError, setBootError] = useState<string | null>(null);
+  const [bootRetry, setBootRetry] = useState(0);
+  const bootRef = useRef(false);
+
+  const { authStatus, user } = useAuthenticator((ctx) => [ctx.authStatus, ctx.user]);
+  const authReady = authStatus === "authenticated" && !!user;
+
   const isMobile = useMediaQuery("(max-width: 499px)");
 
-  // one-time: ensure user + collection exist
+  // ✅ one-time bootstrap: ensure User + TicketCollection exist and capture the collection id
   useEffect(() => {
+    if (!authReady || bootRef.current || !user?.userId) return;
+    bootRef.current = true;
+
     (async () => {
-      if (!user?.userId) return;
-      const existing = await fetchUser(user.userId);
-      if (!existing) {
-        await addTicketCollection(user.userId);
-        await addUser(user.userId, user.username as string, user.userId);
+      try {
+        const u = await ensureUser(user.username as string);
+        if (!u) return;
+        let collId = u.ticketsCollectionId as string | undefined;
+        if (!collId) {
+          collId = await createCollection();
+          try { await linkUserToCollection(u.id, collId); }
+          catch (e: any) {
+            const msg = String(e?.message ?? e);
+            if (!msg.includes('ConditionalCheckFailed')) throw e;
+            const latest = await fetchUser(u.id);
+            collId = latest?.ticketsCollectionId ?? collId;
+          }
+        }
+        setTicketCollectionId(collId);
+      } catch (err) {
+        bootRef.current = false; // allow retry
+        console.error('Bootstrap error:', err);
+        setBootError('Something went wrong loading your account. Please try again.');
       }
     })();
-  }, [user?.userId, user?.username]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [authReady, user?.userId, user?.username, bootRetry]);
 
-  // sync sortType with URL and server (runs when collection is known or URL changes)
-  const initializedSortRef = useRef(false);
+  // ✅ init sort from URL or server, once the collection id is known
   useEffect(() => {
+    if (!authReady || !ticketCollectionId) return;
     (async () => {
-      if (!ticketCollection) return;
-
-      // URL has priority
+      // URL has priority — no async work needed
       const urlSort = normalizeSort(searchParams.get("sort"));
       if (urlSort) {
         setSortType(urlSort);
-        // fire-and-forget server update (no await needed for UI)
-        updateSortType(ticketCollection, urlSort).catch(() => {});
-        initializedSortRef.current = true;
+        updateSortType(ticketCollectionId, urlSort).catch(() => {});
+        setSortReady(true);
         return;
       }
 
-      // else use server preference, else default
-      const serverSort = await fetchSortType(ticketCollection);
-      const effective = serverSort ?? SortType.TIME_CREATED;
+      // Use server preference; fallback to TIME_CREATED on any error so
+      // tickets always load even when the sort preference fetch fails.
+      let effective = SortType.TIME_CREATED;
+      try {
+        const serverSort = await fetchSortType(ticketCollectionId);
+        effective = serverSort ?? SortType.TIME_CREATED;
+      } catch (err) {
+        console.error('Could not fetch sort preference — defaulting to TIME_CREATED:', err);
+      }
       setSortType(effective);
       const sp = new URLSearchParams(location.search);
       sp.set("sort", String(effective));
       setSearchParams(sp, { replace: true });
-      initializedSortRef.current = true;
+      setSortReady(true);
     })();
-  }, [ticketCollection, location.search, searchParams, setSearchParams]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [authReady, ticketCollectionId]);
 
-  // fetch + apply sort whenever collection or sortType changes
+  // ✅ fetch tickets whenever collection, sort, or fetchRetry changes (after sort initialized)
   useEffect(() => {
     let mounted = true;
     (async () => {
-      if (!ticketCollection || !initializedSortRef.current) return;
+      if (!authReady || !ticketCollectionId || !sortReady) return;
       setIsLoading(true);
-      const raw = await fetchTickets(ticketCollection);
-      if (!mounted) return;
-      setTickets(sortTickets(raw, sortType));
-      setIsLoading(false);
+      setFetchError(null);
+      try {
+        const raw = await fetchTickets(ticketCollectionId);
+        if (!mounted) return;
+        setTickets(sortTickets(raw, sortType));
+      } catch (err) {
+        if (!mounted) return;
+        console.error('Error fetching tickets:', err);
+        setFetchError('Failed to load tickets. Please try again.');
+        // Preserve existing tickets — do not wipe the collection on error
+      } finally {
+        if (mounted) setIsLoading(false);
+      }
     })();
     return () => { mounted = false; };
-  }, [ticketCollection, sortType]);
+    // sortType intentionally omitted: sort changes are applied in-memory via handleChangeSort
+    // to avoid a redundant network round-trip. The initial fetch still reads sortType via closure.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [authReady, ticketCollectionId, sortReady, fetchRetry]);
 
   /* ---------- actions ---------- */
+
+  // ✅ ensure ticketsID is set to the current collection id before calling addTicket
   const handleAddTicket = async (newTicket: CreateTicketInput) => {
-    if (!newTicket.name || !newTicket.ticketsID) return;
-    await addTicket(newTicket);
-    if (ticketCollection) {
-      const raw = await fetchTickets(ticketCollection);
+    if (!newTicket.name) return;
+    if (!ticketCollectionId) throw new Error("Your ticket collection isn't ready yet. Please try again in a moment.");
+    newTicket = { ...newTicket, ticketsID: ticketCollectionId };
+    await addTicket(newTicket); // throws on failure — propagates to TicketForm
+    // Refresh is best-effort; a failure here does not undo the successful add
+    try {
+      const raw = await fetchTickets(ticketCollectionId);
       setTickets(sortTickets(raw, sortType));
+    } catch (err) {
+      console.warn('Could not refresh tickets after add (non-fatal):', err);
+      handleRetryFetch();
     }
   };
 
   const handleEditTicket: AppOutletContext["handleEditTicket"] = async (u) => {
-    if (!u?.id) return;
+    if (!u?.id) throw new Error("Cannot save: ticket is missing an id. Please refresh and try again.");
     await editTicket({
       id: u.id,
       name: u.name,
       venue: u.venue,
       eventDate: u.eventDate,
-      eventTime: u.eventTime.length === 5 ? `${u.eventTime}:00` : u.eventTime, // normalize HH:mm -> HH:mm:ss
+      eventTime: u.eventTime.length === 5 ? `${u.eventTime}:00` : u.eventTime,
       theater: u.theater,
       seat: u.seat,
-    });
-
-    if (ticketCollection) {
-      const raw = await fetchTickets(ticketCollection);
-      setTickets(sortTickets(raw, sortType));
+    }); // throws on failure — propagates to TicketEdit
+    // Refresh is best-effort; a failure here does not undo the successful edit
+    if (ticketCollectionId) {
+      try {
+        const raw = await fetchTickets(ticketCollectionId);
+        setTickets(sortTickets(raw, sortType));
+      } catch (err) {
+        console.warn('Could not refresh tickets after edit (non-fatal):', err);
+        // Optimistically update in-place so the user sees the edit immediately.
+        // Use explicit field projection (not { ...t, ...u }) so eventTime is
+        // normalized to HH:MM:SS, matching what editTicket() sent to the server.
+        setTickets(prev => (prev as Ticket[]).map(t => t.id === u.id ? ({
+          ...t,
+          name: u.name,
+          venue: u.venue,
+          eventDate: u.eventDate,
+          eventTime: u.eventTime.length === 5 ? `${u.eventTime}:00` : u.eventTime,
+          theater: u.theater,
+          seat: u.seat,
+        }) : t));
+      }
     } else {
-      setTickets(prev => (prev as Ticket[]).map(t => (t.id === u.id ? ({ ...t, ...u }) as Ticket : t)));
+      setTickets(prev => (prev as Ticket[]).map(t => t.id === u.id ? ({
+        ...t,
+        name: u.name,
+        venue: u.venue,
+        eventDate: u.eventDate,
+        eventTime: u.eventTime.length === 5 ? `${u.eventTime}:00` : u.eventTime,
+        theater: u.theater,
+        seat: u.seat,
+      }) : t));
     }
   };
 
@@ -204,8 +287,25 @@ const AppShell: React.FC<AppShellProps> = ({ user }) => {
     if (!ticketID) return;
     const ok = window.confirm("Delete this ticket? This cannot be undone.");
     if (!ok) return;
-    await removeTicket(ticketID);
-    setTickets(prev => (prev as Ticket[]).filter(t => t.id !== ticketID));
+    try {
+      await removeTicket(ticketID);
+      setTickets(prev => (prev as Ticket[]).filter(t => t.id !== ticketID));
+    } catch (err) {
+      console.error('Error removing ticket:', err);
+      window.alert("Failed to delete the ticket. Please try again.");
+    }
+  };
+
+  const handleRetryFetch = () => setFetchRetry(c => c + 1);
+
+  const handleChangeSort = (next: SortType) => {
+    const sp = new URLSearchParams(location.search);
+    sp.set("sort", String(next));
+    setSearchParams(sp, { replace: true });
+    setSortType(next);
+    // Re-sort in memory — no network fetch needed when only the order changes
+    setTickets(prev => sortTickets(prev as Ticket[], next));
+    if (ticketCollectionId) updateSortType(ticketCollectionId, next).catch(() => {});
   };
 
   const handleSignOut = async () => {
@@ -216,32 +316,48 @@ const AppShell: React.FC<AppShellProps> = ({ user }) => {
     }
   };
 
+  if (bootError) {
+    return (
+      <main className="bg-background min-h-screen flex items-center justify-center">
+        <div className="text-center p-6">
+          <p className="text-copy mb-4">{bootError}</p>
+          <button
+            onClick={() => { setBootError(null); setBootRetry(c => c + 1); }}
+            className="bg-primary text-secondary-content px-4 py-2 rounded cursor-pointer"
+          >
+            Retry
+          </button>
+        </div>
+      </main>
+    );
+  }
+
+  if (!authReady) {
+    return <main className="bg-background min-h-screen" />;
+  }
+
   return (
     <>
       <Navbar
         isMobile={isMobile}
         sortType={sortType}
-        onChangeSort={(next) => {
-          // update URL (triggers fetch effect) and server preference
-          const sp = new URLSearchParams(location.search);
-          sp.set("sort", String(next));
-          setSearchParams(sp, { replace: true });
-          setSortType(next);
-          if (ticketCollection) updateSortType(ticketCollection, next).catch(() => {});
-        }}
+        onChangeSort={handleChangeSort}
         onSignOut={handleSignOut}
       />
-      <main className="appBody">
+      <main className="bg-background min-h-screen">
         <Outlet
           context={
             {
               tickets,
               isLoading,
               isMobile,
+              fetchError,
+              onRetryFetch: handleRetryFetch,
               handleAddTicket,
               handleEditTicket,
               handleRemoveTicket,
-              ticketCollection,
+              ticketCollection: ticketCollectionId,
+              onChangeSort: handleChangeSort,
             } satisfies AppOutletContext
           }
         />
@@ -250,4 +366,4 @@ const AppShell: React.FC<AppShellProps> = ({ user }) => {
   );
 };
 
-export default withAuthenticator(AppShell);
+export default AppShell;

@@ -1,5 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
-import "./Ticket.css";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import TicketEdit, { TicketEditValues } from "./TicketEdit";
 import { Pencil, Trash2 } from "lucide-react";
 
@@ -7,23 +6,28 @@ type TicketProps = {
   id: string;
   name: string;
   venue: string;
-  eventDate: string;  // "YYYY-MM-DD"
-  eventTime: string;  // "HH:mm:ss" or "HH:mm"
+  eventDate?: string | null;  // "YYYY-MM-DD" — nullable in GraphQL schema
+  eventTime?: string | null;  // "HH:mm:ss" or "HH:mm" — nullable in GraphQL schema
   theater: string;
   seat: string;
   onRemove: (id: string) => void;
   onEdit?: (v: TicketEditValues) => Promise<void> | void;
 };
 
-const handleTicketDate = (date: string) => {
+export const handleTicketDate = (date: string | null | undefined): string => {
+  if (!date) return "";
   const [year, month, day] = date.split("-");
   return `${month}/${day}/${year}`;
 };
 
-const handleTicketTime = (time: string) => {
+export const handleTicketTime = (time: string | null | undefined): string => {
+  if (!time) return "";
   const t = time.substring(0, 5);
-  const hour = parseInt(t.split(":")[0], 10);
-  const minute = t.split(":")[1];
+  const parts = t.split(":");
+  if (parts.length < 2) return "";
+  const hour = parseInt(parts[0], 10);
+  const minute = parts[1];
+  if (isNaN(hour)) return "";
   if (hour === 12) return `${t}pm`;
   if (hour > 12) return `${hour - 12}:${minute}pm`;
   if (hour === 0) return `${hour + 12}:${minute}am`;
@@ -105,24 +109,19 @@ const Ticket: React.FC<TicketProps> = ({
       closePopover();
     }
   };
-  
+
   const [editing, setEditing] = useState(false);
 
-  const initialEdit: TicketEditValues = {
-    id,
-    name,
-    venue,
-    eventDate,
-    eventTime,
-    theater,
-    seat,
-  };
+  const initialEdit = useMemo<TicketEditValues>(
+    () => ({ id, name, venue, eventDate: eventDate ?? "", eventTime: eventTime ?? "", theater, seat }),
+    [id, name, venue, eventDate, eventTime, theater, seat],
+  );
 
   return (
-    <div className="ticketObject">
+    <div className="ticketObject bg-white w-[175px] h-[175px] p-2.5 border border-[#ccc] shadow-[2px_2px_8px_rgba(0,0,0,0.2)] font-[Arial,sans-serif] text-sm text-center relative flex flex-col justify-center text-copy max-w-full">
       <div>
         <button
-            className="editTicketButton"
+            className="editTicketButton absolute top-[3px] right-[26px] w-5 h-5 border border-black text-center justify-items-center leading-[12px] font-bold text-xs cursor-pointer p-0"
             onClick={() => setEditing(true)}
             aria-label="Edit ticket"
             title="Edit"
@@ -130,7 +129,7 @@ const Ticket: React.FC<TicketProps> = ({
             <Pencil size={14} />
         </button>
         <button
-            className="removeTicketButton"
+            className="removeTicketButton absolute top-[3px] right-[3px] w-5 h-5 border border-black text-center justify-items-center leading-[12px] font-bold text-xs cursor-pointer p-0"
             onClick={() => onRemove(id)}
             aria-label="Remove ticket"
             title="Remove"
@@ -139,12 +138,12 @@ const Ticket: React.FC<TicketProps> = ({
         </button>
       </div>
 
-      <div className="ticketVenue">{venue}</div>
+      {venue && <div className="text-xs font-bold text-left">{venue}</div>}
 
-      {/* Keep your original .ticketName styling; we only add titleClamp + inner span */}
+      {/* titleClamp: position:relative + overflow:hidden + 2-line max-height */}
       <div
         ref={nameWrapRef}
-        className={`ticketName titleClamp ${isOverflowing ? "hasOverflow" : ""}`}
+        className={`ticketName titleClamp text-base font-bold uppercase my-[5px] relative overflow-hidden leading-[1.25] max-h-[calc(1.25em*2)]${isOverflowing ? " hasOverflow cursor-pointer focus:outline-[2px] focus:outline-[#9ca3af] focus:outline-offset-2" : ""}`}
         title={!isOverflowing ? name : undefined}
         aria-label={name}
         role={isOverflowing ? "button" : undefined}
@@ -152,32 +151,42 @@ const Ticket: React.FC<TicketProps> = ({
         onClick={isOverflowing ? openPopover : undefined}
         onKeyDown={isOverflowing ? onNameKeyDown : undefined}
       >
-        <span ref={nameTextRef} className="ticketNameText">
+        <span ref={nameTextRef} className="ticketNameText [-webkit-box-orient:vertical] [display:-webkit-box] overflow-hidden line-clamp-2">
           {name}
         </span>
       </div>
 
-      <div className="ticketDateTime">
+      <div className="text-xs leading-[1.5]">
         {handleTicketDate(eventDate)} &nbsp;
         {handleTicketTime(eventTime)}
       </div>
 
-      <div className="ticketInfo">
-        <div>
-          Seat <span className="ticketSeat">{seat}</span>
+      {(seat || theater) && (
+        <div className="flex justify-between text-sm font-bold mt-2.5">
+          {seat && (
+            <div>
+              Seat <span className="text-sm font-bold mt-2.5 bg-copy text-white p-[3px] rounded-[3px]">{seat}</span>
+            </div>
+          )}
+          {theater && (
+            <div>
+              Theater <span>{theater}</span>
+            </div>
+          )}
         </div>
-        <div>
-          Theater <span>{theater}</span>
-        </div>
-      </div>
+      )}
 
-      <div className="ticketFooter">Vouchr Tickets</div>
+      <div className="text-[10px] text-copy-lighter mt-[15px]">Vouchr Tickets</div>
 
       {showPopover && popoverPos && (
         <>
-          <button className="titlePopoverBackdrop" onClick={closePopover} aria-label="Close" />
+          <button
+            className="fixed inset-0 bg-transparent border-0 p-0 m-0 z-40"
+            onClick={closePopover}
+            aria-label="Close"
+          />
           <div
-            className="titlePopover"
+            className="titlePopover fixed z-50 max-w-[min(92vw,720px)]"
             style={{
               top: popoverPos.top,
               left: popoverPos.left,
@@ -186,11 +195,13 @@ const Ticket: React.FC<TicketProps> = ({
             role="dialog"
             aria-modal="true"
           >
-            <div className="titlePopoverContent">{name}</div>
+            <div className="titlePopoverContent block max-h-[50vh] overflow-auto bg-white text-black px-3 py-2.5 rounded-[10px] shadow-[0_8px_24px_rgba(0,0,0,0.12)] border border-black/[.08] font-[inherit] font-[inherit] text-[inherit] leading-[1.25]">
+              {name}
+            </div>
           </div>
         </>
       )}
-      
+
       {editing && onEdit && (
         <TicketEdit
           open={editing}

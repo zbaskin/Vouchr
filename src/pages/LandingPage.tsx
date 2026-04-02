@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import logoUrl from '../assets/red-logo.png'
-import "./LandingPage.css"
 
 import { Ticket, Menu as MenuIcon, X as CloseIcon } from 'lucide-react'
 import { Film, Users, Clock, Sparkles } from "lucide-react"
@@ -45,8 +44,8 @@ export default function LandingPage() {
       >
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
             <Link to="/" className="group inline-flex items-center gap-2">
-            <img className="landingLogo" src={logoUrl} alt="Vouchr logo" />
-            <span className="text-xl font-bold tracking-tight landingTitle title">Vouchr</span>
+            <img className="h-20 max-[640px]:h-10 select-none" src={logoUrl} alt="Vouchr logo" />
+            <span className="font-['Arista'] text-[5rem]! pl-5 select-none tracking-tight max-[640px]:text-[clamp(1.5rem,8vw,2.25rem)]! max-[640px]:pl-2">Vouchr</span>
             </Link>
 
             {/* Desktop nav */}
@@ -82,7 +81,7 @@ export default function LandingPage() {
                     role="dialog"
                     aria-modal="true"
                     aria-label="Site navigation"
-                    className="ml-auto h-full w-72 p-4 shadow-2xl ring-1 ring-[var(--border,#e5e5e5)] dark:ring-[var(--border,#2a2a2a)] lpMenuPanel"
+                    className="ml-auto h-full w-72 p-4 shadow-2xl ring-1 ring-[var(--border,#e5e5e5)] dark:ring-[var(--border,#2a2a2a)] bg-white! backdrop-filter-none! [backdrop-filter:none]! dark:bg-[#0b0b0b]!"
                     onClick={(e) => e.stopPropagation()}
                 >
                     <div className="mb-3 flex items-center justify-between">
