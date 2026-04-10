@@ -79,7 +79,7 @@ export default function Navbar({
       {/* logo */}
       <div className="flex items-center gap-2.5 select-none">
         <NavLink to={{ pathname: "/app/collection" }} end className="inline-flex items-center gap-3 no-underline">
-          <img className="h-12 w-auto max-[480px]:h-10" src={logoUrlGold} alt="Vouchr logo" />
+          <img className="h-12 w-auto max-[767px]:h-10" src={logoUrlGold} alt="Vouchr logo" />
           {!isMobile && (
             <p className="font-['Arista'] text-secondary-content text-[2rem] m-0">Vouchr</p>
           )}

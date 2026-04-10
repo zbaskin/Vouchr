@@ -296,7 +296,7 @@ const AppShell: React.FC = () => {
         onChangeSort={handleChangeSort}
         onSignOut={handleSignOut}
       />
-      <main className="bg-background min-h-screen">
+      <main className="bg-background flex-1">
         <Outlet
           context={
             {
