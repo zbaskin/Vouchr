@@ -97,7 +97,7 @@ const Ticket: React.FC<TicketProps> = ({
   );
 
   return (
-    <div className="ticketObject bg-white w-[175px] h-[175px] p-2.5 border border-[#ccc] shadow-[2px_2px_8px_rgba(0,0,0,0.2)] font-[Arial,sans-serif] text-sm text-center relative flex flex-col justify-center text-copy max-w-full">
+    <div className="ticketObject bg-white w-[175px] min-h-[175px] p-2.5 border border-[#ccc] shadow-[2px_2px_8px_rgba(0,0,0,0.2)] font-[Arial,sans-serif] text-sm text-center relative flex flex-col justify-center text-copy max-w-full">
       <div>
         <button
             className="editTicketButton absolute top-[3px] right-[26px] w-5 h-5 border border-black text-center justify-items-center leading-[12px] font-bold text-xs cursor-pointer p-0"

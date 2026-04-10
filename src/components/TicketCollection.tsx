@@ -39,7 +39,7 @@ const TicketCollection: React.FC = () => {
                     </button>
                 </div>
             )}
-            <div className="grid grid-cols-[repeat(auto-fit,minmax(175px,1fr))] justify-center gap-5 p-5 mt-2.5 text-copy bg-primary">
+            <div className="flex flex-wrap justify-center gap-5 p-5 mt-2.5 text-copy bg-primary">
                 {isLoading ? (
                     <p className="text-secondary-content">Loading tickets...</p>
                 ) : tickets.length > 0 ? (
