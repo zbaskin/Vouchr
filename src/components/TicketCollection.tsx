@@ -39,7 +39,8 @@ const TicketCollection: React.FC = () => {
                     </button>
                 </div>
             )}
-            <div className="flex flex-wrap justify-center gap-5 p-5 mt-2.5 text-copy bg-primary">
+            <div className="ticketCardArea w-full flex justify-center mt-2.5">
+            <div className="inline-flex flex-wrap justify-center gap-5 p-5 text-copy bg-primary">
                 {isLoading ? (
                     <p className="text-secondary-content">Loading tickets...</p>
                 ) : tickets.length > 0 ? (
@@ -60,6 +61,7 @@ const TicketCollection: React.FC = () => {
                 ) : (
                     <p className="text-secondary-content">No tickets available.</p>
                 )}
+            </div>
             </div>
             {totalPages > 1 && (
                 <div className="flex justify-center items-center my-4 text-copy gap-2.5">

@@ -62,12 +62,27 @@ function renderCollection(tickets: Ticket[], isMobile = false) {
 describe("TicketCollection — flex layout", () => {
   it("card container uses flex and flex-wrap classes (not grid auto-fit)", () => {
     renderCollection(makeTickets(3));
-    // The inner container wrapping the ticket cards
-    const container = document.querySelector(".ticketCollection > div");
-    expect(container).not.toBeNull();
-    expect(container!.className).toContain("flex");
-    expect(container!.className).toContain("flex-wrap");
-    expect(container!.className).not.toContain("grid");
+    // The cards div is the inline-flex element inside the centering wrapper
+    const cardsDiv = document.querySelector(".ticketCollection .bg-primary");
+    expect(cardsDiv).not.toBeNull();
+    expect(cardsDiv!.className).toContain("flex-wrap");
+    expect(cardsDiv!.className).not.toContain("grid");
+  });
+
+  it("bg-primary is on an inline-flex element so it shrinks to card content width", () => {
+    renderCollection(makeTickets(3));
+    const bgEl = document.querySelector(".bg-primary");
+    expect(bgEl).not.toBeNull();
+    expect(bgEl!.className).toContain("inline-flex");
+  });
+
+  it("centering wrapper does not carry bg-primary (background is only on the card cluster)", () => {
+    renderCollection(makeTickets(3));
+    // First child of ticketCollection is the centering wrapper (or error banner)
+    // Find the direct child that wraps the bg-primary element
+    const wrapper = document.querySelector(".ticketCollection > .ticketCardArea");
+    expect(wrapper).not.toBeNull();
+    expect(wrapper!.className).not.toContain("bg-primary");
   });
 
   it("renders 1 ticket without stretching (card has fixed width class)", () => {
