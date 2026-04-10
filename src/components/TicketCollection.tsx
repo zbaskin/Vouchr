@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import TicketObject from "./Ticket";
-import { useOutletContext } from "react-router-dom";
+import { NavLink, useOutletContext } from "react-router-dom";
+import { Ticket as TicketIcon } from "lucide-react";
 import type { AppOutletContext } from "../AppShell";
 
 const TicketCollection: React.FC = () => {
@@ -59,7 +60,19 @@ const TicketCollection: React.FC = () => {
                         />
                     ))
                 ) : (
-                    <p className="text-secondary-content">No tickets available.</p>
+                    <div className={`emptyState flex flex-col items-center text-center text-secondary-content ${isMobile ? "py-10 px-4 gap-3" : "py-16 px-8 gap-4"}`}>
+                        <TicketIcon className={isMobile ? "w-12 h-12 opacity-80" : "w-16 h-16 opacity-80"} strokeWidth={1.25} />
+                        <div>
+                            <p className={`font-bold m-0 ${isMobile ? "text-lg" : "text-xl"}`}>No tickets yet</p>
+                            <p className="text-sm opacity-75 mt-1 mb-0">Your collection is empty. Add your first ticket to get started.</p>
+                        </div>
+                        <NavLink
+                            to="/app/new"
+                            className="inline-flex items-center gap-2 mt-1 px-5 py-2.5 bg-secondary-content text-primary font-semibold text-sm rounded-lg no-underline hover:opacity-90 transition-opacity"
+                        >
+                            + Add a Ticket
+                        </NavLink>
+                    </div>
                 )}
             </div>
             </div>

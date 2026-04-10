@@ -137,8 +137,30 @@ describe("TicketCollection — flex layout", () => {
     expect(screen.getByText("Loading tickets...")).toBeInTheDocument();
   });
 
-  it("shows empty state when there are no tickets", () => {
+  it("shows empty state headline when there are no tickets", () => {
     renderCollection([]);
-    expect(screen.getByText("No tickets available.")).toBeInTheDocument();
+    expect(screen.getByText("No tickets yet")).toBeInTheDocument();
+  });
+
+  it("empty state renders a link to /app/new", () => {
+    renderCollection([]);
+    const link = screen.getByRole("link", { name: /add a ticket/i });
+    expect(link).toBeInTheDocument();
+    expect(link.getAttribute("href")).toContain("/app/new");
+  });
+
+  it("empty state renders a Ticket icon (svg)", () => {
+    renderCollection([]);
+    // lucide renders an <svg> inside the empty state
+    const emptyState = screen.getByText("No tickets yet").closest(".emptyState");
+    expect(emptyState).not.toBeNull();
+    expect(emptyState!.querySelector("svg")).not.toBeNull();
+  });
+
+  it("empty state renders correctly on mobile layout", () => {
+    renderCollection([], true);
+    expect(screen.getByText("No tickets yet")).toBeInTheDocument();
+    const link = screen.getByRole("link", { name: /add a ticket/i });
+    expect(link).toBeInTheDocument();
   });
 });
