@@ -85,7 +85,7 @@ const AppShell: React.FC = () => {
   const { authStatus, user } = useAuthenticator((ctx) => [ctx.authStatus, ctx.user]);
   const authReady = authStatus === "authenticated" && !!user;
 
-  const isMobile = useMediaQuery("(max-width: 499px)");
+  const isMobile = useMediaQuery("(max-width: 767px)");
 
   // ✅ one-time bootstrap: ensure User + TicketCollection exist and capture the collection id
   useEffect(() => {

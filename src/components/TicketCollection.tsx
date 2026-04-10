@@ -27,7 +27,7 @@ const TicketCollection: React.FC = () => {
     const goPrev = () => setPage((prev) => Math.max(prev - 1, 1));
 
     return (
-        <div className={"ticketCollection " + (isMobile ? "w-[410px]" : "w-[1000px]")}>
+        <div className={"ticketCollection mx-auto " + (isMobile ? "w-[410px]" : "w-[1000px]")}>
             {fetchError && (
                 <div className="flex items-center justify-between gap-4 px-5 py-3 bg-red-100 text-red-800 rounded mb-2">
                     <span>{fetchError}</span>

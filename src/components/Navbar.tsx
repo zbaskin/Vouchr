@@ -75,7 +75,7 @@ export default function Navbar({
 
   return (
     // navbarContainer: full-bleed, centered content, bg-primary, min-h-16
-    <div className="bg-primary min-h-[64px] flex items-center justify-between w-screen ml-[calc(50%-50vw)] mr-[calc(50%-50vw)] px-5 lg:px-[calc((100vw-1000px)/2)]">
+    <div className="bg-primary min-h-[64px] flex items-center justify-between w-full px-5 lg:px-[calc((100vw-1000px)/2)]">
       {/* logo */}
       <div className="flex items-center gap-2.5 select-none">
         <NavLink to={{ pathname: "/app/collection" }} end className="inline-flex items-center gap-3 no-underline">

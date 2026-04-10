@@ -47,13 +47,14 @@ describe("Phase 3b – Navbar migrated", () => {
     expect(tsx).not.toContain("Navbar.css");
   });
 
-  it("Navbar.tsx uses w-screen for full-bleed width", () => {
+  it("Navbar.tsx uses w-full (not w-screen) to avoid horizontal overflow from scrollbar gutter", () => {
     const tsx = readSrc("components/Navbar.tsx");
-    expect(tsx).toContain("w-screen");
+    expect(tsx).toContain("w-full");
+    expect(tsx).not.toContain("w-screen");
   });
 
-  it("Navbar.tsx uses ml-[calc(50%-50vw)] for full-bleed offset", () => {
+  it("Navbar.tsx does not use negative-margin full-bleed escape (50vw)", () => {
     const tsx = readSrc("components/Navbar.tsx");
-    expect(tsx).toContain("ml-[calc(50%-50vw)]");
+    expect(tsx).not.toContain("50vw");
   });
 });
