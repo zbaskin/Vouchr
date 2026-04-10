@@ -21,6 +21,7 @@ type NavbarProps = {
   sortType: SortType;
   onChangeSort: (s: SortType) => void;
   onSignOut?: () => void;
+  ticketCount?: number;
 };
 
 export default function Navbar({
@@ -28,6 +29,7 @@ export default function Navbar({
   sortType,
   onChangeSort,
   onSignOut,
+  ticketCount = 0,
 }: NavbarProps) {
   const qs = "?" + createSearchParams({ sort: sortType }).toString();
   const { pathname } = useLocation();
@@ -35,7 +37,7 @@ export default function Navbar({
   const HIDE_SORT_PATTERNS = ["/app/new", "/app/settings"];
   const HIDE_ADD_PATTERNS = ["/app/settings"];
 
-  const hideSort = HIDE_SORT_PATTERNS.some(
+  const hideSort = ticketCount === 0 || HIDE_SORT_PATTERNS.some(
     (p) =>
       matchPath({ path: p, end: true }, pathname) ||
       matchPath({ path: p, end: false }, pathname)

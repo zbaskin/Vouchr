@@ -74,7 +74,7 @@ describe("Navbar — mobile menu behaviour", () => {
 
 describe("Navbar — mobile sort closes sheet", () => {
   it("closes the menu when a sort option is selected from the dropdown", () => {
-    render(<Navbar {...defaultProps} />);
+    render(<Navbar {...defaultProps} ticketCount={3} />);
     fireEvent.click(screen.getByLabelText("Open menu"));
     expect(screen.getByRole("dialog")).toBeInTheDocument();
 
@@ -86,7 +86,7 @@ describe("Navbar — mobile sort closes sheet", () => {
   });
 
   it("still calls onChangeSort with the selected value when closing", () => {
-    render(<Navbar {...defaultProps} />);
+    render(<Navbar {...defaultProps} ticketCount={3} />);
     fireEvent.click(screen.getByLabelText("Open menu"));
 
     fireEvent.change(screen.getByLabelText("Sort by"), {
@@ -126,5 +126,30 @@ describe("Navbar — mobile menu right-side layout", () => {
     const dialog = screen.getByRole("dialog");
     // shadow-[-8px_0_24px_...] casts leftward — correct for a right-edge panel
     expect(dialog.className).toMatch(/shadow-\[(-8px|[-\d]+px)_0/);
+  });
+});
+
+describe("Navbar — sort hidden when no tickets", () => {
+  it("hides sort label on desktop when ticketCount is 0", () => {
+    render(<Navbar {...defaultProps} isMobile={false} ticketCount={0} />);
+    expect(screen.queryByLabelText("Sort")).not.toBeInTheDocument();
+    expect(screen.queryByText(/sort/i)).not.toBeInTheDocument();
+  });
+
+  it("shows sort label on desktop when ticketCount is greater than 0", () => {
+    render(<Navbar {...defaultProps} isMobile={false} ticketCount={3} />);
+    expect(screen.getByText(/sort/i)).toBeInTheDocument();
+  });
+
+  it("hides sort select on mobile sheet when ticketCount is 0", () => {
+    render(<Navbar {...defaultProps} isMobile={true} ticketCount={0} />);
+    fireEvent.click(screen.getByLabelText("Open menu"));
+    expect(screen.queryByLabelText("Sort by")).not.toBeInTheDocument();
+  });
+
+  it("shows sort select on mobile sheet when ticketCount is greater than 0", () => {
+    render(<Navbar {...defaultProps} isMobile={true} ticketCount={3} />);
+    fireEvent.click(screen.getByLabelText("Open menu"));
+    expect(screen.getByLabelText("Sort by")).toBeInTheDocument();
   });
 });

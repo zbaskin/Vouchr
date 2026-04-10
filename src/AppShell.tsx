@@ -295,6 +295,7 @@ const AppShell: React.FC = () => {
         sortType={sortType}
         onChangeSort={handleChangeSort}
         onSignOut={handleSignOut}
+        ticketCount={tickets.length}
       />
       <main className="bg-background flex-1">
         <Outlet
