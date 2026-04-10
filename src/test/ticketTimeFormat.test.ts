@@ -17,7 +17,7 @@
  */
 
 import { describe, it, expect } from "vitest";
-import { handleTicketTime } from "../components/Ticket";
+import { handleTicketTime } from "../utils/ticketFormat";
 
 describe("handleTicketTime — malformed input", () => {
   it('returns "" for a string with no colon (not "NaN:undefinedam")', () => {

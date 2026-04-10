@@ -6,6 +6,7 @@ import { useOutletContext } from "react-router-dom";
 import type { AppOutletContext } from "../AppShell";
 import { nowInSeconds } from "../utils/timestamp";
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const initialState: CreateTicketInput = { owner: '', name: '', type: EventType.MOVIE, ticketsID: '', timeCreated: 0, visibility: Visibility.PRIVATE };
 
 const TicketForm: React.FC = () => {
@@ -109,7 +110,7 @@ const TicketForm: React.FC = () => {
                                     <DatePicker
                                         id="eventDate"
                                         selected={eventDateTime}
-                                        onChange={(d) => d && setEventDateTime(d)}
+                                        onChange={(d: Date | null) => d && setEventDateTime(d)}
                                         dateFormat="yyyy-MM-dd"
                                         className="w-full box-border px-3 py-2.5 border-[1.5px] border-border rounded-[10px] bg-white font-[inherit] text-copy outline-none transition-[border-color,box-shadow] duration-150 ease focus:border-primary focus:shadow-[0_0_0_3px_rgba(128,22,22,.15)]"
                                     />
@@ -120,7 +121,7 @@ const TicketForm: React.FC = () => {
                                     <DatePicker
                                         id="eventTime"
                                         selected={eventDateTime}
-                                        onChange={(d) => d && setEventDateTime(d)}
+                                        onChange={(d: Date | null) => d && setEventDateTime(d)}
                                         showTimeSelect
                                         showTimeSelectOnly
                                         timeIntervals={5}

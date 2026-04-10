@@ -8,7 +8,7 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
-import { normalizeSort } from '../AppShell';
+import { normalizeSort } from '../utils/sort';
 
 const SCHEMA_PATH = resolve(__dirname, '../../amplify/backend/api/vouchr/schema.graphql');
 

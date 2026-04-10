@@ -23,6 +23,7 @@ import {
   type Ticket,
   SortType,
 } from "./API";
+import { normalizeSort, sortTickets } from "./utils/sort";
 import { useAuthenticator } from "@aws-amplify/ui-react";
 import "@aws-amplify/ui-react/styles.css";
 
@@ -41,53 +42,6 @@ export type AppOutletContext = {
   onChangeSort: (sort: SortType) => void;
 };
 
-export const normalizeSort = (v?: string | null): SortType | null => {
-  switch ((v ?? "").toUpperCase()) {
-    case "ALPHABETICAL": return SortType.ALPHABETICAL;
-    case "EVENT_DATE":   return SortType.EVENT_DATE;
-    case "TIME_CREATED": return SortType.TIME_CREATED;
-    default:             return null;
-  }
-};
-
-/**
- * Construct a Date in LOCAL time from a "YYYY-MM-DD" date string and an optional
- * "HH:MM" or "HH:MM:SS" time string.
- *
- * Why not `new Date(dateStr)`?
- * Date-only ISO strings (YYYY-MM-DD) are parsed as **UTC midnight** per spec.
- * In timezones west of UTC (e.g. EST = UTC-5), UTC midnight falls on the
- * *previous calendar day* locally, so `new Date("2024-03-15").getDate()` returns
- * 14 in EST. Subsequent `.setHours()` then stamps the wrong calendar day.
- *
- * Using `new Date(year, month-1, day, h, m)` always constructs in local time.
- */
-export function buildEventDate(dateStr: string | null | undefined, timeStr: string | null | undefined): Date | null {
-  if (!dateStr) return null;
-  const parts = dateStr.split("-").map(Number);
-  if (parts.length < 3) return null;
-  const [y, m, d] = parts;
-  const timeParts = (timeStr ?? "").split(":").map(Number);
-  const h = Number.isFinite(timeParts[0]) ? timeParts[0] : 0;
-  const min = Number.isFinite(timeParts[1]) ? timeParts[1] : 0;
-  return new Date(y, m - 1, d, h, min, 0, 0);
-}
-
-export const sortTickets = (items: Ticket[], sort: SortType): Ticket[] => {
-  const copy = [...items];
-  if (sort === SortType.ALPHABETICAL) {
-    copy.sort((a, b) => (a.name ?? "").localeCompare(b.name ?? ""));
-  } else if (sort === SortType.EVENT_DATE) {
-    copy.sort((a, b) => {
-      const ad = buildEventDate(a.eventDate, a.eventTime);
-      const bd = buildEventDate(b.eventDate, b.eventTime);
-      return (bd?.getTime() ?? -Infinity) - (ad?.getTime() ?? -Infinity);
-    });
-  } else {
-    copy.sort((a, b) => (b.timeCreated ?? 0) - (a.timeCreated ?? 0));
-  }
-  return copy;
-};
 
 function useMediaQuery(query: string) {
   const get = () =>
@@ -98,7 +52,6 @@ function useMediaQuery(query: string) {
   useEffect(() => {
     if (typeof window === "undefined") return;
     const mql = window.matchMedia(query);
-    setMatches(mql.matches);
     const onChange = (e: MediaQueryListEvent) => setMatches(e.matches);
     if (mql.addEventListener) mql.addEventListener("change", onChange);
     else mql.addListener(onChange);
@@ -147,8 +100,8 @@ const AppShell: React.FC = () => {
         if (!collId) {
           collId = await createCollection();
           try { await linkUserToCollection(u.id, collId); }
-          catch (e: any) {
-            const msg = String(e?.message ?? e);
+          catch (e: unknown) {
+            const msg = String((e as { message?: string })?.message ?? e);
             if (!msg.includes('ConditionalCheckFailed')) throw e;
             const latest = await fetchUser(u.id);
             collId = latest?.ticketsCollectionId ?? collId;
@@ -161,7 +114,6 @@ const AppShell: React.FC = () => {
         setBootError('Something went wrong loading your account. Please try again.');
       }
     })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authReady, user?.userId, user?.username, bootRetry]);
 
   // ✅ init sort from URL or server, once the collection id is known

@@ -30,7 +30,7 @@
  */
 
 import { describe, it, expect } from "vitest";
-import { sortTickets, buildEventDate } from "../AppShell";
+import { sortTickets, buildEventDate } from "../utils/sort";
 import { SortType } from "../API";
 import type { Ticket } from "../API";
 

@@ -12,7 +12,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { handleTicketDate, handleTicketTime } from '../components/Ticket';
+import { handleTicketDate, handleTicketTime } from '../utils/ticketFormat';
 
 // ---------------------------------------------------------------------------
 // handleTicketDate

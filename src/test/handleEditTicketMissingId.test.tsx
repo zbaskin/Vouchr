@@ -16,7 +16,7 @@
  * - Normal edit still resolves when id is present (regression guard)
  */
 
-import { render, waitFor, act } from "@testing-library/react";
+import { render, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { MemoryRouter, Route, Routes, useOutletContext } from "react-router-dom";
 import React from "react";

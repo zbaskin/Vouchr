@@ -20,7 +20,7 @@
  */
 
 import { render, screen, fireEvent, act, waitFor } from "@testing-library/react";
-import { describe, it, expect, vi, useState } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { MemoryRouter, Route, Routes, Outlet } from "react-router-dom";
 import React from "react";
 import TicketCollection from "../components/TicketCollection";

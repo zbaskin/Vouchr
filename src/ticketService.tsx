@@ -332,9 +332,9 @@ export async function ensureUser(username: string) {
       } },
     });
     if (!('data' in res)) throw new Error('Unexpected subscription result');
-  } catch (e: any) {
+  } catch (e: unknown) {
     // If another render/thread already created the user, ignore the conditional error.
-    const msg = String(e?.message ?? e);
+    const msg = String((e as { message?: string })?.message ?? e);
     if (!msg.includes('ConditionalCheckFailed')) throw e;
   }
   // Return the fresh user row
@@ -389,8 +389,8 @@ export async function adjustTicketCount(
       });
       if (!('data' in write)) throw new Error('Unexpected subscription result');
       return write.data.updateTicketCollection?.ticketCount ?? next;
-    } catch (e: any) {
-      const msg = String(e?.errors?.[0]?.message ?? e?.message ?? e);
+    } catch (e: unknown) {
+      const msg = String((e as { errors?: { message?: string }[]; message?: string })?.errors?.[0]?.message ?? (e as { message?: string })?.message ?? e);
       if (msg.includes('Conflict') || msg.includes('ConditionalCheckFailed')) {
         await new Promise(r => setTimeout(r, 50 + attempt * 100));
         continue;

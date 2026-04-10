@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import TicketEdit, { TicketEditValues } from "./TicketEdit";
 import { Pencil, Trash2 } from "lucide-react";
+import { handleTicketDate, handleTicketTime } from "../utils/ticketFormat";
 
 type TicketProps = {
   id: string;
@@ -12,26 +13,6 @@ type TicketProps = {
   seat: string;
   onRemove: (id: string) => void;
   onEdit?: (v: TicketEditValues) => Promise<void> | void;
-};
-
-export const handleTicketDate = (date: string | null | undefined): string => {
-  if (!date) return "";
-  const [year, month, day] = date.split("-");
-  return `${month}/${day}/${year}`;
-};
-
-export const handleTicketTime = (time: string | null | undefined): string => {
-  if (!time) return "";
-  const t = time.substring(0, 5);
-  const parts = t.split(":");
-  if (parts.length < 2) return "";
-  const hour = parseInt(parts[0], 10);
-  const minute = parts[1];
-  if (isNaN(hour)) return "";
-  if (hour === 12) return `${t}pm`;
-  if (hour > 12) return `${hour - 12}:${minute}pm`;
-  if (hour === 0) return `${hour + 12}:${minute}am`;
-  return `${hour}:${minute}am`;
 };
 
 const Ticket: React.FC<TicketProps> = ({
@@ -73,9 +54,7 @@ const Ticket: React.FC<TicketProps> = ({
 
     schedule();
 
-    // @ts-ignore web fonts ready
     if (document?.fonts?.ready) {
-      // @ts-ignore
       document.fonts.ready.then(schedule).catch(() => {});
     }
 
@@ -104,7 +83,7 @@ const Ticket: React.FC<TicketProps> = ({
   const onNameKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (e) => {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
-      showPopover ? closePopover() : openPopover();
+      if (showPopover) { closePopover(); } else { openPopover(); }
     } else if (e.key === "Escape") {
       closePopover();
     }

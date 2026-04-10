@@ -16,7 +16,7 @@
 
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { MemoryRouter, Route, Routes } from "react-router-dom";
+import { MemoryRouter, Route, Routes, Outlet } from "react-router-dom";
 import Settings from "../components/Settings";
 import type { AppOutletContext } from "../AppShell";
 import { SortType } from "../API";
@@ -42,10 +42,7 @@ function renderSettings(contextOverrides: Partial<AppOutletContext> = {}) {
   };
 
   // Use a wrapper route that injects the outlet context
-  const Wrapper = () => {
-    const { Outlet } = require("react-router-dom");
-    return <Outlet context={defaultCtx} />;
-  };
+  const Wrapper = () => <Outlet context={defaultCtx} />;
 
   render(
     <MemoryRouter initialEntries={["/?sort=TIME_CREATED"]}>
