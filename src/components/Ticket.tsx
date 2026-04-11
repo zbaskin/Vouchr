@@ -97,10 +97,10 @@ const Ticket: React.FC<TicketProps> = ({
   );
 
   return (
-    <div className="ticketObject bg-white w-[175px] min-h-[175px] p-2.5 border border-[#ccc] shadow-[2px_2px_8px_rgba(0,0,0,0.2)] font-[Arial,sans-serif] text-sm text-center relative flex flex-col justify-center text-copy max-w-full">
+    <div className="ticketObject bg-white w-43.75 min-h-43.75 p-2.5 border border-[#ccc] shadow-[2px_2px_8px_rgba(0,0,0,0.2)] font-[Arial,sans-serif] text-sm text-center relative flex flex-col justify-center text-copy max-w-full">
       <div>
         <button
-            className="editTicketButton absolute top-[3px] right-[26px] w-5 h-5 border border-black text-center justify-items-center leading-[12px] font-bold text-xs cursor-pointer p-0"
+            className="editTicketButton absolute top-0.75 right-6.5 w-5 h-5 border border-black text-center justify-items-center leading-3 font-bold text-xs cursor-pointer p-0"
             onClick={() => setEditing(true)}
             aria-label="Edit ticket"
             title="Edit"
@@ -108,7 +108,7 @@ const Ticket: React.FC<TicketProps> = ({
             <Pencil size={14} />
         </button>
         <button
-            className="removeTicketButton absolute top-[3px] right-[3px] w-5 h-5 border border-black text-center justify-items-center leading-[12px] font-bold text-xs cursor-pointer p-0"
+            className="removeTicketButton absolute top-0.75 right-0.75 w-5 h-5 border border-black text-center justify-items-center leading-3 font-bold text-xs cursor-pointer p-0"
             onClick={() => onRemove(id)}
             aria-label="Remove ticket"
             title="Remove"
@@ -122,7 +122,7 @@ const Ticket: React.FC<TicketProps> = ({
       {/* titleClamp: position:relative + overflow:hidden + 2-line max-height */}
       <div
         ref={nameWrapRef}
-        className={`ticketName titleClamp text-base font-bold uppercase my-[5px] relative overflow-hidden leading-[1.25] max-h-[calc(1.25em*2)]${isOverflowing ? " hasOverflow cursor-pointer focus:outline-[2px] focus:outline-[#9ca3af] focus:outline-offset-2" : ""}`}
+        className={`ticketName titleClamp text-base font-bold uppercase my-1.25 relative overflow-hidden leading-tight max-h-[calc(1.25em*2)]${isOverflowing ? " hasOverflow cursor-pointer focus:outline-2 focus:outline-[#9ca3af] focus:outline-offset-2" : ""}`}
         title={!isOverflowing ? name : undefined}
         aria-label={name}
         role={isOverflowing ? "button" : undefined}
@@ -135,7 +135,7 @@ const Ticket: React.FC<TicketProps> = ({
         </span>
       </div>
 
-      <div className="text-xs leading-[1.5]">
+      <div className="text-xs leading-normal">
         {handleTicketDate(eventDate)} &nbsp;
         {handleTicketTime(eventTime)}
       </div>
@@ -144,7 +144,7 @@ const Ticket: React.FC<TicketProps> = ({
         <div className="flex justify-between text-sm font-bold mt-2.5">
           {seat && (
             <div>
-              Seat <span className="text-sm font-bold mt-2.5 bg-copy text-white p-[3px] rounded-[3px]">{seat}</span>
+              Seat <span className="text-sm font-bold mt-2.5 bg-copy text-white p-0.75 rounded-[3px]">{seat}</span>
             </div>
           )}
           {theater && (
@@ -155,7 +155,7 @@ const Ticket: React.FC<TicketProps> = ({
         </div>
       )}
 
-      <div className="text-[10px] text-copy-lighter mt-[15px]">Vouchr Tickets</div>
+      <div className="text-[10px] text-copy-lighter mt-3.75">Vouchr Tickets</div>
 
       {showPopover && popoverPos && (
         <>
@@ -174,7 +174,7 @@ const Ticket: React.FC<TicketProps> = ({
             role="dialog"
             aria-modal="true"
           >
-            <div className="titlePopoverContent block max-h-[50vh] overflow-auto bg-white text-black px-3 py-2.5 rounded-[10px] shadow-[0_8px_24px_rgba(0,0,0,0.12)] border border-black/[.08] font-[inherit] font-[inherit] text-[inherit] leading-[1.25]">
+            <div className="titlePopoverContent block max-h-[50vh] overflow-auto bg-white px-3 py-2.5 rounded-[10px] shadow-[0_8px_24px_rgba(0,0,0,0.12)] border border-black/8 font-[inherit] text-inherit leading-tight">
               {name}
             </div>
           </div>

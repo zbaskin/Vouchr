@@ -77,7 +77,7 @@ export default function Navbar({
 
   return (
     // navbarContainer: full-bleed, centered content, bg-primary, min-h-16
-    <div className="bg-primary min-h-[64px] flex items-center justify-between w-full px-5 lg:px-[calc((100vw-1000px)/2)]">
+    <div className="bg-primary min-h-16 flex items-center justify-between w-full px-5 lg:px-[calc((100vw-1000px)/2)]">
       {/* logo */}
       <div className="flex items-center gap-2.5 select-none">
         <NavLink to={{ pathname: "/app/collection" }} end className="inline-flex items-center gap-3 no-underline">
@@ -132,7 +132,7 @@ export default function Navbar({
                 id="sortSel"
                 value={sortType}
                 onChange={(e) => onChangeSort(e.target.value as SortType)}
-                className="absolute inset-0 w-full h-full opacity-0 appearance-none border-0 bg-transparent cursor-pointer z-[1]"
+                className="absolute inset-0 w-full h-full opacity-0 appearance-none border-0 bg-transparent cursor-pointer z-1"
               >
                 <option value={SortType.TIME_CREATED}>Newest</option>
                 <option value={SortType.EVENT_DATE}>Event Date</option>
@@ -155,7 +155,7 @@ export default function Navbar({
           <li role="none" className="inline-flex items-center">
             <button
               type="button"
-              className="inline-flex items-center gap-2 px-3 py-2 text-[0.95rem] font-semibold text-secondary-content bg-transparent border-0 cursor-pointer hover:underline focus:underline"
+              className="inline-flex items-center gap-2 px-3 py-2 text-[0.95rem] font-semibold! text-secondary-content bg-transparent border-0 cursor-pointer hover:underline focus:underline"
               onClick={onSignOut}
               disabled={!onSignOut}
             >
@@ -183,7 +183,7 @@ export default function Navbar({
 
           {open && (
             <div
-              className="fixed inset-0 bg-black/[.42] z-50 flex justify-end"
+              className="fixed inset-0 bg-black/42 z-50 flex justify-end"
               onClick={close}
               role="presentation"
               data-testid="mobile-menu-overlay"
@@ -212,7 +212,7 @@ export default function Navbar({
                     <NavLink
                       to={{ pathname: "/app/collection", search: qs }}
                       end
-                      className="inline-flex items-center gap-2.5 w-full px-2 py-2.5 no-underline text-[inherit] font-semibold rounded-lg hover:bg-white/[.08] focus:bg-white/[.08]"
+                      className="inline-flex items-center gap-2.5 w-full px-2 py-2.5 no-underline text-inherit font-semibold rounded-lg hover:bg-white/8 focus:bg-white/8"
                       onClick={close}
                     >
                       Collection
@@ -223,10 +223,10 @@ export default function Navbar({
                     <li>
                       <NavLink
                         to={{ pathname: "/app/new" }}
-                        className="inline-flex items-center gap-2.5 w-full px-2 py-2.5 no-underline text-[inherit] font-semibold rounded-lg hover:bg-white/[.08] focus:bg-white/[.08]"
+                        className="inline-flex items-center gap-2.5 w-full px-2 py-2.5 no-underline text-inherit font-semibold rounded-lg hover:bg-white/8 focus:bg-white/8"
                         onClick={close}
                       >
-                        <PlusIcon className="h-[18px] w-[18px]" /> Add Ticket
+                        <PlusIcon className="h-4.5 w-4.5" /> Add Ticket
                       </NavLink>
                     </li>
                   )}
@@ -238,7 +238,7 @@ export default function Navbar({
                       </label>
                       <select
                         id="m-sortSel"
-                        className="w-full h-11 rounded-[10px] px-3 border border-border bg-[var(--surface,#111)] text-[inherit]"
+                        className="w-full h-11 rounded-[10px] px-3 border border-border bg-(--surface,#111) text-inherit"
                         value={sortType}
                         onChange={(e) => {
                           onChangeSort(e.target.value as SortType);
@@ -255,10 +255,10 @@ export default function Navbar({
                   <li>
                     <NavLink
                       to={{ pathname: "/app/settings" }}
-                      className="inline-flex items-center gap-2.5 w-full px-2 py-2.5 no-underline text-[inherit] font-semibold rounded-lg hover:bg-white/[.08] focus:bg-white/[.08]"
+                      className="inline-flex items-center gap-2.5 w-full px-2 py-2.5 no-underline text-inherit font-semibold rounded-lg hover:bg-white/8 focus:bg-white/8"
                       onClick={close}
                     >
-                      <SettingsIcon className="h-[18px] w-[18px]" /> Settings
+                      <SettingsIcon className="h-4.5 w-4.5" /> Settings
                     </NavLink>
                   </li>
                 </ul>
@@ -266,13 +266,13 @@ export default function Navbar({
                 <div className="mt-2 pt-2 border-t border-border">
                   <button
                     type="button"
-                    className="inline-flex items-center gap-2.5 w-full px-2 py-2.5 no-underline text-[inherit] font-semibold! rounded-lg bg-transparent border-0 cursor-pointer hover:bg-white/[.08] focus:bg-white/[.08]"
+                    className="inline-flex items-center gap-2.5 w-full px-2 py-2.5 no-underline text-inherit font-semibold! rounded-lg bg-transparent border-0 cursor-pointer hover:bg-white/8 focus:bg-white/8"
                     onClick={() => {
                       close();
                       onSignOut?.();
                     }}
                   >
-                    <LogOutIcon className="h-[18px] w-[18px]" /> Sign out
+                    <LogOutIcon className="h-4.5 w-4.5" /> Sign out
                   </button>
                 </div>
               </div>

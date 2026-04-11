@@ -49,7 +49,7 @@ export default function TicketEdit({ open, initial, onCancel, onSave }: Props) {
 
   return (
     <div role="dialog" aria-modal="true"
-         className="fixed inset-0 z-[1000] grid place-items-center bg-black/40">
+         className="fixed inset-0 z-1000 grid place-items-center bg-black/40">
       <div className="w-[min(92vw,600px)] rounded-xl bg-white p-4 shadow-xl">
         <div className="mb-3 flex items-center justify-between">
           <h2 className="text-lg font-semibold">Edit Ticket</h2>
@@ -107,7 +107,7 @@ export default function TicketEdit({ open, initial, onCancel, onSave }: Props) {
             <button type="button" onClick={onCancel} className="rounded-md border px-3 py-2">
               Cancel
             </button>
-            <button type="submit" disabled={isSubmitting} className="rounded-md !bg-[var(--primary,#0a0a0a)] px-3 py-2 text-white disabled:opacity-50">
+            <button type="submit" disabled={isSubmitting} className="rounded-md bg-(--primary,#0a0a0a)! px-3 py-2 text-white disabled:opacity-50">
               {isSubmitting ? "Saving…" : "Save changes"}
             </button>
           </div>

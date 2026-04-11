@@ -34,8 +34,24 @@ const TicketCollection: React.FC = () => {
     const goNext = () => setPage((prev) => Math.min(prev + 1, totalPages));
     const goPrev = () => setPage((prev) => Math.max(prev - 1, 1));
 
+    const emptyStateClass = isMobile
+        ? "emptyState flex flex-col items-center text-center text-secondary-content py-10 px-4 gap-3"
+        : "emptyState flex flex-col items-center text-center text-secondary-content py-16 px-8 gap-4";
+
+    const ticketIconClass = isMobile ? "w-12 h-12 opacity-80" : "w-16 h-16 opacity-80";
+
+    const noTicketsHeadingClass = isMobile ? "font-bold m-0 text-lg" : "font-bold m-0 text-xl";
+
+    const featureHintsClass = isMobile
+        ? "featureHints grid grid-cols-1 px-5 pt-6 pb-4 gap-4"
+        : "featureHints grid grid-cols-2 px-5 pt-8 pb-4 gap-x-8 gap-y-5 max-w-lg mx-auto";
+
+    const featureHintsLabelClass = isMobile
+        ? "col-span-full text-xs font-semibold uppercase tracking-widest text-copy-lighter m-0 mb-1"
+        : "col-span-full text-xs font-semibold uppercase tracking-widest text-copy-lighter m-0 mb-2";
+
     return (
-        <div className={"ticketCollection mx-auto " + (isMobile ? "w-[410px]" : "w-[1000px]")}>
+        <div className={"ticketCollection mx-auto " + (isMobile ? "w-102.5" : "w-250")}>
             {fetchError && (
                 <div className="flex items-center justify-between gap-4 px-5 py-3 bg-red-100 text-red-800 rounded mb-2">
                     <span>{fetchError}</span>
@@ -67,10 +83,10 @@ const TicketCollection: React.FC = () => {
                         />
                     ))
                 ) : (
-                    <div className={`emptyState flex flex-col items-center text-center text-secondary-content ${isMobile ? "py-10 px-4 gap-3" : "py-16 px-8 gap-4"}`}>
-                        <TicketIcon className={isMobile ? "w-12 h-12 opacity-80" : "w-16 h-16 opacity-80"} strokeWidth={1.25} />
+                    <div className={emptyStateClass}>
+                        <TicketIcon className={ticketIconClass} strokeWidth={1.25} />
                         <div>
-                            <p className={`font-bold m-0 ${isMobile ? "text-lg" : "text-xl"}`}>No tickets yet</p>
+                            <p className={noTicketsHeadingClass}>No tickets yet</p>
                             <p className="text-sm opacity-75 mt-1 mb-0">Your collection is empty. Add your first ticket to get started.</p>
                         </div>
                         <NavLink
@@ -85,8 +101,8 @@ const TicketCollection: React.FC = () => {
             </div>
 
             {!isLoading && tickets.length === 0 && (
-                <div className={`featureHints px-5 pt-6 pb-4 ${isMobile ? "grid grid-cols-1 gap-4" : "grid grid-cols-2 gap-x-8 gap-y-5 pt-8 max-w-lg mx-auto"}`}>
-                    <p className={`col-span-full text-xs font-semibold uppercase tracking-widest text-copy-lighter m-0 ${isMobile ? "mb-1" : "mb-2"}`}>
+                <div className={featureHintsClass}>
+                    <p className={featureHintsLabelClass}>
                         What you can track
                     </p>
                     {FEATURE_HINTS.map(({ icon: Icon, label, desc }) => (

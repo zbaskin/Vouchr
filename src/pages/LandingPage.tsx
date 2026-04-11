@@ -15,12 +15,12 @@ import { useState } from 'react'
 export default function LandingPage() {
   const [open, setOpen] = useState(false)
   return (
-    <div className="min-h-dvh bg-[var(--bg,white)] text-[var(--text,#0a0a0a)] dark:bg-[var(--bg,#0b0b0b)] dark:text-[var(--text,#fafafa)]">      
+    <div className="min-h-dvh bg-(--bg) text-(--text) dark:bg-(--bg) dark:text-(--text)">      
       {/* Decorative background tied to your palette */}
       <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
-        <div className="absolute -top-40 -left-40 h-96 w-96 rounded-full bg-[color:var(--accent,#22d3ee)]/15 blur-3xl" />
-        <div className="absolute -bottom-40 -right-40 h-96 w-96 rounded-full bg-[color:var(--primary,#8b5cf6)]/15 blur-3xl" />
-        <svg className="absolute inset-x-0 top-0 -z-10 h-[500px] w-full opacity-60" viewBox="0 0 1440 320" preserveAspectRatio="none">
+        <div className="absolute -top-40 -left-40 h-96 w-96 rounded-full bg-(--accent)/15 blur-3xl" />
+        <div className="absolute -bottom-40 -right-40 h-96 w-96 rounded-full bg-(--primary)/15 blur-3xl" />
+        <svg className="absolute inset-x-0 top-0 -z-10 h-125 w-full opacity-60" viewBox="0 0 1440 320" preserveAspectRatio="none">
           <defs>
             <linearGradient id="g" x1="0" x2="1">
               <stop offset="0%" stopColor="var(--primary,#8b5cf6)"/>
@@ -37,8 +37,8 @@ export default function LandingPage() {
         className={
             "sticky top-0 z-20 " +
             (open
-                ? "bg-[color:var(--surface,white)] dark:bg-[color:var(--surface,#0b0b0b)] shadow"
-                : "backdrop-blur supports-[backdrop-filter]:bg-[color:var(--surface,rgba(255,255,255,.7))] dark:supports-[backdrop-filter]:bg-[color:var(--surface,rgba(10,10,10,.6))]"
+                ? "bg-(--surface) dark:bg-(--surface) shadow"
+                : "backdrop-blur supports-backdrop-filter:bg-(--surface) dark:supports-backdrop-filter:bg-(--surface)"
             )
         }
       >
@@ -50,17 +50,17 @@ export default function LandingPage() {
 
             {/* Desktop nav */}
             <nav className="hidden lg:flex items-center gap-2 sm:gap-3">
-                <a href="#features" className="rounded-xl px-3 py-2 text-lg font-medium hover:bg-[var(--surface-2,#f6f6f6)] dark:hover:bg-[var(--surface-2,#191919)]">Features</a>
-                <a href="#how" className="rounded-xl px-3 py-2 text-lg font-medium hover:bg-[var(--surface-2,#f6f6f6)] dark:hover:bg-[var(--surface-2,#191919)]">How it works</a>
-                <Link to="/login" className="rounded-xl px-3 py-2 text-lg font-semibold ring-1 ring-inset ring-[var(--border,#d4d4d4)] hover:bg-[var(--surface-2,#f6f6f6)] dark:ring-[var(--border,#2a2a2a)] dark:hover:bg-[var(--surface-2,#191919)]">Log in</Link>
-                <Link to="/login" className="hidden sm:inline-flex items-center rounded-xl bg-[var(--primary,#0a0a0a)] px-4 py-2 text-lg font-semibold !text-[var(--primary-fg,#ffffff)] shadow hover:brightness-95">Create account</Link>
+                <a href="#features" className="rounded-xl px-3 py-2 text-lg font-medium hover:bg-(--surface-2) dark:hover:bg-(--surface-2)">Features</a>
+                <a href="#how" className="rounded-xl px-3 py-2 text-lg font-medium hover:bg-(--surface-2) dark:hover:bg-(--surface-2)">How it works</a>
+                <Link to="/login" className="rounded-xl px-3 py-2 text-lg font-semibold ring-1 ring-inset ring-(--border) hover:bg-(--surface-2) dark:ring-(--border) dark:hover:bg-(--surface-2)">Log in</Link>
+                <Link to="/login" className="hidden sm:inline-flex items-center rounded-xl bg-(--primary) px-4 py-2 text-lg font-semibold text-(--primary-fg)! shadow hover:brightness-95">Create account</Link>
             </nav>
 
             {/* Mobile trigger */}
             <button
                 type="button"
                 onClick={() => setOpen((v) => !v)}
-                className="lg:hidden inline-flex items-center justify-center rounded-md p-2 ring-1 ring-[var(--border,#d4d4d4)] hover:bg-[var(--surface-2,#f6f6f6)] dark:ring-[var(--border,#2a2a2a)] dark:hover:bg-[var(--surface-2,#191919)]"
+                className="lg:hidden inline-flex items-center justify-center rounded-md p-2 ring-1 ring-(--border) hover:bg-(--surface-2) dark:ring-(--border) dark:hover:bg-(--surface-2)"
                 aria-label={open ? "Close menu" : "Open menu"}
                 aria-expanded={open}
                 aria-controls="lp-mobile-menu"
@@ -81,13 +81,13 @@ export default function LandingPage() {
                     role="dialog"
                     aria-modal="true"
                     aria-label="Site navigation"
-                    className="ml-auto h-full w-72 p-4 shadow-2xl ring-1 ring-[var(--border,#e5e5e5)] dark:ring-[var(--border,#2a2a2a)] bg-white! backdrop-filter-none! [backdrop-filter:none]! dark:bg-[#0b0b0b]!"
+                    className="ml-auto h-full w-72 p-4 shadow-2xl ring-1 ring-(--border) dark:ring-(--border) bg-white! backdrop-filter-none! dark:bg-[#0b0b0b]!"
                     onClick={(e) => e.stopPropagation()}
                 >
                     <div className="mb-3 flex items-center justify-between">
                         <span className="text-base font-semibold">Menu</span>
                         <button
-                            className="rounded-md p-2 hover:bg-[var(--surface-2,#f6f6f6)] dark:hover:bg-[var(--surface-2,#191919)]"
+                            className="rounded-md p-2 hover:bg-(--surface-2) dark:hover:bg-(--surface-2)"
                             onClick={() => setOpen(false)}
                             aria-label="Close menu"
                         >
@@ -95,10 +95,10 @@ export default function LandingPage() {
                         </button>
                     </div>
                     <nav className="grid gap-1">
-                        <a href="#features" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2 text-base font-medium hover:bg-[var(--surface-2,#f6f6f6)] dark:hover:bg-[var(--surface-2,#191919)]">Features</a>
-                        <a href="#how" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2 text-base font-medium hover:bg-[var(--surface-2,#f6f6f6)] dark:hover:bg-[var(--surface-2,#191919)]">How it works</a>
-                        <Link to="/login" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2 text-base font-semibold ring-1 ring-inset ring-[var(--border,#d4d4d4)] hover:bg-[var(--surface-2,#f6f6f6)] dark:ring-[var(--border,#2a2a2a)] dark:hover:bg-[var(--surface-2,#191919)]">Log in</Link>
-                        <Link to="/login" onClick={() => setOpen(false)} className="inline-flex items-center justify-center rounded-lg bg-[var(--primary,#0a0a0a)] px-3 py-2 text-base font-semibold !text-[var(--primary-fg,#ffffff)] shadow hover:brightness-95">Create account</Link>
+                        <a href="#features" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2 text-base font-medium hover:bg-(--surface-2) dark:hover:bg-(--surface-2)">Features</a>
+                        <a href="#how" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2 text-base font-medium hover:bg-(--surface-2) dark:hover:bg-(--surface-2)">How it works</a>
+                        <Link to="/login" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2 text-base font-semibold ring-1 ring-inset ring-(--border) hover:bg-(--surface-2) dark:ring-(--border) dark:hover:bg-(--surface-2)">Log in</Link>
+                        <Link to="/login" onClick={() => setOpen(false)} className="inline-flex items-center justify-center rounded-lg bg-(--primary) px-3 py-2 text-base font-semibold text-(--primary-fg)! shadow hover:brightness-95">Create account</Link>
                     </nav>
                 </div>
             </div>
@@ -109,43 +109,43 @@ export default function LandingPage() {
       <section className="relative mx-auto grid max-w-6xl grid-cols-1 items-center gap-8 px-4 pb-16 pt-10 sm:pt-16 md:grid-cols-2 md:gap-12 lg:pt-24">
         <motion.div initial={{opacity:0, y:20}} animate={{opacity:1, y:0}} transition={{duration:0.5}}>
           <h1 className="text-balance text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
-            Your movie life, <span className="bg-gradient-to-r from-[var(--primary,#8b5cf6)] via-[var(--accent,#22d3ee)] to-[var(--primary,#fb7185)] bg-clip-text text-transparent">beautifully organized</span>
+            Your movie life, <span className="bg-linear-to-r from-(--primary) via-(--accent) to-(--primary) bg-clip-text text-transparent">beautifully organized</span>
           </h1>
-          <p className="mt-4 max-w-prose text-pretty text-lg leading-relaxed text-[color:var(--muted,#525252)]">
+          <p className="mt-4 max-w-prose text-pretty text-lg leading-relaxed text-(--muted)">
             Vouchr turns crumpled ticket stubs and fading memories into a living collection. Save screenings, formats, theaters, and notes—then share a profile that actually feels like <em>you</em>.
           </p>
           <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-            <Link to="/login" className="inline-flex items-center justify-center rounded-xl bg-[var(--primary,#0a0a0a)] px-5 py-3 text-sm font-semibold !text-[var(--primary-fg,#ffffff)] shadow hover:brightness-95">
+            <Link to="/login" className="inline-flex items-center justify-center rounded-xl bg-(--primary) px-5 py-3 text-sm font-semibold text-(--primary-fg)! shadow hover:brightness-95">
               Get started — it’s free
             </Link>
-            <a href="#how" className="inline-flex items-center justify-center rounded-xl px-5 py-3 text-sm font-semibold ring-1 ring-inset ring-[var(--border,#d4d4d4)] hover:bg-[var(--surface-2,#f6f6f6)] dark:ring-[var(--border,#2a2a2a)] dark:hover:bg-[var(--surface-2,#191919)]">
+            <a href="#how" className="inline-flex items-center justify-center rounded-xl px-5 py-3 text-sm font-semibold ring-1 ring-inset ring-(--border) hover:bg-(--surface-2) dark:ring-(--border) dark:hover:bg-(--surface-2)">
               Learn more
             </a>
           </div>
-          <div className="mt-4 text-xs text-[color:var(--muted,#6b7280)]">No spam. You control your collection’s visibility.</div>
+          <div className="mt-4 text-xs text-(--muted)">No spam. You control your collection’s visibility.</div>
         </motion.div>
 
         {/* Mockup card */}
         <motion.div initial={{opacity:0, y:20}} animate={{opacity:1, y:0}} transition={{duration:0.6, delay:0.1}} className="relative">
-          <div className="relative isolate mx-auto w-full max-w-xl overflow-hidden rounded-3xl border border-[var(--border,#e5e5e5)] bg-[color:var(--surface,rgba(255,255,255,.6))] p-4 shadow-2xl backdrop-blur dark:border-[var(--border,#2a2a2a)] dark:bg-[color:var(--surface,rgba(12,12,12,.6))]">
-            <div className="rounded-2xl bg-[var(--surface-2,#fafafa)] p-4 dark:bg-[var(--surface-2,#0f0f0f)]">
+          <div className="relative isolate mx-auto w-full max-w-xl overflow-hidden rounded-3xl border border-(--border) bg-(--surface) p-4 shadow-2xl backdrop-blur dark:border-(--border) dark:bg-(--surface)">
+            <div className="rounded-2xl bg-(--surface-2) p-4 dark:bg-(--surface-2)">
               <div className="mb-3 flex items-center justify-between">
                 <div className="text-sm font-semibold">Your Ticket Collection</div>
-                <div className="text-xs text-[color:var(--muted,#6b7280)]">Sample</div>
+                <div className="text-xs text-(--muted)">Sample</div>
               </div>
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {sampleTickets.map((t, i) => (
                   <div
                     key={i}
-                    className="rounded-xl border border-[var(--border,#e5e5e5)] bg-[var(--surface,white)]
-                              p-3 shadow-sm dark:border-[var(--border,#2a2a2a)] dark:bg-[var(--surface,#0b0b0b)]"
+                    className="rounded-xl border border-(--border) bg-(--surface)
+                              p-3 shadow-sm dark:border-(--border) dark:bg-(--surface)"
                   >
                     <div className="flex items-center justify-between">
                       <div className="inline-flex items-center gap-1">
                         <span className="text-lg">{t.emoji}</span>
                         <Pill>{t.tag}</Pill>
                       </div>
-                      <span className="text-xs text-[color:var(--muted,#6b7280)]">
+                      <span className="text-xs text-(--muted)">
                         <Stars n={t.rating} />
                       </span>
                     </div>
@@ -154,11 +154,11 @@ export default function LandingPage() {
                       {t.title}
                     </div>
 
-                    <div className="mt-0.5 text-[11px] text-[color:var(--muted,#6b7280)]">
+                    <div className="mt-0.5 text-[11px] text-(--muted)">
                       {t.meta}
                     </div>
 
-                    <div className="mt-2 text-xs italic text-[color:var(--muted,#6b7280)]">
+                    <div className="mt-2 text-xs italic text-(--muted)">
                       “{t.note}”
                     </div>
                   </div>
@@ -173,16 +173,16 @@ export default function LandingPage() {
       <section id="features" className="mx-auto max-w-6xl px-4 py-12 sm:py-16">
         <div className="mx-auto max-w-3xl text-center">
           <h2 className="text-2xl font-bold sm:text-3xl">Built for cinephiles, designed for humans</h2>
-          <p className="mt-2 text-[color:var(--muted,#6b7280)]">Everything you need to capture screenings and relive them anytime.</p>
+          <p className="mt-2 text-(--muted)">Everything you need to capture screenings and relive them anytime.</p>
         </div>
         <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {features.map((f, idx) => (
-            <motion.div key={idx} initial={{opacity:0, y:10}} whileInView={{opacity:1, y:0}} viewport={{once:true}} transition={{duration:0.35, delay:idx*0.05}} className="rounded-2xl border border-[var(--border,#e5e5e5)] bg-[var(--surface,white)] p-6 shadow-sm dark:border-[var(--border,#2a2a2a)] dark:bg-[var(--surface,#0b0b0b)]">
-              <div className="mb-3 inline-flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--surface-2,#f6f6f6)]">
-                <Ticket className="h-5 w-5 text-[color:var(--primary,#111)]" />
+            <motion.div key={idx} initial={{opacity:0, y:10}} whileInView={{opacity:1, y:0}} viewport={{once:true}} transition={{duration:0.35, delay:idx*0.05}} className="rounded-2xl border border-(--border) bg-(--surface) p-6 shadow-sm dark:border-(--border) dark:bg-(--surface)">
+              <div className="mb-3 inline-flex h-9 w-9 items-center justify-center rounded-lg bg-(--surface-2)">
+                <Ticket className="h-5 w-5 text-(--primary)" />
               </div>
               <h3 className="text-lg font-semibold">{f.title}</h3>
-              <p className="mt-1 text-sm text-[color:var(--muted,#6b7280)]">{f.desc}</p>
+              <p className="mt-1 text-sm text-(--muted)">{f.desc}</p>
             </motion.div>
           ))}
         </div>
@@ -192,25 +192,25 @@ export default function LandingPage() {
       <section id="how" className="mx-auto max-w-6xl px-4 py-12 sm:py-16">
         <div className="grid grid-cols-1 gap-8 md:flex md:items-center md:gap-12">
             <div className="w-full flex flex-col justify-center">
-                <h2 className="text-2xl font-bold sm:text-3xl">Three steps to your first collection</h2>
-                <ol className="mt-4 w-full max-w-[36rem] mx-auto px-4 space-y-4">
+                <h2 className="text-2xl font-bold sm:text-3xl text-center">Three steps to your first collection</h2>
+                <ol className="mt-4 w-full max-w-x1 mx-auto px-4 space-y-4">
                     {howItWorks.map((s, i) => (
-                      <li key={i} className="grid [grid-template-columns:1rem_minmax(16rem,36rem)] items-center gap-3">
+                      <li key={i} className="grid grid-cols-[1rem_minmax(16rem,36rem)] items-center gap-3">
                           <span className="inline-flex h-7 w-7 items-center justify-center rounded-full
-                                          bg-[var(--primary,#0a0a0a)] text-[color:var(--primary-fg,#fff)]
+                                          bg-(--primary) text-(--primary-fg)
                                           text-sm font-semibold">
                             {i + 1}
                           </span>
                           <div className="text-center">
                             <div className="font-medium leading-tight">{s.title}</div>
-                            <p className="mt-1 text-sm leading-snug text-[color:var(--muted,#6b7280)]">{s.desc}</p>
+                            <p className="mt-1 text-sm leading-snug text-(--muted)">{s.desc}</p>
                           </div>
                       </li>
                     ))}
                 </ol>
 
                 <div className="mt-6 w-full flex items-center justify-center gap-3">
-                    <Link to="/login" className="inline-flex items-center rounded-xl bg-[var(--primary,#0a0a0a)] px-4 py-2 text-sm font-semibold !text-[color:var(--primary-fg,#ffffff)] hover:brightness-95">Start now</Link>
+                    <Link to="/login" className="inline-flex items-center rounded-xl bg-(--primary) px-4 py-2 text-sm font-semibold text-(--primary-fg)! hover:brightness-95">Start now</Link>
                 </div>
             </div>
         </div>
@@ -219,13 +219,13 @@ export default function LandingPage() {
       {/* Activity & Stats ===================================================== */}
       <section id="activity" className="mx-auto max-w-6xl px-4 py-10 sm:py-14">
         {/* subtle divider */}
-        <div className="mx-auto mb-8 h-px w-full max-w-4xl bg-gradient-to-r from-transparent via-[var(--border,#e5e5e5)] to-transparent" />
+        <div className="mx-auto mb-8 h-px w-full max-w-4xl bg-linear-to-r from-transparent via-(--border) to-transparent" />
 
         <div className="grid gap-8 lg:grid-cols-3">
           {/* Feed (left 2/3) */}
           <div className="lg:col-span-2">
             <h2 className="text-xl font-semibold mb-3">What people are adding</h2>
-            <p className="text-sm text-[color:var(--muted,#6b7280)] mb-5">
+            <p className="text-sm text-(--muted) mb-5">
               A glimpse of recent tickets from the community (sample data).
             </p>
 
@@ -237,18 +237,18 @@ export default function LandingPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.35, delay: i * 0.04 }}
-                  className="rounded-xl border border-[var(--border,#e5e5e5)] bg-[var(--surface,white)] p-3 shadow-sm dark:border-[var(--border,#2a2a2a)] dark:bg-[var(--surface,#0b0b0b)]"
+                  className="rounded-xl border border-(--border) bg-(--surface) p-3 shadow-sm dark:border-(--border) dark:bg-(--surface)"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--surface-2,#f6f6f6)] dark:bg-[var(--surface-2,#191919)]">
-                      <Ticket className="h-5 w-5 text-[color:var(--primary,#111)]" />
+                    <div className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-(--surface-2) dark:bg-(--surface-2)">
+                      <Ticket className="h-5 w-5 text-(--primary)" />
                     </div>
                     <div className="min-w-0">
                       <div className="truncate text-sm">
                         <span className="font-medium">{item.user}</span>{' '}
                         added <span className="font-medium">{item.title}</span>
                       </div>
-                      <div className="text-xs text-[color:var(--muted,#6b7280)]">
+                      <div className="text-xs text-(--muted)">
                         {item.meta}
                       </div>
                     </div>
@@ -259,17 +259,17 @@ export default function LandingPage() {
           </div>
 
           {/* Stats (right 1/3) */}
-          <div className="self-center rounded-2xl border border-[var(--border,#e5e5e5)] bg-[var(--surface,white)] p-6 shadow-sm dark:border-[var(--border,#2a2a2a)] dark:bg-[var(--surface,#0b0b0b)]">
+          <div className="self-center rounded-2xl border border-(--border) bg-(--surface) p-6 shadow-sm dark:border-(--border) dark:bg-(--surface)">
             <h3 className="text-lg font-semibold">Why people love Vouchr</h3>
             <ul className="mt-4 space-y-4 ">
               {stats.map((s, i) => (
                 <li key={i} className="flex items-center gap-3 text-left">
-                  <div className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--surface-2,#f6f6f6)] dark:bg-[var(--surface-2,#191919)]">
+                  <div className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-(--surface-2) dark:bg-(--surface-2)">
                     {s.icon}
                   </div>
                   <div>
                     <div className="text-base font-semibold">{s.value}</div>
-                    <div className="text-sm text-[color:var(--muted,#6b7280)]">{s.label}</div>
+                    <div className="text-sm text-(--muted)">{s.label}</div>
                   </div>
                 </li>
               ))}
@@ -279,7 +279,7 @@ export default function LandingPage() {
               <Link
                 to="/login"
                 className="inline-flex h-11 w-full items-center justify-center rounded-xl
-                          bg-[var(--primary,#0a0a0a)] !text-[color:var(--primary-fg,#ffffff)]
+                          bg-(--primary) text-(--primary-fg)!
                           text-sm font-semibold hover:brightness-95"
               >
                 Start your collection
@@ -291,29 +291,29 @@ export default function LandingPage() {
 
       {/* Social proof */}
       <section className="mx-auto max-w-5xl px-4 pb-16">
-        <div className="rounded-3xl border border-[var(--border,#e5e5e5)] bg-[var(--surface,white)] p-6 shadow-sm dark:border-[var(--border,#2a2a2a)] dark:bg-[var(--surface,#0b0b0b)] sm:p-10">
-          <blockquote className="text-balance text-center text-lg italic text-[color:var(--muted,#3f3f46)] dark:text-[color:var(--muted,#d4d4d8)]">
+        <div className="rounded-3xl border border-(--border) bg-(--surface) p-6 shadow-sm dark:border-(--border) dark:bg-(--surface) sm:p-10">
+          <blockquote className="text-balance text-center text-lg italic text-(--muted) dark:text-(--muted)">
             “Finally, a clean way to remember every screening — formats, theaters, the whole story. My Letterboxd looks great; my Vouchr feels personal.”
           </blockquote>
-          <div className="mt-3 text-center text-sm text-[color:var(--muted,#6b7280)]">— Early Vouchr user</div>
+          <div className="mt-3 text-center text-sm text-(--muted)">— Early Vouchr user</div>
         </div>
       </section>
 
       <section className="px-4 mb-12">
-        <div className="mx-auto max-w-6xl rounded-2xl border border-[var(--border,#e5e5e5)]
-                        bg-[color:var(--surface,rgba(255,255,255,.6))] p-6 sm:p-8
-                        shadow-sm backdrop-blur dark:border-[var(--border,#2a2a2a)]
-                        dark:bg-[color:var(--surface,rgba(12,12,12,.6))]">
+        <div className="mx-auto max-w-6xl rounded-2xl border border-(--border)
+                        bg-(--surface) p-6 sm:p-8
+                        shadow-sm backdrop-blur dark:border-(--border)
+                        dark:bg-(--surface)">
           <div className="flex flex-col items-center gap-4 text-center sm:flex-row sm:justify-between sm:text-left">
             <div>
               <div className="text-lg font-semibold">Ready to start your Ticket Collection?</div>
-              <p className="text-sm text-[color:var(--muted,#6b7280)]">It’s free, private by default, and takes seconds.</p>
+              <p className="text-sm text-(--muted)">It’s free, private by default, and takes seconds.</p>
             </div>
             <Link
               to="/login"
               className="inline-flex h-11 items-center justify-center rounded-xl
-                        bg-[var(--primary,#0a0a0a)] px-5 text-sm font-semibold
-                        !text-[color:var(--primary-fg,#ffffff)] hover:brightness-95"
+                        bg-(--primary) px-5 text-sm font-semibold
+                        text-(--primary-fg)! hover:brightness-95"
             >
               Create account
             </Link>
@@ -323,10 +323,10 @@ export default function LandingPage() {
 
 
       {/* Footer */}
-      <footer className="border-t border-[var(--border,#e5e5e5)] bg-[color:var(--surface,rgba(255,255,255,.7))] py-8 text-sm dark:border-[var(--border,#2a2a2a)] dark:bg-[color:var(--surface,rgba(10,10,10,.7))]">
+      <footer className="border-t border-(--border) bg-(--surface) py-8 text-sm dark:border-(--border) dark:bg-(--surface)">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 sm:flex-row">
-          <div className="text-[color:var(--muted,#6b7280)]">© {new Date().getFullYear()} Vouchr</div>
-          <div className="flex items-center gap-4 text-[color:var(--muted,#6b7280)]">
+          <div className="text-(--muted)">© {new Date().getFullYear()} Vouchr</div>
+          <div className="flex items-center gap-4 text-(--muted)">
             <a className="hover:underline" href="#">Privacy</a>
             <a className="hover:underline" href="#">Terms</a>
             <Link className="font-semibold hover:underline" to="/login">Log in</Link>
@@ -481,7 +481,7 @@ const Stars = ({ n = 0 }: { n?: number }) => (
 
 const Pill = ({ children }: { children: React.ReactNode }) => (
   <span className="rounded-md px-2 py-0.5 text-[10px] font-semibold ring-1 ring-inset
-                   ring-[var(--border,#e5e5e5)] text-[color:var(--muted,#6b7280)]">
+                   ring-(--border) text-(--muted)">
     {children}
   </span>
 );

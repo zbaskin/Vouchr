@@ -55,14 +55,14 @@ const TicketForm: React.FC = () => {
     };
 
     return (
-        <section className="max-w-[1000px] mx-auto px-4 pt-6 pb-12 text-left">
-            <div className="bg-secondary-content border border-black/[.08] rounded-[14px] shadow-[0_10px_30px_rgba(0,0,0,.08)] overflow-hidden">
+        <section className="max-w-250 mx-auto px-4 pt-6 pb-12 text-left">
+            <div className="bg-secondary-content border border-black/8 rounded-[14px] shadow-[0_10px_30px_rgba(0,0,0,.08)] overflow-hidden">
                 <header className="bg-primary text-secondary-content px-5 py-4">
                     <h1 className="m-0 text-[1.4rem] leading-tight font-bold">Add a Ticket</h1>
                     <p className="mt-1.5 mb-0 text-[0.95rem] opacity-90">Log your film experience — title, date, time, and where you saw it.</p>
                 </header>
 
-                <div className="px-5 pt-[18px] pb-2">
+                <div className="px-5 pt-4.5 pb-2">
                     <div className="grid grid-cols-2 gap-x-4 gap-y-3.5 max-[768px]:grid-cols-1">
                         {/* Title */}
                         <div className="col-span-full flex flex-col gap-1.5">
