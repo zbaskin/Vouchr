@@ -1,8 +1,15 @@
 import React, { useEffect, useState } from "react";
 import TicketObject from "./Ticket";
 import { NavLink, useOutletContext } from "react-router-dom";
-import { Ticket as TicketIcon } from "lucide-react";
+import { Ticket as TicketIcon, Film, CalendarDays, MapPin, Armchair } from "lucide-react";
 import type { AppOutletContext } from "../AppShell";
+
+const FEATURE_HINTS = [
+  { icon: Film,        label: "Film or event title",  desc: "Log any screening — movies, concerts, live shows." },
+  { icon: CalendarDays, label: "Date & time",          desc: "Never forget when the lights went down." },
+  { icon: MapPin,      label: "Venue",                 desc: "The theater, arena, or cinema name." },
+  { icon: Armchair,    label: "Theater & seat",        desc: "Exact auditorium and seat number, saved forever." },
+] as const;
 
 const TicketCollection: React.FC = () => {
     const { tickets, handleRemoveTicket, handleEditTicket, isLoading, isMobile, fetchError, onRetryFetch } = useOutletContext<AppOutletContext>();
@@ -76,6 +83,24 @@ const TicketCollection: React.FC = () => {
                 )}
             </div>
             </div>
+
+            {!isLoading && tickets.length === 0 && (
+                <div className={`featureHints px-5 pt-6 pb-4 ${isMobile ? "grid grid-cols-1 gap-4" : "grid grid-cols-2 gap-x-8 gap-y-5 pt-8 max-w-lg mx-auto"}`}>
+                    <p className={`col-span-full text-xs font-semibold uppercase tracking-widest text-copy-lighter m-0 ${isMobile ? "mb-1" : "mb-2"}`}>
+                        What you can track
+                    </p>
+                    {FEATURE_HINTS.map(({ icon: Icon, label, desc }) => (
+                        <div key={label} className="flex items-start gap-3">
+                            <Icon className="w-5 h-5 mt-0.5 shrink-0 text-primary" strokeWidth={1.5} />
+                            <div>
+                                <p className="m-0 text-sm font-semibold text-copy">{label}</p>
+                                <p className="m-0 text-xs text-copy-lighter">{desc}</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
+
             {totalPages > 1 && (
                 <div className="flex justify-center items-center my-4 text-copy gap-2.5">
                     <button

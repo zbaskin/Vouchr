@@ -164,3 +164,50 @@ describe("TicketCollection — flex layout", () => {
     expect(link).toBeInTheDocument();
   });
 });
+
+describe("TicketCollection — feature hints", () => {
+  it("shows feature hints on desktop when there are no tickets", () => {
+    renderCollection([], false);
+    expect(document.querySelector(".featureHints")).not.toBeNull();
+  });
+
+  it("shows feature hints on mobile when there are no tickets", () => {
+    renderCollection([], true);
+    expect(document.querySelector(".featureHints")).not.toBeNull();
+  });
+
+  it("does NOT show feature hints when tickets exist", () => {
+    renderCollection(makeTickets(3), false);
+    expect(document.querySelector(".featureHints")).toBeNull();
+  });
+
+  it("does NOT show feature hints while loading", () => {
+    const ctx: AppOutletContext = {
+      tickets: [],
+      isLoading: true,
+      isMobile: false,
+      ticketCollection: "col-1",
+      fetchError: null,
+      onRetryFetch: vi.fn(),
+      handleAddTicket: vi.fn(),
+      handleRemoveTicket: vi.fn(),
+      handleEditTicket: vi.fn(),
+      onChangeSort: vi.fn(),
+    };
+    render(
+      <MemoryRouter initialEntries={["/"]}>
+        <Routes>
+          <Route element={<Outlet context={ctx} />}>
+            <Route path="/" element={<TicketCollection />} />
+          </Route>
+        </Routes>
+      </MemoryRouter>
+    );
+    expect(document.querySelector(".featureHints")).toBeNull();
+  });
+
+  it("feature hints include a label about tracking film titles", () => {
+    renderCollection([], false);
+    expect(screen.getByText(/film or event title/i)).toBeInTheDocument();
+  });
+});

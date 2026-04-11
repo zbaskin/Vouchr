@@ -299,7 +299,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className="px-4">
+      <section className="px-4 mb-12">
         <div className="mx-auto max-w-6xl rounded-2xl border border-[var(--border,#e5e5e5)]
                         bg-[color:var(--surface,rgba(255,255,255,.6))] p-6 sm:p-8
                         shadow-sm backdrop-blur dark:border-[var(--border,#2a2a2a)]
