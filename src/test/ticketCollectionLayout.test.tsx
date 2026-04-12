@@ -91,7 +91,7 @@ describe("TicketCollection — flex layout", () => {
     // The ticketObject card element should carry a fixed-width class
     const card = document.querySelector(".ticketObject");
     expect(card).not.toBeNull();
-    expect(card!.className).toContain("w-[175px]");
+    expect(card!.className).toContain("w-43.75");
   });
 
   it("renders 4 tickets — all visible, none stretched beyond card width", () => {
@@ -102,7 +102,7 @@ describe("TicketCollection — flex layout", () => {
     const cards = document.querySelectorAll(".ticketObject");
     expect(cards).toHaveLength(4);
     cards.forEach((card) => {
-      expect(card.className).toContain("w-[175px]");
+      expect(card.className).toContain("w-43.75");
     });
   });
 
@@ -209,5 +209,71 @@ describe("TicketCollection — feature hints", () => {
   it("feature hints include a label about tracking film titles", () => {
     renderCollection([], false);
     expect(screen.getByText(/film or event title/i)).toBeInTheDocument();
+  });
+});
+
+describe("TicketCollection — ghost add-ticket card", () => {
+  it("shows ghost card on desktop when page is not full", () => {
+    renderCollection(makeTickets(3), false);
+    expect(document.querySelector(".addTicketGhost")).not.toBeNull();
+  });
+
+  it("shows ghost card on mobile when page is not full", () => {
+    renderCollection(makeTickets(3), true);
+    expect(document.querySelector(".addTicketGhost")).not.toBeNull();
+  });
+
+  it("ghost card links to /app/new", () => {
+    renderCollection(makeTickets(3));
+    const ghost = document.querySelector(".addTicketGhost");
+    expect(ghost).not.toBeNull();
+    expect(ghost!.getAttribute("href")).toContain("/app/new");
+  });
+
+  it("does NOT show ghost card when there are no tickets (empty state shown instead)", () => {
+    renderCollection([]);
+    expect(document.querySelector(".addTicketGhost")).toBeNull();
+  });
+
+  it("does NOT show ghost card when desktop page is exactly full (15 tickets)", () => {
+    renderCollection(makeTickets(15), false);
+    expect(document.querySelector(".addTicketGhost")).toBeNull();
+  });
+
+  it("does NOT show ghost card when mobile page is exactly full (8 tickets)", () => {
+    renderCollection(makeTickets(8), true);
+    expect(document.querySelector(".addTicketGhost")).toBeNull();
+  });
+
+  it("does NOT show ghost card while loading", () => {
+    const ctx: AppOutletContext = {
+      tickets: [],
+      isLoading: true,
+      isMobile: false,
+      ticketCollection: "col-1",
+      fetchError: null,
+      onRetryFetch: vi.fn(),
+      handleAddTicket: vi.fn(),
+      handleRemoveTicket: vi.fn(),
+      handleEditTicket: vi.fn(),
+      onChangeSort: vi.fn(),
+    };
+    render(
+      <MemoryRouter initialEntries={["/"]}>
+        <Routes>
+          <Route element={<Outlet context={ctx} />}>
+            <Route path="/" element={<TicketCollection />} />
+          </Route>
+        </Routes>
+      </MemoryRouter>
+    );
+    expect(document.querySelector(".addTicketGhost")).toBeNull();
+  });
+
+  it("ghost card matches ticket card width", () => {
+    renderCollection(makeTickets(3));
+    const ghost = document.querySelector(".addTicketGhost");
+    expect(ghost).not.toBeNull();
+    expect(ghost!.className).toContain("w-43.75");
   });
 });

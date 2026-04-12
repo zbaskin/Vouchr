@@ -27,14 +27,14 @@ describe("Phase 2a – TicketCollection migrated", () => {
     expect(tsx).not.toContain("TicketCollection.css");
   });
 
-  it("TicketCollection.tsx uses w-[1000px] for desktop width", () => {
+  it("TicketCollection.tsx uses w-250 for desktop width", () => {
     const tsx = readSrc("components/TicketCollection.tsx");
-    expect(tsx).toContain("w-[1000px]");
+    expect(tsx).toContain("w-250");
   });
 
-  it("TicketCollection.tsx uses w-[410px] for mobile width", () => {
+  it("TicketCollection.tsx uses w-102.5 for mobile width", () => {
     const tsx = readSrc("components/TicketCollection.tsx");
-    expect(tsx).toContain("w-[410px]");
+    expect(tsx).toContain("w-102.5");
   });
 });
 

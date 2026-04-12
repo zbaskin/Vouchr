@@ -68,20 +68,31 @@ const TicketCollection: React.FC = () => {
                 {isLoading ? (
                     <p className="text-secondary-content">Loading tickets...</p>
                 ) : tickets.length > 0 ? (
-                    displayedTickets.map((ticket, index) => (
-                        <TicketObject
-                            key={ticket.id || index}
-                            id={ticket.id || ""}
-                            name={ticket.name}
-                            venue={ticket.venue as string}
-                            eventDate={ticket.eventDate}
-                            eventTime={ticket.eventTime}
-                            theater={ticket.theater as string}
-                            seat={ticket.seat as string}
-                            onRemove={handleRemoveTicket}
-                            onEdit={handleEditTicket}
-                        />
-                    ))
+                    <>
+                        {displayedTickets.map((ticket, index) => (
+                            <TicketObject
+                                key={ticket.id || index}
+                                id={ticket.id || ""}
+                                name={ticket.name}
+                                venue={ticket.venue as string}
+                                eventDate={ticket.eventDate}
+                                eventTime={ticket.eventTime}
+                                theater={ticket.theater as string}
+                                seat={ticket.seat as string}
+                                onRemove={handleRemoveTicket}
+                                onEdit={handleEditTicket}
+                            />
+                        ))}
+                        {displayedTickets.length < TICKETS_PER_PAGE && (
+                            <NavLink
+                                to="/app/new"
+                                className="addTicketGhost w-43.75 min-h-43.75 border-2 border-dashed border-secondary-content/30 flex flex-col items-center justify-center gap-2 text-secondary-content/50 no-underline hover:border-secondary-content/70 hover:text-secondary-content transition-colors"
+                            >
+                                <span className="text-3xl leading-none select-none">+</span>
+                                <span className="text-xs">Add a ticket</span>
+                            </NavLink>
+                        )}
+                    </>
                 ) : (
                     <div className={emptyStateClass}>
                         <TicketIcon className={ticketIconClass} strokeWidth={1.25} />
