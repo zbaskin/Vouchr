@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import {
   createSearchParams,
   NavLink,
@@ -48,6 +48,24 @@ export default function Navbar({
       matchPath({ path: p, end: true }, pathname) ||
       matchPath({ path: p, end: false }, pathname)
   );
+
+  // Desktop sort dropdown state
+  const [sortOpen, setSortOpen] = useState(false);
+  const sortRef = useRef<HTMLLIElement>(null);
+
+  useEffect(() => {
+    if (!sortOpen) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setSortOpen(false); };
+    const onOutside = (e: MouseEvent) => {
+      if (sortRef.current && !sortRef.current.contains(e.target as Node)) setSortOpen(false);
+    };
+    document.addEventListener("keydown", onKey);
+    document.addEventListener("mousedown", onOutside);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.removeEventListener("mousedown", onOutside);
+    };
+  }, [sortOpen]);
 
   // Mobile menu state
   const [open, setOpen] = useState(false);
@@ -119,25 +137,41 @@ export default function Navbar({
           )}
 
           {!hideSort && (
-            <li role="none" className="inline-flex items-center relative">
-              {/* sortLabel: navLink style + ::after arrow indicator */}
-              <label
-                className="inline-flex items-center gap-2 px-3 py-2 text-[0.95rem] font-semibold text-secondary-content cursor-pointer after:content-['_▾'] after:text-[0.85em] after:opacity-90"
-                htmlFor="sortSel"
+            <li role="none" className="inline-flex items-center relative" ref={sortRef}>
+              <button
+                type="button"
+                aria-haspopup="listbox"
+                aria-expanded={sortOpen}
+                onClick={() => setSortOpen((v) => !v)}
+                className="group inline-flex items-center gap-1.5 px-3 py-2 text-[0.95rem] font-semibold! text-secondary-content bg-transparent border-0 cursor-pointer"
               >
-                Sort
-              </label>
-              {/* sortSelect: invisible overlay over the label */}
-              <select
-                id="sortSel"
-                value={sortType}
-                onChange={(e) => onChangeSort(e.target.value as SortType)}
-                className="absolute inset-0 w-full h-full opacity-0 appearance-none border-0 bg-transparent cursor-pointer z-1"
-              >
-                <option value={SortType.TIME_CREATED}>Newest</option>
-                <option value={SortType.EVENT_DATE}>Event Date</option>
-                <option value={SortType.ALPHABETICAL}>Title A–Z</option>
-              </select>
+                <span className="group-hover:underline group-focus:underline">Sort</span>
+                <span className="text-[0.85em] opacity-90" aria-hidden="true">{sortOpen ? "▴" : "▾"}</span>
+              </button>
+              {sortOpen && (
+                <div
+                  role="listbox"
+                  className="absolute top-full left-0 mt-1 bg-secondary-content border border-primary/20 rounded-lg shadow-[0_4px_16px_rgba(0,0,0,0.35)] py-1 min-w-[150px] z-50"
+                >
+                  {([
+                    { value: SortType.TIME_CREATED, label: "Newest" },
+                    { value: SortType.EVENT_DATE,   label: "Event Date" },
+                    { value: SortType.ALPHABETICAL, label: "Title A–Z" },
+                  ] as const).map(({ value, label }) => (
+                    <button
+                      key={value}
+                      role="option"
+                      aria-selected={sortType === value}
+                      type="button"
+                      onClick={() => { onChangeSort(value); setSortOpen(false); }}
+                      className={"flex w-full items-center gap-2.5 px-4 py-2 text-sm text-primary text-left bg-transparent border-0 cursor-pointer hover:bg-primary/10" + (sortType === value ? " font-semibold" : "")}
+                    >
+                      <span className={"w-3 text-xs shrink-0" + (sortType === value ? "" : " opacity-0")} aria-hidden="true">✓</span>
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              )}
             </li>
           )}
 
@@ -233,7 +267,7 @@ export default function Navbar({
 
                   {!hideSort && (
                     <li className="grid grid-cols-1 gap-1.5 py-1.5 px-0.5">
-                      <label htmlFor="m-sortSel" className="text-[0.85rem] opacity-90">
+                      <label htmlFor="m-sortSel" className="text-[0.85rem] font-semibold opacity-90">
                         Sort by
                       </label>
                       <select
