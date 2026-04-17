@@ -51,8 +51,10 @@ export default function TicketEdit({ open, initial, onCancel, onSave }: Props) {
 
   return (
     <div role="dialog" aria-modal="true"
-         className="fixed inset-0 z-1000 grid place-items-center bg-black/40">
-      <div className="w-[min(92vw,600px)] rounded-xl bg-white p-4 shadow-xl">
+         className="fixed inset-0 z-1000 grid place-items-center bg-black/40"
+         onClick={(e) => { e.stopPropagation(); onCancel(); }}>
+      <div className="w-[min(92vw,600px)] rounded-xl bg-white p-4 shadow-xl"
+           onClick={(e) => e.stopPropagation()}>
         <div className="mb-3 flex items-center justify-between">
           <h2 className="text-lg font-semibold">Edit Ticket</h2>
           <button onClick={onCancel} className="rounded-md border px-2 py-1 text-sm">Close</button>
