@@ -203,6 +203,8 @@ export const onCreateTicket = /* GraphQL */ `subscription OnCreateTicket(
     timeCreated
     ticketsID
     visibility
+    rating
+    notes
     createdAt
     updatedAt
     __typename
@@ -230,6 +232,8 @@ export const onUpdateTicket = /* GraphQL */ `subscription OnUpdateTicket(
     timeCreated
     ticketsID
     visibility
+    rating
+    notes
     createdAt
     updatedAt
     __typename
@@ -257,6 +261,8 @@ export const onDeleteTicket = /* GraphQL */ `subscription OnDeleteTicket(
     timeCreated
     ticketsID
     visibility
+    rating
+    notes
     createdAt
     updatedAt
     __typename

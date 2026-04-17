@@ -230,6 +230,8 @@ export async function addTicket(t: CreateTicketInput) {
         eventTime: t.eventTime ?? null,
         timeCreated: t.timeCreated ?? now,     // REQUIRED (non-null in schema)
         visibility: t.visibility ?? Visibility.PRIVATE, // enum
+        rating: t.rating ?? null,
+        notes: t.notes ?? null,
       },
     },
   });

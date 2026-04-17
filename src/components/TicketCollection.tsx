@@ -80,6 +80,9 @@ const TicketCollection: React.FC = () => {
                                 eventTime={ticket.eventTime}
                                 theater={ticket.theater as string}
                                 seat={ticket.seat as string}
+                                type={(ticket as any).type}
+                                rating={(ticket as any).rating ?? null}
+                                notes={(ticket as any).notes ?? null}
                                 onRemove={handleRemoveTicket}
                                 onEdit={handleEditTicket}
                                 onNavigate={ticket.id ? () => navigate(`/app/ticket/${ticket.id}`) : undefined}

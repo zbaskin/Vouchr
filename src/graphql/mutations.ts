@@ -261,6 +261,8 @@ export const deleteTicket = /* GraphQL */ `mutation DeleteTicket(
     timeCreated
     ticketsID
     visibility
+    rating
+    notes
     createdAt
     updatedAt
     __typename

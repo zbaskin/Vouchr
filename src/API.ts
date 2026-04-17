@@ -128,8 +128,8 @@ export enum Visibility {
 
 export enum SortType {
   ALPHABETICAL = "ALPHABETICAL",
-  EVENT_DATE = "EVENT_DATE",
   EVENT_TYPE = "EVENT_TYPE",
+  EVENT_DATE = "EVENT_DATE",
   TIME_CREATED = "TIME_CREATED",
 }
 
@@ -275,6 +275,8 @@ export type ModelTicketConditionInput = {
   timeCreated?: ModelIntInput | null,
   ticketsID?: ModelIDInput | null,
   visibility?: ModelVisibilityInput | null,
+  rating?: ModelFloatInput | null,
+  notes?: ModelStringInput | null,
   and?: Array< ModelTicketConditionInput | null > | null,
   or?: Array< ModelTicketConditionInput | null > | null,
   not?: ModelTicketConditionInput | null,
@@ -285,6 +287,18 @@ export type ModelTicketConditionInput = {
 export type ModelEventTypeInput = {
   eq?: EventType | null,
   ne?: EventType | null,
+};
+
+export type ModelFloatInput = {
+  ne?: number | null,
+  eq?: number | null,
+  le?: number | null,
+  lt?: number | null,
+  ge?: number | null,
+  gt?: number | null,
+  between?: Array< number | null > | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
 };
 
 export type UpdateTicketInput = {
@@ -372,6 +386,8 @@ export type ModelTicketFilterInput = {
   timeCreated?: ModelIntInput | null,
   ticketsID?: ModelIDInput | null,
   visibility?: ModelVisibilityInput | null,
+  rating?: ModelFloatInput | null,
+  notes?: ModelStringInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
   and?: Array< ModelTicketFilterInput | null > | null,
@@ -468,11 +484,25 @@ export type ModelSubscriptionTicketFilterInput = {
   timeCreated?: ModelSubscriptionIntInput | null,
   ticketsID?: ModelSubscriptionIDInput | null,
   visibility?: ModelSubscriptionStringInput | null,
+  rating?: ModelSubscriptionFloatInput | null,
+  notes?: ModelSubscriptionStringInput | null,
   createdAt?: ModelSubscriptionStringInput | null,
   updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionTicketFilterInput | null > | null,
   or?: Array< ModelSubscriptionTicketFilterInput | null > | null,
   owner?: ModelStringInput | null,
+};
+
+export type ModelSubscriptionFloatInput = {
+  ne?: number | null,
+  eq?: number | null,
+  le?: number | null,
+  lt?: number | null,
+  ge?: number | null,
+  gt?: number | null,
+  between?: Array< number | null > | null,
+  in?: Array< number | null > | null,
+  notIn?: Array< number | null > | null,
 };
 
 export type CreateUserMutationVariables = {
@@ -667,6 +697,8 @@ export type CreateTicketMutation = {
     timeCreated: number,
     ticketsID: string,
     visibility: Visibility,
+    rating?: number | null,
+    notes?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -693,6 +725,8 @@ export type UpdateTicketMutation = {
     timeCreated: number,
     ticketsID: string,
     visibility: Visibility,
+    rating?: number | null,
+    notes?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -719,6 +753,8 @@ export type DeleteTicketMutation = {
     timeCreated: number,
     ticketsID: string,
     visibility: Visibility,
+    rating?: number | null,
+    notes?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -905,6 +941,8 @@ export type GetTicketQuery = {
     timeCreated: number,
     ticketsID: string,
     visibility: Visibility,
+    rating?: number | null,
+    notes?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -934,6 +972,8 @@ export type ListTicketsQuery = {
       timeCreated: number,
       ticketsID: string,
       visibility: Visibility,
+      rating?: number | null,
+      notes?: string | null,
       createdAt: string,
       updatedAt: string,
     } | null >,
@@ -967,6 +1007,8 @@ export type TicketsByOwnerQuery = {
       timeCreated: number,
       ticketsID: string,
       visibility: Visibility,
+      rating?: number | null,
+      notes?: string | null,
       createdAt: string,
       updatedAt: string,
     } | null >,
@@ -1000,6 +1042,8 @@ export type TicketsByTicketsIDQuery = {
       timeCreated: number,
       ticketsID: string,
       visibility: Visibility,
+      rating?: number | null,
+      notes?: string | null,
       createdAt: string,
       updatedAt: string,
     } | null >,
@@ -1199,6 +1243,8 @@ export type OnCreateTicketSubscription = {
     timeCreated: number,
     ticketsID: string,
     visibility: Visibility,
+    rating?: number | null,
+    notes?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1225,6 +1271,8 @@ export type OnUpdateTicketSubscription = {
     timeCreated: number,
     ticketsID: string,
     visibility: Visibility,
+    rating?: number | null,
+    notes?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1251,6 +1299,8 @@ export type OnDeleteTicketSubscription = {
     timeCreated: number,
     ticketsID: string,
     visibility: Visibility,
+    rating?: number | null,
+    notes?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,

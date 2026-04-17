@@ -220,6 +220,8 @@ export const listTickets = /* GraphQL */ `query ListTickets(
       timeCreated
       ticketsID
       visibility
+      rating
+      notes
       createdAt
       updatedAt
       __typename
@@ -260,6 +262,8 @@ export const ticketsByOwner = /* GraphQL */ `query TicketsByOwner(
       timeCreated
       ticketsID
       visibility
+      rating
+      notes
       createdAt
       updatedAt
       __typename
