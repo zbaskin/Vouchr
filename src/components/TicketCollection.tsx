@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import TicketObject from "./Ticket";
-import { NavLink, useOutletContext } from "react-router-dom";
+import { NavLink, useOutletContext, useNavigate } from "react-router-dom";
 import { Ticket as TicketIcon, Film, CalendarDays, MapPin, Armchair } from "lucide-react";
 import type { AppOutletContext } from "../AppShell";
 
@@ -13,6 +13,7 @@ const FEATURE_HINTS = [
 
 const TicketCollection: React.FC = () => {
     const { tickets, handleRemoveTicket, handleEditTicket, isLoading, isMobile, fetchError, onRetryFetch } = useOutletContext<AppOutletContext>();
+    const navigate = useNavigate();
 
     const [page, setPage] = useState(1);
     const TICKETS_PER_PAGE = isMobile ? 8 : 15;
@@ -81,6 +82,7 @@ const TicketCollection: React.FC = () => {
                                 seat={ticket.seat as string}
                                 onRemove={handleRemoveTicket}
                                 onEdit={handleEditTicket}
+                                onNavigate={ticket.id ? () => navigate(`/app/ticket/${ticket.id}`) : undefined}
                             />
                         ))}
                         {displayedTickets.length < TICKETS_PER_PAGE && (

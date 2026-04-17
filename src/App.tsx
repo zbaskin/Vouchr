@@ -5,6 +5,7 @@ import ProtectedApp from './pages/ProtectedApp';
 import TicketCollection from './components/TicketCollection';
 import TicketForm from './components/TicketForm';
 import Settings from './components/Settings';
+import TicketDetail from './pages/TicketDetail';
 
 export default function App() {
     return (
@@ -17,6 +18,7 @@ export default function App() {
                 <Route index element={<Navigate to="collection" replace />} />
                 <Route path="collection" element={<TicketCollection />} />
                 <Route path="new" element={<TicketForm />} />
+                <Route path="ticket/:id" element={<TicketDetail />} />
                 <Route path="settings" element={<Settings />} />
             </Route>
 

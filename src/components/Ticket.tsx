@@ -15,6 +15,7 @@ type TicketProps = {
   type?: EventType | null;
   onRemove: (id: string) => void;
   onEdit?: (v: TicketEditValues) => Promise<void> | void;
+  onNavigate?: () => void;
 };
 
 const Ticket: React.FC<TicketProps> = ({
@@ -28,6 +29,7 @@ const Ticket: React.FC<TicketProps> = ({
   type,
   onRemove,
   onEdit,
+  onNavigate,
 }) => {
   // Overflow detection on the clamped text node
   const nameWrapRef = useRef<HTMLDivElement | null>(null);
@@ -100,11 +102,14 @@ const Ticket: React.FC<TicketProps> = ({
   );
 
   return (
-    <div className="ticketObject bg-white w-43.75 min-h-43.75 p-2.5 border border-[#ccc] shadow-[2px_2px_8px_rgba(0,0,0,0.2)] font-[Arial,sans-serif] text-sm text-center relative flex flex-col justify-center text-copy max-w-full">
+    <div
+      className={`ticketObject bg-white w-43.75 min-h-43.75 p-2.5 border border-[#ccc] shadow-[2px_2px_8px_rgba(0,0,0,0.2)] font-[Arial,sans-serif] text-sm text-center relative flex flex-col justify-center text-copy max-w-full${onNavigate ? " cursor-pointer" : ""}`}
+      onClick={onNavigate}
+    >
       <div>
         <button
             className="editTicketButton absolute top-0.75 right-6.5 w-5 h-5 border border-black text-center justify-items-center leading-3 font-bold text-xs cursor-pointer p-0"
-            onClick={() => setEditing(true)}
+            onClick={(e) => { e.stopPropagation(); setEditing(true); }}
             aria-label="Edit ticket"
             title="Edit"
         >
@@ -112,7 +117,7 @@ const Ticket: React.FC<TicketProps> = ({
         </button>
         <button
             className="removeTicketButton absolute top-0.75 right-0.75 w-5 h-5 border border-black text-center justify-items-center leading-3 font-bold text-xs cursor-pointer p-0"
-            onClick={() => onRemove(id)}
+            onClick={(e) => { e.stopPropagation(); onRemove(id); }}
             aria-label="Remove ticket"
             title="Remove"
         >
