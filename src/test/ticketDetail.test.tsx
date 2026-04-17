@@ -19,6 +19,7 @@ vi.mock("react-router-dom", async (importOriginal) => {
     ...actual,
     useParams: vi.fn(),
     useOutletContext: vi.fn(),
+    useNavigate: () => vi.fn(),
     Link: ({ to, children }: { to: string; children: React.ReactNode }) => (
       <a href={to}>{children}</a>
     ),
@@ -52,6 +53,8 @@ function setupContext(tickets: unknown[] = [FULL_TICKET], id = "ticket-abc") {
   (useOutletContext as ReturnType<typeof vi.fn>).mockReturnValue({
     tickets,
     isLoading: false,
+    handleEditTicket: vi.fn().mockResolvedValue(undefined),
+    handleRemoveTicket: vi.fn().mockResolvedValue(undefined),
   });
 }
 
