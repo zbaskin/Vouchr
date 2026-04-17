@@ -151,7 +151,7 @@ export default function Navbar({
               {sortOpen && (
                 <div
                   role="listbox"
-                  className="absolute top-full left-0 mt-1 bg-secondary-content border border-primary/20 rounded-lg shadow-[0_4px_16px_rgba(0,0,0,0.35)] py-1 min-w-[150px] z-50"
+                  className="absolute top-full left-0 mt-1 bg-secondary-content border border-primary/20 rounded-lg shadow-[0_4px_16px_rgba(0,0,0,0.35)] py-1 min-w-37.5 z-50"
                 >
                   {([
                     { value: SortType.TIME_CREATED, label: "Newest" },

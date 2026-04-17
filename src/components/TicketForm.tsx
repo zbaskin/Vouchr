@@ -66,7 +66,7 @@ const TicketForm: React.FC = () => {
                     <div className="grid grid-cols-2 gap-x-4 gap-y-3.5 max-[768px]:grid-cols-1">
                         {/* Title */}
                         <div className="col-span-full flex flex-col gap-1.5">
-                            <label htmlFor="movieName" className="text-[0.9rem] font-semibold text-primary-dark">Movie title</label>
+                            <label htmlFor="movieName" className="text-[0.9rem] font-semibold text-primary-dark">Title</label>
                             <input
                                 id="movieName"
                                 className="w-full box-border px-3 py-2.5 border-[1.5px] border-border rounded-[10px] bg-white font-[inherit] text-copy outline-none transition-[border-color,box-shadow] duration-150 ease focus:border-primary focus:shadow-[0_0_0_3px_rgba(128,22,22,.15)]"
@@ -75,6 +75,22 @@ const TicketForm: React.FC = () => {
                                 onChange={(e) => { setSubmitError(null); setFormState({ ...formState, name: e.target.value }); }}
                                 required
                             />
+                        </div>
+
+                        {/* Event Type */}
+                        <div className="col-span-full flex flex-col gap-1.5">
+                            <label htmlFor="eventType" className="text-[0.9rem] font-semibold text-primary-dark">Event type</label>
+                            <select
+                                id="eventType"
+                                className="w-full box-border px-3 py-2.5 border-[1.5px] border-border rounded-[10px] bg-white font-[inherit] text-copy outline-none transition-[border-color,box-shadow] duration-150 ease focus:border-primary focus:shadow-[0_0_0_3px_rgba(128,22,22,.15)] cursor-pointer"
+                                value={formState.type}
+                                onChange={(e) => setFormState({ ...formState, type: e.target.value as EventType })}
+                            >
+                                <option value={EventType.MOVIE}>Movie</option>
+                                <option value={EventType.CONCERT}>Concert</option>
+                                <option value={EventType.SPORT}>Sport</option>
+                                <option value={EventType.FLIGHT}>Flight</option>
+                            </select>
                         </div>
 
                         {/* Venue */}
