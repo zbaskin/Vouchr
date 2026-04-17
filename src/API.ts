@@ -155,6 +155,7 @@ export type Ticket = {
   timeCreated: number,
   ticketsID: string,
   visibility: Visibility,
+  rating?: number | null,
   createdAt: string,
   updatedAt: string,
 };
@@ -256,6 +257,7 @@ export type CreateTicketInput = {
   timeCreated: number,
   ticketsID: string,
   visibility: Visibility,
+  rating?: number | null,
 };
 
 export type ModelTicketConditionInput = {
@@ -297,6 +299,7 @@ export type UpdateTicketInput = {
   timeCreated?: number | null,
   ticketsID?: string | null,
   visibility?: Visibility | null,
+  rating?: number | null,
 };
 
 export type DeleteTicketInput = {

@@ -5,6 +5,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useOutletContext } from "react-router-dom";
 import type { AppOutletContext } from "../AppShell";
 import { nowInSeconds } from "../utils/timestamp";
+import StarRating from "./StarRating";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const initialState: CreateTicketInput = { owner: '', name: '', type: EventType.MOVIE, ticketsID: '', timeCreated: 0, visibility: Visibility.PRIVATE };
@@ -14,6 +15,7 @@ const TicketForm: React.FC = () => {
     const [formState, setFormState] = useState<CreateTicketInput>(initialState);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitError, setSubmitError] = useState<string | null>(null);
+    const [rating, setRating] = useState<number | null>(null);
 
     const [eventDateTime, setEventDateTime] = useState(new Date());
 
@@ -39,13 +41,15 @@ const TicketForm: React.FC = () => {
             ticketsID: ticketCollection as string ?? '',
             timeCreated: nowInSeconds(),
             eventDate,
-            eventTime
+            eventTime,
+            rating,
         };
         setIsSubmitting(true);
         setSubmitError(null);
         try {
             await handleAddTicket(newTicket);
             setFormState(initialState);
+            setRating(null);
             setEventDateTime(new Date());
         } catch {
             setSubmitError("Failed to save ticket. Please try again.");
@@ -161,6 +165,13 @@ const TicketForm: React.FC = () => {
                                 onChange={(e) => setFormState({ ...formState, seat: e.target.value })}
                             />
                         </div>
+
+                        {/* Rating */}
+                        <div className="flex flex-col gap-1.5">
+                            <span className="text-[0.9rem] font-semibold text-primary-dark">Rating</span>
+                            <StarRating value={rating} onChange={setRating} />
+                            <span className="text-[0.8rem] text-copy-light">Optional.</span>
+                        </div>
                     </div>
                 </div>
 
@@ -185,6 +196,7 @@ const TicketForm: React.FC = () => {
                         className="appearance-none rounded-xl px-3.5 py-2.5 font-[inherit] cursor-pointer transition-[transform,box-shadow,background-color] duration-[40ms,150ms,200ms] ease bg-white text-primary border-[1.5px] border-primary"
                         onClick={() => {
                             setFormState({ ...initialState, ticketsID: ticketCollection ?? '' });
+                            setRating(null);
                             setEventDateTime(new Date());
                         }}
                     >

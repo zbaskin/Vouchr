@@ -5,6 +5,7 @@ import type { AppOutletContext } from "../AppShell";
 import { EventType } from "../API";
 import { handleTicketDate, handleTicketTime } from "../utils/ticketFormat";
 import TicketEdit, { type TicketEditValues } from "../components/TicketEdit";
+import StarRating from "../components/StarRating";
 
 const EVENT_TYPE_LABELS: Record<EventType, string> = {
   [EventType.MOVIE]: "Movie",
@@ -54,6 +55,7 @@ export default function TicketDetail() {
     city?: string | null;
     eventDate?: string | null;
     eventTime?: string | null;
+    rating?: number | null;
   };
 
   const dateStr = handleTicketDate(t.eventDate);
@@ -68,6 +70,7 @@ export default function TicketDetail() {
     seat: t.seat ?? "",
     eventDate: t.eventDate ?? "",
     eventTime: t.eventTime ?? "",
+    rating: t.rating ?? null,
   };
 
   const handleDelete = async () => {
@@ -132,6 +135,12 @@ export default function TicketDetail() {
               <span className="text-[1rem] text-copy">
                 {[dateStr, timeStr].filter(Boolean).join(" · ")}
               </span>
+            </div>
+          )}
+          {t.rating != null && (
+            <div className="col-span-full flex flex-col gap-0.5">
+              <span className="text-[0.8rem] font-semibold text-copy-light uppercase tracking-wide">Rating</span>
+              <StarRating value={t.rating} />
             </div>
           )}
           <Row label="Venue" value={t.venue} />

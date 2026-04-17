@@ -106,4 +106,7 @@ type Ticket
 
   # Mirror the parent's visibility at write-time (denormalized for fast reads)
   visibility: Visibility!
+
+  # Optional half-star rating (0.5–5.0 in 0.5 increments), null = unrated
+  rating: Float
 }

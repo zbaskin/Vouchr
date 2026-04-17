@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { EventType } from "../API";
+import StarRating from "./StarRating";
 
 export type TicketEditValues = {
   id: string;
@@ -10,6 +11,7 @@ export type TicketEditValues = {
   theater: string;
   seat: string;
   type: EventType;
+  rating: number | null;
 };
 
 type Props = {
@@ -119,6 +121,13 @@ export default function TicketEdit({ open, initial, onCancel, onSave }: Props) {
               <input className={input} value={v.seat}
                      onChange={(e) => setV({ ...v, seat: e.target.value })}/>
             </label>
+          </div>
+
+          <div>
+            <span className="text-sm">Rating</span>
+            <div className="mt-1">
+              <StarRating value={v.rating} onChange={(r) => setV({ ...v, rating: r })} />
+            </div>
           </div>
 
           <div className="mt-4 flex justify-end gap-2">

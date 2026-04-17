@@ -13,6 +13,7 @@ type TicketProps = {
   theater: string;
   seat: string;
   type?: EventType | null;
+  rating?: number | null;
   onRemove: (id: string) => void;
   onEdit?: (v: TicketEditValues) => Promise<void> | void;
   onNavigate?: () => void;
@@ -27,6 +28,7 @@ const Ticket: React.FC<TicketProps> = ({
   theater,
   seat,
   type,
+  rating = null,
   onRemove,
   onEdit,
   onNavigate,
@@ -97,8 +99,8 @@ const Ticket: React.FC<TicketProps> = ({
   const [editing, setEditing] = useState(false);
 
   const initialEdit = useMemo<TicketEditValues>(
-    () => ({ id, name, venue, eventDate: eventDate ?? "", eventTime: eventTime ?? "", theater, seat, type: type ?? EventType.MOVIE }),
-    [id, name, venue, eventDate, eventTime, theater, seat, type],
+    () => ({ id, name, venue, eventDate: eventDate ?? "", eventTime: eventTime ?? "", theater, seat, type: type ?? EventType.MOVIE, rating: rating ?? null }),
+    [id, name, venue, eventDate, eventTime, theater, seat, type, rating],
   );
 
   return (

@@ -203,6 +203,7 @@ export const createTicket = /* GraphQL */ `mutation CreateTicket(
     timeCreated
     ticketsID
     visibility
+    rating
     createdAt
     updatedAt
     __typename
@@ -230,6 +231,7 @@ export const updateTicket = /* GraphQL */ `mutation UpdateTicket(
     timeCreated
     ticketsID
     visibility
+    rating
     createdAt
     updatedAt
     __typename
