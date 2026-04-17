@@ -56,6 +56,7 @@ export default function TicketDetail() {
     eventDate?: string | null;
     eventTime?: string | null;
     rating?: number | null;
+    notes?: string | null;
   };
 
   const dateStr = handleTicketDate(t.eventDate);
@@ -71,6 +72,7 @@ export default function TicketDetail() {
     eventDate: t.eventDate ?? "",
     eventTime: t.eventTime ?? "",
     rating: t.rating ?? null,
+    notes: t.notes ?? null,
   };
 
   const handleDelete = async () => {
@@ -147,6 +149,12 @@ export default function TicketDetail() {
           <Row label="Theater" value={t.theater} />
           <Row label="Seat" value={t.seat} />
           <Row label="City" value={t.city} />
+          {t.notes && (
+            <div className="col-span-full flex flex-col gap-0.5">
+              <span className="text-[0.8rem] font-semibold text-copy-light uppercase tracking-wide">Notes</span>
+              <p className="text-[1rem] text-copy m-0 whitespace-pre-wrap">{t.notes}</p>
+            </div>
+          )}
         </div>
       </div>
 

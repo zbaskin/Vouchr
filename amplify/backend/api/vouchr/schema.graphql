@@ -109,4 +109,7 @@ type Ticket
 
   # Optional half-star rating (0.5–5.0 in 0.5 increments), null = unrated
   rating: Float
+
+  # Optional free-form personal notes about the experience
+  notes: String
 }

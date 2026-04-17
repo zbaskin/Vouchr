@@ -193,6 +193,7 @@ export const getTicket = /* GraphQL */ `query GetTicket($id: ID!) {
     ticketsID
     visibility
     rating
+    notes
     createdAt
     updatedAt
     __typename
@@ -300,6 +301,7 @@ export const ticketsByTicketsID = /* GraphQL */ `query TicketsByTicketsID(
       ticketsID
       visibility
       rating
+      notes
       createdAt
       updatedAt
       __typename

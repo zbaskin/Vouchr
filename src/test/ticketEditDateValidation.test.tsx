@@ -29,6 +29,9 @@ const VALID: TicketEditValues = {
   eventTime: "19:30",
   theater: "7",
   seat: "D4",
+  type: "MOVIE" as any,
+  rating: null,
+  notes: null,
 };
 
 const EMPTY_DATE: TicketEditValues = { ...VALID, eventDate: "" };
@@ -113,7 +116,7 @@ describe("TicketEdit — date validation feedback", () => {
     await waitFor(() => expect(screen.getByRole("alert")).toBeInTheDocument());
 
     // Fix the date via the controlled input
-    const dateInput = screen.getByDisplayValue("");
+    const dateInput = screen.getByLabelText(/event date/i) as HTMLInputElement;
     fireEvent.change(dateInput, { target: { value: "2024-07-21" } });
 
     // Re-submit: should succeed and close

@@ -37,7 +37,7 @@ export type AppOutletContext = {
   handleAddTicket: (t: CreateTicketInput) => Promise<void>;
   handleRemoveTicket: (id: string | null | undefined) => Promise<void>;
   handleEditTicket: (t: {
-    id: string; name: string; venue: string; eventDate: string; eventTime: string; theater: string; seat: string; type?: string; rating?: number | null;
+    id: string; name: string; venue: string; eventDate: string; eventTime: string; theater: string; seat: string; type?: string; rating?: number | null; notes?: string | null;
   }) => Promise<void>;
   onChangeSort: (sort: SortType) => void;
 };
@@ -202,6 +202,7 @@ const AppShell: React.FC = () => {
       theater: u.theater,
       seat: u.seat,
       rating: u.rating ?? null,
+      notes: u.notes ?? null,
     }); // throws on failure — propagates to TicketEdit
     // Refresh is best-effort; a failure here does not undo the successful edit
     if (ticketCollectionId) {
@@ -222,6 +223,7 @@ const AppShell: React.FC = () => {
           theater: u.theater,
           seat: u.seat,
           rating: u.rating ?? null,
+          notes: u.notes ?? null,
         }) : t));
       }
     } else {

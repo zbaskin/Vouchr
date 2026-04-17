@@ -12,6 +12,7 @@ export type TicketEditValues = {
   seat: string;
   type: EventType;
   rating: number | null;
+  notes: string | null;
 };
 
 type Props = {
@@ -129,6 +130,16 @@ export default function TicketEdit({ open, initial, onCancel, onSave }: Props) {
               <StarRating value={v.rating} onChange={(r) => setV({ ...v, rating: r })} />
             </div>
           </div>
+
+          <label className="block">
+            <span className="text-sm">Notes</span>
+            <textarea
+              className={`${input} resize-none`}
+              rows={3}
+              value={v.notes ?? ""}
+              onChange={(e) => setV({ ...v, notes: e.target.value || null })}
+            />
+          </label>
 
           <div className="mt-4 flex justify-end gap-2">
             <button type="button" onClick={onCancel} className="rounded-md border px-3 py-2">

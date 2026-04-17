@@ -16,6 +16,7 @@ const TicketForm: React.FC = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitError, setSubmitError] = useState<string | null>(null);
     const [rating, setRating] = useState<number | null>(null);
+    const [notes, setNotes] = useState<string | null>(null);
 
     const [eventDateTime, setEventDateTime] = useState(new Date());
 
@@ -43,6 +44,7 @@ const TicketForm: React.FC = () => {
             eventDate,
             eventTime,
             rating,
+            notes,
         };
         setIsSubmitting(true);
         setSubmitError(null);
@@ -50,6 +52,7 @@ const TicketForm: React.FC = () => {
             await handleAddTicket(newTicket);
             setFormState(initialState);
             setRating(null);
+            setNotes(null);
             setEventDateTime(new Date());
         } catch {
             setSubmitError("Failed to save ticket. Please try again.");
@@ -172,6 +175,19 @@ const TicketForm: React.FC = () => {
                             <StarRating value={rating} onChange={setRating} />
                             <span className="text-[0.8rem] text-copy-light">Optional.</span>
                         </div>
+
+                        {/* Notes */}
+                        <div className="col-span-full flex flex-col gap-1.5">
+                            <label htmlFor="notes" className="text-[0.9rem] font-semibold text-primary-dark">Notes</label>
+                            <textarea
+                                id="notes"
+                                rows={3}
+                                className="w-full box-border px-3 py-2.5 border-[1.5px] border-border rounded-[10px] bg-white font-[inherit] text-copy outline-none transition-[border-color,box-shadow] duration-150 ease focus:border-primary focus:shadow-[0_0_0_3px_rgba(128,22,22,.15)] resize-none"
+                                placeholder="Any thoughts on the experience…"
+                                value={notes ?? ""}
+                                onChange={(e) => setNotes(e.target.value || null)}
+                            />
+                        </div>
                     </div>
                 </div>
 
@@ -197,6 +213,7 @@ const TicketForm: React.FC = () => {
                         onClick={() => {
                             setFormState({ ...initialState, ticketsID: ticketCollection ?? '' });
                             setRating(null);
+                            setNotes(null);
                             setEventDateTime(new Date());
                         }}
                     >
