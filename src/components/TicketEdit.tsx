@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { EventType } from "../API";
 
 export type TicketEditValues = {
   id: string;
@@ -8,6 +9,7 @@ export type TicketEditValues = {
   eventTime: string;  // "HH:mm" or "HH:mm:ss"
   theater: string;
   seat: string;
+  type: EventType;
 };
 
 type Props = {
@@ -63,11 +65,25 @@ export default function TicketEdit({ open, initial, onCancel, onSave }: Props) {
         )}
 
         <form onSubmit={onSubmit} className="space-y-3">
+          <label className="block">
+            <span className="text-sm">Title</span>
+            <input className={input} value={v.name}
+                   onChange={(e) => { setSaveError(null); setV({ ...v, name: e.target.value }); }} required/>
+          </label>
+
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <label className="block">
-              <span className="text-sm">Title</span>
-              <input className={input} value={v.name}
-                     onChange={(e) => { setSaveError(null); setV({ ...v, name: e.target.value }); }} required/>
+              <span className="text-sm">Event type</span>
+              <select
+                className={input}
+                value={v.type}
+                onChange={(e) => setV({ ...v, type: e.target.value as EventType })}
+              >
+                <option value={EventType.MOVIE}>Movie</option>
+                <option value={EventType.CONCERT}>Concert</option>
+                <option value={EventType.SPORT}>Sport</option>
+                <option value={EventType.FLIGHT}>Flight</option>
+              </select>
             </label>
             <label className="block">
               <span className="text-sm">Venue</span>

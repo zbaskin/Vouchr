@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import TicketEdit, { TicketEditValues } from "./TicketEdit";
 import { Pencil, Trash2 } from "lucide-react";
 import { handleTicketDate, handleTicketTime } from "../utils/ticketFormat";
+import { EventType } from "../API";
 
 type TicketProps = {
   id: string;
@@ -11,6 +12,7 @@ type TicketProps = {
   eventTime?: string | null;  // "HH:mm:ss" or "HH:mm" — nullable in GraphQL schema
   theater: string;
   seat: string;
+  type?: EventType | null;
   onRemove: (id: string) => void;
   onEdit?: (v: TicketEditValues) => Promise<void> | void;
 };
@@ -23,6 +25,7 @@ const Ticket: React.FC<TicketProps> = ({
   eventTime,
   theater,
   seat,
+  type,
   onRemove,
   onEdit,
 }) => {
@@ -92,8 +95,8 @@ const Ticket: React.FC<TicketProps> = ({
   const [editing, setEditing] = useState(false);
 
   const initialEdit = useMemo<TicketEditValues>(
-    () => ({ id, name, venue, eventDate: eventDate ?? "", eventTime: eventTime ?? "", theater, seat }),
-    [id, name, venue, eventDate, eventTime, theater, seat],
+    () => ({ id, name, venue, eventDate: eventDate ?? "", eventTime: eventTime ?? "", theater, seat, type: type ?? EventType.MOVIE }),
+    [id, name, venue, eventDate, eventTime, theater, seat, type],
   );
 
   return (
